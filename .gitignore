@@ -1,0 +1,13 @@
+# Environment variables
+.env
+
+# MacOS
+.DS_Store
+
+# Temporary files
+*.tmp
+*.log
+
+# IDE
+.vscode/
+.idea/
