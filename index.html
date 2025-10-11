@@ -366,6 +366,12 @@
             border-left: 4px solid #28a745;
         }
 
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-10px); }
+            20%, 40%, 60%, 80% { transform: translateX(10px); }
+        }
+
         @media (max-width: 768px) {
             .container {
                 padding: 15px;
@@ -864,7 +870,29 @@
 
         // Función para seleccionar una opción (sin enviar todavía)
         function selectOption(topicId, optionIndex, optionText, buttonElement) {
-            console.log(`✓ Seleccionado: ${optionText} para ${topicId}`);
+            console.log(`✓ Intentando seleccionar: ${optionText} para ${topicId}`);
+
+            // Verificar si esta puntuación ya está usada en otra ponencia
+            const isUsed = Object.entries(selectedVotes).some(([id, selection]) => {
+                return id !== topicId && selection.optionIndex === optionIndex;
+            });
+
+            if (isUsed) {
+                // Mostrar mensaje de error
+                const selectionMsg = document.getElementById(`selection-${topicId}`);
+                if (selectionMsg) {
+                    selectionMsg.textContent = `⚠️ Esta puntuación ya está asignada a otra ponencia`;
+                    selectionMsg.style.color = '#dc3545';
+                }
+
+                // Efecto visual de error
+                buttonElement.style.animation = 'shake 0.5s';
+                setTimeout(() => {
+                    buttonElement.style.animation = '';
+                }, 500);
+
+                return; // No permitir la selección
+            }
 
             // Guardar selección
             selectedVotes[topicId] = {
@@ -892,6 +920,35 @@
                 selectionMsg.textContent = `✓ Seleccionado: ${optionText}`;
                 selectionMsg.style.color = '#28a745';
             }
+
+            // Actualizar disponibilidad de botones en otras ponencias
+            updateButtonsAvailability();
+        }
+
+        // Función para actualizar qué botones están disponibles
+        function updateButtonsAvailability() {
+            // Obtener todas las puntuaciones ya usadas
+            const usedOptions = Object.values(selectedVotes).map(v => v.optionIndex);
+
+            // Para cada ponencia, deshabilitar visualmente las opciones ya usadas
+            document.querySelectorAll('.vote-btn').forEach(btn => {
+                const topicId = btn.dataset.topic;
+                const optionIndex = parseInt(btn.dataset.option);
+
+                // Si esta ponencia no ha sido votada aún
+                if (!selectedVotes[topicId]) {
+                    // Y la opción está usada en otra ponencia
+                    if (usedOptions.includes(optionIndex)) {
+                        btn.style.opacity = '0.4';
+                        btn.style.cursor = 'not-allowed';
+                        btn.title = 'Esta puntuación ya está asignada';
+                    } else {
+                        btn.style.opacity = '1';
+                        btn.style.cursor = 'pointer';
+                        btn.title = '';
+                    }
+                }
+            });
         }
 
         // Función para enviar todos los votos
@@ -905,6 +962,18 @@
                 messageDiv.innerHTML = `
                     <div style="background: #fff3cd; color: #856404; padding: 15px; border-radius: 10px; border-left: 4px solid #ffc107;">
                         ⚠️ Debes seleccionar una opción para todas las ponencias (${Object.keys(selectedVotes).length}/${totalTopics})
+                    </div>
+                `;
+                return;
+            }
+
+            // Verificar que todas las puntuaciones sean diferentes
+            const usedScores = Object.values(selectedVotes).map(v => v.optionIndex);
+            const uniqueScores = new Set(usedScores);
+            if (uniqueScores.size !== usedScores.length) {
+                messageDiv.innerHTML = `
+                    <div style="background: #fff3cd; color: #856404; padding: 15px; border-radius: 10px; border-left: 4px solid #ffc107;">
+                        ⚠️ Cada ponencia debe tener una puntuación diferente. No puedes repetir puntuaciones.
                     </div>
                 `;
                 return;
