@@ -803,7 +803,23 @@
             container.innerHTML = '';
 
             topics.forEach(topic => {
-                const options = JSON.parse(topic.options);
+                console.log('🔍 Procesando topic:', topic);
+                console.log('🔍 topic.options:', topic.options, typeof topic.options);
+
+                let options;
+                try {
+                    // Si ya es un array, usarlo directamente
+                    if (Array.isArray(topic.options)) {
+                        options = topic.options;
+                    } else {
+                        // Si es string, parsearlo
+                        options = JSON.parse(topic.options);
+                    }
+                } catch (e) {
+                    console.error('❌ Error al parsear options:', e);
+                    console.log('Raw options:', topic.options);
+                    return; // Saltar este topic si no se puede parsear
+                }
 
                 const votingItem = document.createElement('div');
                 votingItem.className = 'voting-item';
