@@ -829,7 +829,7 @@
                         <p>${topic.description}</p>
                         <div class="voting-options">
                             ${options.map((option, index) => `
-                                <button class="vote-btn" onclick="voteForOption('${topic.id}', ${index}, '${option}')" style="margin: 5px;">
+                                <button class="vote-btn" onclick="voteForOption('${topic.id}', ${index}, '${option}', this)" style="margin: 5px;">
                                     ${option}
                                 </button>
                             `).join('')}
@@ -848,7 +848,7 @@
         }
 
         // Nueva función para votar en opciones específicas
-        async function voteForOption(topicId, optionIndex, optionText) {
+        async function voteForOption(topicId, optionIndex, optionText, buttonElement) {
             try {
                 console.log(`🗳️ Votando por: ${optionText} en tópico: ${topicId}`);
 
@@ -868,18 +868,20 @@
                 } else {
                     console.log('✅ Voto registrado:', data);
 
-                    // Feedback visual
-                    const button = event.target;
-                    const originalText = button.textContent;
-                    button.textContent = '¡Votado!';
-                    button.style.background = '#28a745';
-                    button.disabled = true;
+                    // Feedback visual - obtener botón desde el evento
+                    const button = buttonElement || event?.target;
+                    if (button) {
+                        const originalText = button.textContent;
+                        button.textContent = '¡Votado!';
+                        button.style.background = '#28a745';
+                        button.disabled = true;
 
-                    setTimeout(() => {
-                        button.textContent = originalText;
-                        button.style.background = '#4CAF50';
-                        button.disabled = false;
-                    }, 2000);
+                        setTimeout(() => {
+                            button.textContent = originalText;
+                            button.style.background = '#4CAF50';
+                            button.disabled = false;
+                        }, 2000);
+                    }
 
                     // Actualizar contador
                     await updateVoteCount(topicId);
