@@ -824,22 +824,20 @@
                 const votingItem = document.createElement('div');
                 votingItem.className = 'voting-item';
                 votingItem.innerHTML = `
-                    <div>
-                        <h3>${topic.title}</h3>
-                        <p>${topic.description}</p>
-                        <div class="voting-options">
+                    <div style="width: 100%;">
+                        <h3 style="text-align: center; margin-bottom: 15px; font-size: 22px;">${topic.title}</h3>
+                        <p style="text-align: center; margin-bottom: 20px; color: #666;">${topic.description}</p>
+                        <div class="voting-options" style="display: flex; flex-wrap: wrap; gap: 15px; justify-content: center;">
                             ${options.map((option, index) => `
-                                <div style="text-align: center; margin: 10px 0;">
-                                    <h4 style="color: #667eea; margin-bottom: 8px;">${option}</h4>
-                                    <button class="vote-btn" onclick="voteForOption('${topic.id}', ${index}, '${option}', this)" style="margin: 5px;">
-                                        Esta es la mejor ponencia
-                                    </button>
-                                </div>
+                                <button class="vote-btn" onclick="voteForOption('${topic.id}', ${index}, '${option}', this)"
+                                        style="flex: 1; min-width: 100px; padding: 15px 20px; font-size: 18px; font-weight: bold;">
+                                    ${option}
+                                </button>
                             `).join('')}
                         </div>
-                    </div>
-                    <div>
-                        <span class="vote-count" id="votes-${topic.id}">0 votos</span>
+                        <div style="text-align: center; margin-top: 15px;">
+                            <span class="vote-count" id="votes-${topic.id}">0 votos</span>
+                        </div>
                     </div>
                 `;
 
