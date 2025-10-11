@@ -729,6 +729,9 @@
             updateVoteDisplay();
             displayTags();
             await loadAgendaFromSupabase();
+
+            // Debug: mostrar estado de las votaciones
+            console.log('🔍 Estado final de votaciones en DOM:', document.getElementById('voting-items').innerHTML);
         };
 
         // Cargar agenda desde Supabase
@@ -756,13 +759,21 @@
         async function loadDataFromSupabase() {
             try {
                 // Cargar votaciones activas
+                console.log('🔍 Cargando votaciones...');
                 const { data: votingTopics, error: votingError } = await supabaseClient
                     .from('voting_topics')
                     .select('*')
                     .eq('is_active', true);
 
-                if (votingTopics && votingTopics.length > 0) {
+                console.log('🔍 Votaciones recibidas:', { votingTopics, votingError });
+
+                if (votingError) {
+                    console.error('❌ Error al cargar votaciones:', votingError);
+                } else if (votingTopics && votingTopics.length > 0) {
+                    console.log('✅ Actualizando votaciones en la UI...');
                     updateVotingTopics(votingTopics);
+                } else {
+                    console.log('⚠️ No se encontraron votaciones activas');
                 }
 
                 // Cargar tags
@@ -814,6 +825,9 @@
                 `;
 
                 container.appendChild(votingItem);
+
+                // Cargar contador inicial de votos
+                updateVoteCount(topic.id);
             });
         }
 
