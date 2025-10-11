@@ -372,6 +372,102 @@
             20%, 40%, 60%, 80% { transform: translateX(10px); }
         }
 
+        /* Estilos para pantalla de resultados */
+        .result-item {
+            margin: 25px 0;
+            padding: 20px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .result-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .result-score {
+            font-size: 32px;
+            font-weight: bold;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .result-bar-container {
+            width: 100%;
+            height: 40px;
+            background: #f0f0f0;
+            border-radius: 20px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .result-bar {
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 20px;
+            transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 15px;
+            color: white;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .winner-badge {
+            display: inline-block;
+            background: #ffd700;
+            color: #333;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 14px;
+            margin-left: 10px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .result-details {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .result-stat {
+            text-align: center;
+        }
+
+        .result-stat-label {
+            font-size: 12px;
+            color: #999;
+        }
+
+        .result-stat-value {
+            font-size: 18px;
+            font-weight: bold;
+            color: #667eea;
+        }
+
         @media (max-width: 768px) {
             .container {
                 padding: 15px;
@@ -672,6 +768,32 @@
                 <button class="btn" onclick="showScreen('home-screen')" style="max-width: 300px; margin: 0 auto;">
                     🏠 Volver al Menú Principal
                 </button>
+            </div>
+        </div>
+
+        <!-- Pantalla de Resultados (Solo Admin) -->
+        <div id="results-screen" class="screen">
+            <div class="header">
+                <h1>🏆 Resultados de Votación</h1>
+                <p>Puntuación Total por Ponencia</p>
+            </div>
+
+            <div class="section">
+                <div style="text-align: center; margin-bottom: 30px;">
+                    <button class="btn" onclick="loadResults()" style="max-width: 300px; display: inline-block;">
+                        🔄 Actualizar Resultados
+                    </button>
+                </div>
+
+                <div id="results-container">
+                    <!-- Los resultados se cargarán aquí -->
+                </div>
+
+                <div style="text-align: center; margin-top: 30px;">
+                    <button class="back-btn" onclick="showScreen('home-screen')">
+                        ← Volver al inicio
+                    </button>
+                </div>
             </div>
         </div>
 
@@ -1081,6 +1203,18 @@
             const screens = document.querySelectorAll('.screen');
             screens.forEach(screen => screen.classList.remove('active'));
 
+            // Si estamos saliendo de la pantalla de resultados, detener auto-refresh
+            if (resultsRefreshInterval !== null && screenId !== 'results-screen') {
+                clearInterval(resultsRefreshInterval);
+                resultsRefreshInterval = null;
+                console.log('🛑 Auto-refresh de resultados detenido');
+            }
+
+            // Si estamos entrando a la pantalla de resultados, cargar datos
+            if (screenId === 'results-screen') {
+                loadResults();
+            }
+
             // Mostrar la pantalla seleccionada
             document.getElementById(screenId).classList.add('active');
         }
@@ -1298,6 +1432,191 @@
                 submitTags();
             }
         });
+
+        // Variable para controlar el auto-refresh
+        let resultsRefreshInterval = null;
+
+        // Función para cargar y mostrar resultados de votación
+        async function loadResults(autoRefresh = false) {
+            const resultsContainer = document.getElementById('results-container');
+
+            // Si es la primera llamada manual, iniciar auto-refresh
+            if (!autoRefresh && resultsRefreshInterval === null) {
+                resultsRefreshInterval = setInterval(() => {
+                    loadResults(true);
+                }, 5000); // Actualizar cada 5 segundos
+                console.log('✅ Auto-refresh de resultados activado (cada 5 segundos)');
+            }
+
+            // Mostrar mensaje de carga solo si no es auto-refresh
+            if (!autoRefresh) {
+                resultsContainer.innerHTML = `
+                    <div style="text-align: center; padding: 40px; color: #667eea;">
+                        <div style="font-size: 48px; margin-bottom: 15px;">⏳</div>
+                        <p style="font-size: 18px;">Cargando resultados...</p>
+                    </div>
+                `;
+            }
+
+            try {
+                // IDs de las 4 ponencias
+                const presentationIds = [
+                    '44444444-4444-4444-4444-444444444444',
+                    '55555555-5555-5555-5555-555555555555',
+                    '66666666-6666-6666-6666-666666666666',
+                    '77777777-7777-7777-7777-777777777777'
+                ];
+
+                // Obtener información de las ponencias
+                const { data: topics, error: topicsError } = await supabaseClient
+                    .from('voting_topics')
+                    .select('*')
+                    .in('id', presentationIds);
+
+                if (topicsError) {
+                    throw topicsError;
+                }
+
+                // Obtener todos los votos
+                const { data: allVotes, error: votesError } = await supabaseClient
+                    .from('votes')
+                    .select('*')
+                    .in('voting_topic_id', presentationIds);
+
+                if (votesError) {
+                    throw votesError;
+                }
+
+                console.log('📊 Topics:', topics);
+                console.log('📊 Votos:', allVotes);
+
+                // Calcular puntuaciones
+                const results = topics.map(topic => {
+                    // Filtrar votos de esta ponencia
+                    const topicVotes = allVotes.filter(vote => vote.voting_topic_id === topic.id);
+
+                    // Calcular puntuación total
+                    let totalScore = 0;
+                    const scoreDistribution = { 5: 0, 3: 0, 2: 0, 1: 0 };
+
+                    topicVotes.forEach(vote => {
+                        // selected_options es un array, tomamos el primer elemento
+                        const optionIndex = vote.selected_options[0];
+
+                        // Mapear índice a puntos: [0] = 5 puntos, [1] = 3 puntos, [2] = 2 puntos, [3] = 1 punto
+                        const pointsMap = [5, 3, 2, 1];
+                        const points = pointsMap[optionIndex];
+
+                        totalScore += points;
+                        scoreDistribution[points]++;
+                    });
+
+                    return {
+                        id: topic.id,
+                        title: topic.title,
+                        totalScore: totalScore,
+                        voteCount: topicVotes.length,
+                        distribution: scoreDistribution
+                    };
+                });
+
+                // Ordenar por puntuación (mayor a menor)
+                results.sort((a, b) => b.totalScore - a.totalScore);
+
+                // Encontrar puntuación máxima para calcular porcentajes
+                const maxScore = Math.max(...results.map(r => r.totalScore));
+
+                // Generar HTML
+                let html = '';
+
+                // Añadir indicador de última actualización
+                const now = new Date();
+                const timeString = now.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+                html += `
+                    <div style="text-align: center; margin-bottom: 20px; padding: 15px; background: #f8f9ff; border-radius: 10px;">
+                        <div style="font-size: 14px; color: #667eea;">
+                            🔄 Actualización automática activa
+                        </div>
+                        <div style="font-size: 12px; color: #999; margin-top: 5px;">
+                            Última actualización: ${timeString}
+                        </div>
+                    </div>
+                `;
+
+                if (results.every(r => r.totalScore === 0)) {
+                    html += `
+                        <div style="text-align: center; padding: 40px; color: #666;">
+                            <div style="font-size: 48px; margin-bottom: 15px;">📊</div>
+                            <p style="font-size: 18px;">Aún no hay votos registrados</p>
+                        </div>
+                    `;
+                } else {
+                    results.forEach((result, index) => {
+                        const percentage = maxScore > 0 ? (result.totalScore / maxScore * 100) : 0;
+                        const isWinner = index === 0 && result.totalScore > 0;
+
+                        html += `
+                            <div class="result-item">
+                                <div class="result-header">
+                                    <div>
+                                        <span class="result-title">${result.title}</span>
+                                        ${isWinner ? '<span class="winner-badge">🏆 GANADOR</span>' : ''}
+                                    </div>
+                                    <div class="result-score">${result.totalScore}</div>
+                                </div>
+
+                                <div class="result-bar-container">
+                                    <div class="result-bar" style="width: ${percentage}%;">
+                                        ${percentage > 20 ? `${percentage.toFixed(0)}%` : ''}
+                                    </div>
+                                </div>
+
+                                <div class="result-details">
+                                    <div class="result-stat">
+                                        <div class="result-stat-label">Total Votos</div>
+                                        <div class="result-stat-value">${result.voteCount}</div>
+                                    </div>
+                                    <div class="result-stat">
+                                        <div class="result-stat-label">5 puntos</div>
+                                        <div class="result-stat-value">${result.distribution[5]}</div>
+                                    </div>
+                                    <div class="result-stat">
+                                        <div class="result-stat-label">3 puntos</div>
+                                        <div class="result-stat-value">${result.distribution[3]}</div>
+                                    </div>
+                                    <div class="result-stat">
+                                        <div class="result-stat-label">2 puntos</div>
+                                        <div class="result-stat-value">${result.distribution[2]}</div>
+                                    </div>
+                                    <div class="result-stat">
+                                        <div class="result-stat-label">1 punto</div>
+                                        <div class="result-stat-value">${result.distribution[1]}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    });
+                }
+
+                // Actualizar contenedor con animación
+                resultsContainer.style.opacity = '0';
+                setTimeout(() => {
+                    resultsContainer.innerHTML = html;
+                    resultsContainer.style.transition = 'opacity 0.5s';
+                    resultsContainer.style.opacity = '1';
+                }, 200);
+
+            } catch (error) {
+                console.error('❌ Error al cargar resultados:', error);
+                resultsContainer.innerHTML = `
+                    <div style="text-align: center; padding: 40px; color: #dc3545;">
+                        <div style="font-size: 48px; margin-bottom: 15px;">⚠️</div>
+                        <p style="font-size: 18px;">Error al cargar los resultados</p>
+                        <p style="font-size: 14px; color: #666;">${error.message}</p>
+                    </div>
+                `;
+            }
+        }
     </script>
 </body>
 </html>
