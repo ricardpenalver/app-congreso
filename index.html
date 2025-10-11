@@ -614,38 +614,7 @@
             <div class="section">
                 <h2>🗳️ Votación</h2>
                 <div id="voting-items">
-                    <div class="voting-item">
-                        <div>
-                            <h3>Propuesta A: Horario de Mañana</h3>
-                            <p>Iniciar el evento a las 9:00 AM</p>
-                        </div>
-                        <div>
-                            <button class="vote-btn" onclick="vote('propuesta-a')">Votar</button>
-                            <span class="vote-count" id="votes-propuesta-a">0</span>
-                        </div>
-                    </div>
-
-                    <div class="voting-item">
-                        <div>
-                            <h3>Propuesta B: Horario de Tarde</h3>
-                            <p>Iniciar el evento a las 2:00 PM</p>
-                        </div>
-                        <div>
-                            <button class="vote-btn" onclick="vote('propuesta-b')">Votar</button>
-                            <span class="vote-count" id="votes-propuesta-b">0</span>
-                        </div>
-                    </div>
-
-                    <div class="voting-item">
-                        <div>
-                            <h3>Propuesta C: Evento Virtual</h3>
-                            <p>Realizar el evento de forma online</p>
-                        </div>
-                        <div>
-                            <button class="vote-btn" onclick="vote('propuesta-c')">Votar</button>
-                            <span class="vote-count" id="votes-propuesta-c">0</span>
-                        </div>
-                    </div>
+                    <!-- Las votaciones se cargarán dinámicamente desde Supabase -->
                 </div>
             </div>
         </div>
@@ -813,8 +782,102 @@
 
         // Actualizar display de votaciones
         function updateVotingTopics(topics) {
-            // Esta función se implementará cuando actualicemos la sección de votaciones
             console.log('Votaciones desde Supabase:', topics);
+            const container = document.getElementById('voting-items');
+
+            if (!container || !topics || topics.length === 0) {
+                return;
+            }
+
+            container.innerHTML = '';
+
+            topics.forEach(topic => {
+                const options = JSON.parse(topic.options);
+
+                const votingItem = document.createElement('div');
+                votingItem.className = 'voting-item';
+                votingItem.innerHTML = `
+                    <div>
+                        <h3>${topic.title}</h3>
+                        <p>${topic.description}</p>
+                        <div class="voting-options">
+                            ${options.map((option, index) => `
+                                <button class="vote-btn" onclick="voteForOption('${topic.id}', ${index}, '${option}')" style="margin: 5px;">
+                                    ${option}
+                                </button>
+                            `).join('')}
+                        </div>
+                    </div>
+                    <div>
+                        <span class="vote-count" id="votes-${topic.id}">0 votos</span>
+                    </div>
+                `;
+
+                container.appendChild(votingItem);
+            });
+        }
+
+        // Nueva función para votar en opciones específicas
+        async function voteForOption(topicId, optionIndex, optionText) {
+            try {
+                console.log(`🗳️ Votando por: ${optionText} en tópico: ${topicId}`);
+
+                const voteData = {
+                    voting_topic_id: topicId,
+                    selected_options: [optionIndex]
+                };
+
+                const { data, error } = await supabaseClient
+                    .from('votes')
+                    .insert([voteData])
+                    .select();
+
+                if (error) {
+                    console.error('❌ Error al votar:', error);
+                    alert('Error al registrar el voto. Inténtalo de nuevo.');
+                } else {
+                    console.log('✅ Voto registrado:', data);
+
+                    // Feedback visual
+                    const button = event.target;
+                    const originalText = button.textContent;
+                    button.textContent = '¡Votado!';
+                    button.style.background = '#28a745';
+                    button.disabled = true;
+
+                    setTimeout(() => {
+                        button.textContent = originalText;
+                        button.style.background = '#4CAF50';
+                        button.disabled = false;
+                    }, 2000);
+
+                    // Actualizar contador
+                    await updateVoteCount(topicId);
+                }
+
+            } catch (error) {
+                console.error('❌ Error fatal al votar:', error);
+                alert('Error de conexión al votar.');
+            }
+        }
+
+        // Función para actualizar contador de votos
+        async function updateVoteCount(topicId) {
+            try {
+                const { data, error } = await supabaseClient
+                    .from('votes')
+                    .select('id')
+                    .eq('voting_topic_id', topicId);
+
+                if (!error && data) {
+                    const countElement = document.getElementById(`votes-${topicId}`);
+                    if (countElement) {
+                        countElement.textContent = `${data.length} votos`;
+                    }
+                }
+            } catch (error) {
+                console.log('Error al actualizar contador:', error);
+            }
         }
 
         // Actualizar display de la agenda
