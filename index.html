@@ -660,6 +660,21 @@
             </div>
         </div>
 
+        <!-- Pantalla de Confirmación de Voto -->
+        <div id="vote-confirmation-screen" class="screen">
+            <div class="section" style="text-align: center; padding: 50px 25px;">
+                <div style="font-size: 80px; margin-bottom: 20px;">✅</div>
+                <h2 style="font-size: 28px; color: #28a745; margin-bottom: 15px;">¡Voto Registrado!</h2>
+                <p style="font-size: 18px; color: #666; margin-bottom: 30px;">
+                    Tu votación ha sido registrada exitosamente.<br>
+                    Gracias por tu participación.
+                </p>
+                <button class="btn" onclick="showScreen('home-screen')" style="max-width: 300px; margin: 0 auto;">
+                    🏠 Volver al Menú Principal
+                </button>
+            </div>
+        </div>
+
         <!-- Pantalla de Etiquetas -->
         <div id="tags-screen" class="screen">
             <button class="back-btn" onclick="showScreen('home-screen')">
@@ -1013,19 +1028,14 @@
                 } else {
                     console.log('✅ Votos registrados exitosamente:', data);
 
-                    messageDiv.innerHTML = `
-                        <div class="success-message">
-                            ✅ ¡Votación registrada exitosamente! Gracias por tu participación.
-                        </div>
-                    `;
+                    // Pequeña pausa para dar feedback visual
+                    submitBtn.textContent = '✓ ¡Enviado!';
+                    submitBtn.style.background = '#28a745';
 
-                    // Deshabilitar todos los botones de votación
-                    document.querySelectorAll('.vote-btn').forEach(btn => {
-                        btn.disabled = true;
-                        btn.style.opacity = '0.6';
-                    });
-
-                    submitBtn.textContent = '✓ Votación Completada';
+                    // Redirigir a pantalla de confirmación después de 1 segundo
+                    setTimeout(() => {
+                        showScreen('vote-confirmation-screen');
+                    }, 1000);
                 }
 
             } catch (error) {
