@@ -829,9 +829,12 @@
                         <p>${topic.description}</p>
                         <div class="voting-options">
                             ${options.map((option, index) => `
-                                <button class="vote-btn" onclick="voteForOption('${topic.id}', ${index}, '${option}', this)" style="margin: 5px;">
-                                    ${option}
-                                </button>
+                                <div style="text-align: center; margin: 10px 0;">
+                                    <h4 style="color: #667eea; margin-bottom: 8px;">${option}</h4>
+                                    <button class="vote-btn" onclick="voteForOption('${topic.id}', ${index}, '${option}', this)" style="margin: 5px;">
+                                        Esta es la mejor ponencia
+                                    </button>
+                                </div>
                             `).join('')}
                         </div>
                     </div>
@@ -872,7 +875,7 @@
                     const button = buttonElement || event?.target;
                     if (button) {
                         const originalText = button.textContent;
-                        button.textContent = '¡Votado!';
+                        button.textContent = '¡Voto registrado!';
                         button.style.background = '#28a745';
                         button.disabled = true;
 
@@ -880,7 +883,7 @@
                             button.textContent = originalText;
                             button.style.background = '#4CAF50';
                             button.disabled = false;
-                        }, 2000);
+                        }, 3000);
                     }
 
                     // Actualizar contador
