@@ -791,6 +791,9 @@
             }
         }
 
+        // Object para almacenar las selecciones temporales
+        let selectedVotes = {};
+
         // Actualizar display de votaciones
         function updateVotingTopics(topics) {
             console.log('Votaciones desde Supabase:', topics);
@@ -801,6 +804,9 @@
             }
 
             container.innerHTML = '';
+
+            // Resetear selecciones
+            selectedVotes = {};
 
             topics.forEach(topic => {
                 console.log('🔍 Procesando topic:', topic);
@@ -827,70 +833,141 @@
                     <div style="width: 100%;">
                         <h3 style="text-align: center; margin-bottom: 15px; font-size: 22px;">${topic.title}</h3>
                         <p style="text-align: center; margin-bottom: 20px; color: #666;">${topic.description}</p>
-                        <div class="voting-options" style="display: flex; flex-wrap: wrap; gap: 15px; justify-content: center;">
+                        <div class="voting-options" id="options-${topic.id}" style="display: flex; flex-wrap: wrap; gap: 15px; justify-content: center;">
                             ${options.map((option, index) => `
-                                <button class="vote-btn" onclick="voteForOption('${topic.id}', ${index}, '${option}', this)"
-                                        style="flex: 1; min-width: 100px; padding: 15px 20px; font-size: 18px; font-weight: bold;">
+                                <button class="vote-btn" onclick="selectOption('${topic.id}', ${index}, '${option}', this)"
+                                        style="flex: 1; min-width: 100px; padding: 15px 20px; font-size: 18px; font-weight: bold;"
+                                        data-topic="${topic.id}" data-option="${index}">
                                     ${option}
                                 </button>
                             `).join('')}
                         </div>
                         <div style="text-align: center; margin-top: 15px;">
-                            <span class="vote-count" id="votes-${topic.id}">0 votos</span>
+                            <span id="selection-${topic.id}" style="color: #667eea; font-weight: bold;">Selecciona una opción</span>
                         </div>
                     </div>
                 `;
 
                 container.appendChild(votingItem);
-
-                // Cargar contador inicial de votos
-                updateVoteCount(topic.id);
             });
+
+            // Añadir botón de registro al final
+            const submitButton = document.createElement('div');
+            submitButton.innerHTML = `
+                <button id="submit-votes-btn" class="btn" onclick="submitAllVotes()" style="margin-top: 30px; font-size: 18px; padding: 20px;">
+                    📊 Registrar Votación
+                </button>
+                <div id="vote-message" style="margin-top: 15px;"></div>
+            `;
+            container.appendChild(submitButton);
         }
 
-        // Nueva función para votar en opciones específicas
-        async function voteForOption(topicId, optionIndex, optionText, buttonElement) {
+        // Función para seleccionar una opción (sin enviar todavía)
+        function selectOption(topicId, optionIndex, optionText, buttonElement) {
+            console.log(`✓ Seleccionado: ${optionText} para ${topicId}`);
+
+            // Guardar selección
+            selectedVotes[topicId] = {
+                optionIndex: optionIndex,
+                optionText: optionText
+            };
+
+            // Quitar selección de otros botones del mismo topic
+            const container = document.getElementById(`options-${topicId}`);
+            const buttons = container.querySelectorAll('.vote-btn');
+            buttons.forEach(btn => {
+                btn.style.background = '#4CAF50';
+                btn.style.borderWidth = '2px';
+                btn.style.borderStyle = 'solid';
+                btn.style.borderColor = 'transparent';
+            });
+
+            // Marcar botón seleccionado
+            buttonElement.style.background = '#667eea';
+            buttonElement.style.borderColor = '#764ba2';
+
+            // Actualizar mensaje
+            const selectionMsg = document.getElementById(`selection-${topicId}`);
+            if (selectionMsg) {
+                selectionMsg.textContent = `✓ Seleccionado: ${optionText}`;
+                selectionMsg.style.color = '#28a745';
+            }
+        }
+
+        // Función para enviar todos los votos
+        async function submitAllVotes() {
+            const messageDiv = document.getElementById('vote-message');
+            const submitBtn = document.getElementById('submit-votes-btn');
+
+            // Verificar que se hayan seleccionado todas las ponencias
+            const totalTopics = 4; // Tenemos 4 ponencias
+            if (Object.keys(selectedVotes).length < totalTopics) {
+                messageDiv.innerHTML = `
+                    <div style="background: #fff3cd; color: #856404; padding: 15px; border-radius: 10px; border-left: 4px solid #ffc107;">
+                        ⚠️ Debes seleccionar una opción para todas las ponencias (${Object.keys(selectedVotes).length}/${totalTopics})
+                    </div>
+                `;
+                return;
+            }
+
+            // Deshabilitar botón mientras se envía
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Enviando votos...';
+
             try {
-                console.log(`🗳️ Votando por: ${optionText} en tópico: ${topicId}`);
+                // Preparar todos los votos
+                const votesToInsert = [];
+                for (const [topicId, selection] of Object.entries(selectedVotes)) {
+                    votesToInsert.push({
+                        voting_topic_id: topicId,
+                        selected_options: [selection.optionIndex]
+                    });
+                }
 
-                const voteData = {
-                    voting_topic_id: topicId,
-                    selected_options: [optionIndex]
-                };
+                console.log('📊 Enviando votos:', votesToInsert);
 
+                // Insertar todos los votos
                 const { data, error } = await supabaseClient
                     .from('votes')
-                    .insert([voteData])
+                    .insert(votesToInsert)
                     .select();
 
                 if (error) {
-                    console.error('❌ Error al votar:', error);
-                    alert('Error al registrar el voto. Inténtalo de nuevo.');
+                    console.error('❌ Error al registrar votos:', error);
+                    messageDiv.innerHTML = `
+                        <div style="background: #f8d7da; color: #721c24; padding: 15px; border-radius: 10px; border-left: 4px solid #dc3545;">
+                            ❌ Error al registrar la votación. Inténtalo de nuevo.
+                        </div>
+                    `;
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = '📊 Registrar Votación';
                 } else {
-                    console.log('✅ Voto registrado:', data);
+                    console.log('✅ Votos registrados exitosamente:', data);
 
-                    // Feedback visual - obtener botón desde el evento
-                    const button = buttonElement || event?.target;
-                    if (button) {
-                        const originalText = button.textContent;
-                        button.textContent = '¡Voto registrado!';
-                        button.style.background = '#28a745';
-                        button.disabled = true;
+                    messageDiv.innerHTML = `
+                        <div class="success-message">
+                            ✅ ¡Votación registrada exitosamente! Gracias por tu participación.
+                        </div>
+                    `;
 
-                        setTimeout(() => {
-                            button.textContent = originalText;
-                            button.style.background = '#4CAF50';
-                            button.disabled = false;
-                        }, 3000);
-                    }
+                    // Deshabilitar todos los botones de votación
+                    document.querySelectorAll('.vote-btn').forEach(btn => {
+                        btn.disabled = true;
+                        btn.style.opacity = '0.6';
+                    });
 
-                    // Actualizar contador
-                    await updateVoteCount(topicId);
+                    submitBtn.textContent = '✓ Votación Completada';
                 }
 
             } catch (error) {
-                console.error('❌ Error fatal al votar:', error);
-                alert('Error de conexión al votar.');
+                console.error('❌ Error fatal:', error);
+                messageDiv.innerHTML = `
+                    <div style="background: #f8d7da; color: #721c24; padding: 15px; border-radius: 10px; border-left: 4px solid #dc3545;">
+                        ❌ Error de conexión. Verifica tu internet e inténtalo de nuevo.
+                    </div>
+                `;
+                submitBtn.disabled = false;
+                submitBtn.textContent = '📊 Registrar Votación';
             }
         }
 
