@@ -875,6 +875,15 @@
 
             // Debug: mostrar estado de las votaciones
             console.log('🔍 Estado final de votaciones en DOM:', document.getElementById('voting-items').innerHTML);
+
+            // Verificar si la URL contiene el parámetro para mostrar resultados
+            const urlParams = new URLSearchParams(window.location.search);
+            const hashParams = window.location.hash;
+
+            if (urlParams.has('results') || hashParams === '#results') {
+                console.log('🏆 Detectado parámetro de resultados en URL, mostrando pantalla...');
+                showScreen('results-screen');
+            }
         };
 
         // Cargar agenda desde Supabase
