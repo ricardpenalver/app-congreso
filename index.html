@@ -1576,8 +1576,9 @@
 
                                 <div class="result-bar-container">
                                     <div class="result-bar" style="width: ${percentage}%;">
-                                        ${percentage > 20 ? `${percentage.toFixed(0)}%` : ''}
+                                        ${percentage > 15 ? `${percentage.toFixed(1)}%` : ''}
                                     </div>
+                                    ${percentage <= 15 ? `<div style="position: absolute; left: calc(${percentage}% + 10px); top: 50%; transform: translateY(-50%); color: #667eea; font-weight: bold; font-size: 14px;">${percentage.toFixed(1)}%</div>` : ''}
                                 </div>
 
                                 <div class="result-details">
@@ -1607,13 +1608,19 @@
                     });
                 }
 
-                // Actualizar contenedor con animación
-                resultsContainer.style.opacity = '0';
-                setTimeout(() => {
+                // Actualizar contenedor sin parpadeo durante auto-refresh
+                if (autoRefresh) {
+                    // En auto-refresh, actualizar directamente sin animación
                     resultsContainer.innerHTML = html;
-                    resultsContainer.style.transition = 'opacity 0.5s';
-                    resultsContainer.style.opacity = '1';
-                }, 200);
+                } else {
+                    // Solo en carga inicial, mostrar animación suave
+                    resultsContainer.style.opacity = '0';
+                    setTimeout(() => {
+                        resultsContainer.innerHTML = html;
+                        resultsContainer.style.transition = 'opacity 0.5s';
+                        resultsContainer.style.opacity = '1';
+                    }, 200);
+                }
 
             } catch (error) {
                 console.error('❌ Error al cargar resultados:', error);
