@@ -1532,8 +1532,8 @@
                 // Ordenar por puntuación (mayor a menor)
                 results.sort((a, b) => b.totalScore - a.totalScore);
 
-                // Encontrar puntuación máxima para calcular porcentajes
-                const maxScore = Math.max(...results.map(r => r.totalScore));
+                // Calcular el total de puntos otorgados
+                const totalPointsGiven = results.reduce((sum, r) => sum + r.totalScore, 0);
 
                 // Generar HTML
                 let html = '';
@@ -1561,7 +1561,7 @@
                     `;
                 } else {
                     results.forEach((result, index) => {
-                        const percentage = maxScore > 0 ? (result.totalScore / maxScore * 100) : 0;
+                        const percentage = totalPointsGiven > 0 ? (result.totalScore / totalPointsGiven * 100) : 0;
                         const isWinner = index === 0 && result.totalScore > 0;
 
                         html += `
