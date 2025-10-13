@@ -964,11 +964,11 @@
     </style>
 </head>
 <body>
-    <!-- Canvas para partículas -->
-    <canvas id="particles-canvas"></canvas>
-
     <!-- Overlay de bienvenida -->
     <div id="welcome-overlay">
+        <!-- Canvas para partículas -->
+        <canvas id="particles-canvas"></canvas>
+
         <!-- Botón de cerrar sesión (solo visible si hay sesión activa) -->
         <button class="logout-btn" id="logout-btn" style="display: none;" onclick="logout()">
             🚪 Cerrar sesión
@@ -1011,18 +1011,17 @@
             <div class="header">
                 <h1>🎉 App de Eventos</h1>
                 <p>Bienvenido - Selecciona una opción</p>
-            
-        <!-- Saludo personalizado del usuario (se muestra después de identificarse) -->
-        <div class="user-greeting" id="user-greeting" style="display: none;">
-            <div class="user-greeting-text">¡Hola, <span id="greeting-name"></span>!</div>
-            <div class="user-greeting-subtitle">Tu código de identificación</div>
-            <div class="user-code-badge" id="greeting-code"></div>
-            <button class="logout-btn" onclick="logout()" style="position: static; margin-top: 15px;">
-                🚪 Cerrar sesión
-            </button>
-        </div>
+            </div>
 
-</div>
+            <!-- Saludo personalizado del usuario (se muestra después de identificarse) -->
+            <div class="user-greeting" id="user-greeting" style="display: none;">
+                <div class="user-greeting-text">¡Hola, <span id="greeting-name"></span>!</div>
+                <div class="user-greeting-subtitle">Tu código de identificación</div>
+                <div class="user-code-badge" id="greeting-code"></div>
+                <button class="logout-btn" onclick="logout()" style="position: static; margin-top: 15px;">
+                    🚪 Cerrar sesión
+                </button>
+            </div>
 
             <div class="menu-grid">
                 <div class="menu-option" onclick="showScreen('voting-screen')">
