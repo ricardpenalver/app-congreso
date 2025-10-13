@@ -79,12 +79,26 @@ Home Screen
    - Almacenamiento en Supabase + localStorage fallback
    - Feedback visual al usuario
 
-3. **Sistema de Votaciones**
-   - Múltiples propuestas
-   - Conteo en tiempo real
-   - UI interactiva con confirmación
+3. **Sistema de Votaciones Competitivo**
+   - 4 ponencias en competencia
+   - Sistema de puntuación: 5, 3, 2, 1 puntos
+   - Validación de puntuaciones únicas (no se pueden repetir)
+   - Selección múltiple con botón único de envío
+   - Pantalla de confirmación post-voto
+   - Actualización visual en tiempo real
 
-4. **Etiquetas e Ideas**
+4. **Pantalla de Resultados en Tiempo Real** ⭐ NUEVO
+   - Acceso mediante parámetro URL: `?results` o `#results`
+   - Auto-refresh cada 5 segundos sin parpadeo
+   - Gráficos de barras animados con gradiente
+   - Cálculo de porcentajes sobre total de puntos otorgados
+   - Badge dorado animado "🏆 GANADOR" para primer lugar
+   - Visualización de porcentajes siempre visible (dentro/fuera de barra según tamaño)
+   - Distribución detallada de votos (5, 3, 2, 1 puntos)
+   - Timestamp de última actualización
+   - Optimizado para proyección en pantallas públicas
+
+5. **Etiquetas e Ideas**
    - Input de texto libre
    - Almacenamiento híbrido
    - Display visual con colores

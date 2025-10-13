@@ -468,6 +468,114 @@
             color: #667eea;
         }
 
+        /* Estilos para etiquetas enviadas - Diseño tipo tarjetas uniforme */
+        #tags-ranking-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .ranking-tag-card {
+            position: relative;
+            padding: 30px 15px 20px 15px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+            min-height: 140px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .ranking-tag-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 100%);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .ranking-tag-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
+        }
+
+        .ranking-tag-card:hover::before {
+            opacity: 1;
+        }
+
+        .ranking-position-badge {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            min-width: 28px;
+            height: 28px;
+            padding: 0 6px;
+            background: rgba(255, 255, 255, 0.25);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 11px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .ranking-tag-name {
+            font-size: 24px;
+            font-weight: 700;
+            text-transform: capitalize;
+            letter-spacing: 0.5px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            word-wrap: break-word;
+            max-width: 100%;
+            line-height: 1.2;
+            padding: 0 5px;
+        }
+
+        .ranking-count {
+            font-size: 20px;
+            font-weight: 600;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            opacity: 0.95;
+        }
+
+        .no-tags-message {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 60px 20px;
+            color: #999;
+            font-size: 18px;
+            background: #f8f9ff;
+            border-radius: 15px;
+            border: 2px dashed #ddd;
+        }
+
+        @media (max-width: 768px) {
+            #tags-ranking-container {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+        }
+
+        @media (max-width: 480px) {
+            #tags-ranking-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
         @media (max-width: 768px) {
             .container {
                 padding: 15px;
@@ -812,8 +920,10 @@
                 <button onclick="submitTags()" class="btn">Enviar Etiquetas</button>
 
                 <div id="tags-display">
-                    <h3>Etiquetas enviadas:</h3>
-                    <div class="tags-container" id="tags-container">
+                    <h3>🏷️ Etiquetas enviadas</h3>
+                    <p style="color: #666; font-size: 14px; margin-bottom: 15px;">Tus etiquetas y su posición en el ranking global</p>
+                    <div id="tags-ranking-container">
+                        <!-- Las etiquetas se cargarán aquí dinámicamente -->
                     </div>
                 </div>
                 <div id="tags-message"></div>
@@ -863,6 +973,16 @@
         let sessions = [];
         let speakers = [];
 
+        // ID de sesión del usuario para identificar sus etiquetas
+        let userSessionId = localStorage.getItem('userSessionId');
+        if (!userSessionId) {
+            userSessionId = 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+            localStorage.setItem('userSessionId', userSessionId);
+        }
+
+        // Etiquetas del usuario actual
+        let userTags = JSON.parse(localStorage.getItem('userTags') || '[]');
+
         // Cargar datos al iniciar
         window.onload = async function() {
             console.log('🚀 Iniciando aplicación...');
@@ -870,7 +990,7 @@
             await loadDataFromSupabase();
             loadData(); // Fallback para datos locales
             updateVoteDisplay();
-            displayTags();
+            // displayTags(); // Se cargará automáticamente al entrar a la pantalla
             await loadAgendaFromSupabase();
 
             // Debug: mostrar estado de las votaciones
@@ -1206,6 +1326,9 @@
             console.log('Sesiones desde Supabase:', sessions);
         }
 
+        // Variable para controlar el auto-refresh del ranking de tags
+        let tagsRefreshInterval = null;
+
         // Función para cambiar de pantalla
         function showScreen(screenId) {
             // Ocultar todas las pantallas
@@ -1219,9 +1342,26 @@
                 console.log('🛑 Auto-refresh de resultados detenido');
             }
 
+            // Si estamos saliendo de la pantalla de tags, detener auto-refresh
+            if (tagsRefreshInterval !== null && screenId !== 'tags-screen') {
+                clearInterval(tagsRefreshInterval);
+                tagsRefreshInterval = null;
+                console.log('🛑 Auto-refresh de tags detenido');
+            }
+
             // Si estamos entrando a la pantalla de resultados, cargar datos
             if (screenId === 'results-screen') {
                 loadResults();
+            }
+
+            // Si estamos entrando a la pantalla de tags, iniciar auto-refresh
+            if (screenId === 'tags-screen') {
+                displayTags(); // Cargar inicial
+                // Auto-refresh cada 5 segundos
+                tagsRefreshInterval = setInterval(() => {
+                    displayTags();
+                }, 5000);
+                console.log('✅ Auto-refresh de tags activado (cada 5 segundos)');
             }
 
             // Mostrar la pantalla seleccionada
@@ -1338,13 +1478,14 @@
             const tagsText = tagsInput.value.trim();
 
             if (tagsText) {
-                const newTags = tagsText.split(',').map(tag => tag.trim()).filter(tag => tag);
+                const newTags = tagsText.split(',').map(tag => tag.trim().toLowerCase()).filter(tag => tag);
 
                 try {
-                    // Intentar guardar en Supabase
+                    // Intentar guardar en Supabase con el ID de sesión del usuario
                     const tagsToInsert = newTags.map(tagName => ({
                         name: tagName,
-                        color: '#' + Math.floor(Math.random()*16777215).toString(16) // Color aleatorio
+                        user_session_id: userSessionId,
+                        color: '#' + Math.floor(Math.random()*16777215).toString(16)
                     }));
 
                     const { data, error } = await supabaseClient
@@ -1359,18 +1500,23 @@
                         saveData();
                     } else {
                         console.log('Tags guardadas en Supabase:', data);
-                        // Actualizar tags locales desde Supabase
-                        await loadDataFromSupabase();
                     }
+
+                    // Guardar etiquetas del usuario en localStorage
+                    userTags.push(...newTags);
+                    localStorage.setItem('userTags', JSON.stringify(userTags));
 
                 } catch (error) {
                     console.log('Error de conexión, guardando localmente:', error);
                     // Fallback completo a localStorage
                     allTags.push(...newTags);
+                    userTags.push(...newTags);
+                    localStorage.setItem('userTags', JSON.stringify(userTags));
                     saveData();
                 }
 
-                displayTags();
+                // Recargar el ranking
+                await displayTags();
 
                 // Mostrar mensaje de éxito
                 document.getElementById('tags-message').innerHTML =
@@ -1386,15 +1532,135 @@
             }
         }
 
-        // Mostrar etiquetas
-        function displayTags() {
-            const container = document.getElementById('tags-container');
-            if (container) {
-                const uniqueTags = [...new Set(allTags)];
-                container.innerHTML = uniqueTags.map(tag =>
-                    `<span class="tag">${tag}</span>`
-                ).join('');
+        // Mostrar etiquetas del usuario con su ranking
+        async function displayTags() {
+            const container = document.getElementById('tags-ranking-container');
+            if (!container) return;
+
+            // Si el usuario no ha enviado etiquetas
+            if (userTags.length === 0) {
+                container.innerHTML = '<div class="no-tags-message">Aún no has enviado etiquetas<br><small>Escribe tus palabras clave arriba y envíalas</small></div>';
+                return;
             }
+
+            try {
+                // Obtener todas las etiquetas desde Supabase para calcular el ranking global
+                const { data: tagsData, error } = await supabaseClient
+                    .from('tags')
+                    .select('name');
+
+                if (error) {
+                    console.error('Error al cargar etiquetas:', error);
+                    displayLocalTagsRanking();
+                    return;
+                }
+
+                // Contar frecuencia de cada etiqueta globalmente
+                const globalTagCounts = {};
+                let totalTags = tagsData ? tagsData.length : 0;
+
+                if (tagsData) {
+                    tagsData.forEach(tag => {
+                        const tagName = tag.name.toLowerCase().trim();
+                        globalTagCounts[tagName] = (globalTagCounts[tagName] || 0) + 1;
+                    });
+                }
+
+                // Crear ranking global ordenado
+                const globalRanking = Object.entries(globalTagCounts)
+                    .map(([name, count]) => ({
+                        name: name,
+                        count: count,
+                        percentage: totalTags > 0 ? ((count / totalTags) * 100).toFixed(1) : 0
+                    }))
+                    .sort((a, b) => b.count - a.count);
+
+                // Obtener etiquetas únicas del usuario
+                const uniqueUserTags = [...new Set(userTags.map(t => t.toLowerCase().trim()))];
+
+                // Filtrar solo las etiquetas del usuario con su info del ranking global
+                const userTagsWithRanking = uniqueUserTags.map(userTag => {
+                    const globalIndex = globalRanking.findIndex(t => t.name === userTag);
+                    const tagInfo = globalRanking[globalIndex];
+
+                    return {
+                        name: userTag,
+                        ranking: globalIndex >= 0 ? globalIndex + 1 : null,
+                        count: tagInfo ? tagInfo.count : 1,
+                        percentage: tagInfo ? tagInfo.percentage : '0.0'
+                    };
+                }).sort((a, b) => (a.ranking || 999) - (b.ranking || 999));
+
+                // Generar HTML
+                container.innerHTML = userTagsWithRanking.map((tag) => {
+                    return `
+                        <div class="ranking-tag-card">
+                            <div class="ranking-position-badge">#${tag.ranking || '?'}</div>
+                            <div class="ranking-tag-name">${tag.name}</div>
+                            <div class="ranking-count">${tag.count}</div>
+                        </div>
+                    `;
+                }).join('');
+
+            } catch (error) {
+                console.error('Error al mostrar ranking:', error);
+                displayLocalTagsRanking();
+            }
+        }
+
+        // Fallback para mostrar etiquetas locales del usuario
+        function displayLocalTagsRanking() {
+            const container = document.getElementById('tags-ranking-container');
+            if (!container) return;
+
+            if (userTags.length === 0) {
+                container.innerHTML = '<div class="no-tags-message">Aún no has enviado etiquetas<br><small>Escribe tus palabras clave arriba y envíalas</small></div>';
+                return;
+            }
+
+            // Contar frecuencia de etiquetas locales globalmente
+            const globalTagCounts = {};
+            let totalTags = allTags.length;
+
+            allTags.forEach(tag => {
+                const tagName = tag.toLowerCase().trim();
+                globalTagCounts[tagName] = (globalTagCounts[tagName] || 0) + 1;
+            });
+
+            // Crear ranking global
+            const globalRanking = Object.entries(globalTagCounts)
+                .map(([name, count]) => ({
+                    name: name,
+                    count: count,
+                    percentage: totalTags > 0 ? ((count / totalTags) * 100).toFixed(1) : 0
+                }))
+                .sort((a, b) => b.count - a.count);
+
+            // Obtener etiquetas únicas del usuario
+            const uniqueUserTags = [...new Set(userTags.map(t => t.toLowerCase().trim()))];
+
+            // Mostrar solo las etiquetas del usuario con su ranking
+            const userTagsWithRanking = uniqueUserTags.map(userTag => {
+                const globalIndex = globalRanking.findIndex(t => t.name === userTag);
+                const tagInfo = globalRanking[globalIndex];
+
+                return {
+                    name: userTag,
+                    ranking: globalIndex >= 0 ? globalIndex + 1 : null,
+                    count: tagInfo ? tagInfo.count : 1,
+                    percentage: tagInfo ? tagInfo.percentage : '0.0'
+                };
+            }).sort((a, b) => (a.ranking || 999) - (b.ranking || 999));
+
+            container.innerHTML = userTagsWithRanking.map((tag) => {
+                return `
+                    <div class="ranking-tag-card">
+                        <div class="ranking-position-badge">#${tag.ranking || '?'}</div>
+                        <div class="ranking-tag-name">${tag.name}</div>
+                        <div class="ranking-count">${tag.count}</div>
+                    </div>
+                `;
+            }).join('');
         }
 
         // Guardar datos en localStorage
