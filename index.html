@@ -357,6 +357,39 @@
             border-color: #667eea;
         }
 
+        /* Estilos diferenciados para talleres y congreso */
+        .workshop-btn {
+            border-color: #FF6B6B;
+        }
+
+        .workshop-btn:hover {
+            border-color: #FF6B6B;
+            background: #ffebeb;
+        }
+
+        .workshop-btn.active {
+            background: linear-gradient(135deg, #FF6B6B 0%, #C44569 100%);
+            color: white;
+            border-color: #FF6B6B;
+        }
+
+        .congress-btn {
+            border-color: #667eea;
+            font-weight: 600;
+        }
+
+        .congress-btn:hover {
+            border-color: #667eea;
+            background: #f0f3ff;
+        }
+
+        .congress-btn.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-color: #667eea;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
         .success-message {
             background: #d4edda;
             color: #155724;
@@ -1060,109 +1093,175 @@
                 <h2>📅 Agenda del Congreso</h2>
 
                 <div class="day-filter">
-                    <div class="filter-btn active" onclick="filterDay('all')">Todos los días</div>
-                    <div class="filter-btn" onclick="filterDay('day1')">Día 1</div>
-                    <div class="filter-btn" onclick="filterDay('day2')">Día 2</div>
-                    <div class="filter-btn" onclick="filterDay('day3')">Día 3</div>
+                    <div class="filter-btn active" onclick="filterDay('all')">Todos</div>
+                    <div class="filter-btn workshop-btn" onclick="filterDay('day1')">🛠️ Talleres 5 Nov</div>
+                    <div class="filter-btn congress-btn" onclick="filterDay('day2')">🎤 Congreso 6 Nov</div>
+                    <div class="filter-btn workshop-btn" onclick="filterDay('day3')">🛠️ Talleres 7 Nov</div>
                 </div>
 
                 <div id="agenda-content">
-                    <!-- Día 1 -->
+                    <!-- Día 1 - Talleres Miércoles 5 de Noviembre -->
                     <div class="agenda-day" data-day="day1">
-                        <div class="day-header">
-                            Día 1 - Lunes 15 de Enero, 2024
+                        <div class="day-header" style="background: linear-gradient(135deg, #FF6B6B 0%, #C44569 100%);">
+                            🛠️ Talleres - Miércoles 5 de Noviembre
                         </div>
 
                         <div class="agenda-item">
-                            <div class="agenda-time">08:00</div>
+                            <div class="agenda-time">09:30</div>
                             <div class="agenda-content">
-                                <div class="agenda-title">Registro y Bienvenida</div>
-                                <div class="agenda-location">📍 Hall Principal</div>
-                                <span class="agenda-type type-networking">Networking</span>
-                            </div>
-                        </div>
-
-                        <div class="agenda-item">
-                            <div class="agenda-time">09:00</div>
-                            <div class="agenda-content">
-                                <div class="agenda-title">Inauguración del Congreso</div>
-                                <div class="agenda-speaker">👤 Dr. María González - Directora del Congreso</div>
-                                <div class="agenda-location">📍 Auditorio Principal</div>
-                                <span class="agenda-type type-keynote">Keynote</span>
+                                <div class="agenda-title">Showroom certificación Analiza</div>
+                                <div class="agenda-speaker">Controla el rendimiento y la productividad en tu Organización</div>
+                                <div class="agenda-location">📍 AULA 1</div>
+                                <span class="agenda-type type-workshop">Taller</span>
                             </div>
                         </div>
 
                         <div class="agenda-item">
                             <div class="agenda-time">09:30</div>
                             <div class="agenda-content">
-                                <div class="agenda-title">El Futuro de la Tecnología</div>
-                                <div class="agenda-speaker">👤 Dr. Carlos Mendoza - CTO Tech Corp</div>
-                                <div class="agenda-location">📍 Auditorio Principal</div>
-                                <span class="agenda-type type-keynote">Keynote</span>
+                                <div class="agenda-title">Estandarización de procedimientos reglados</div>
+                                <div class="agenda-speaker">Diseño y estandarización de subprocesos de tramitación reglada</div>
+                                <div class="agenda-location">📍 AULA 2</div>
+                                <span class="agenda-type type-workshop">Taller</span>
                             </div>
                         </div>
 
                         <div class="agenda-item">
-                            <div class="agenda-time">10:30</div>
+                            <div class="agenda-time">09:30</div>
                             <div class="agenda-content">
-                                <div class="agenda-title">Pausa para Café</div>
-                                <div class="agenda-location">📍 Área de Exposición</div>
+                                <div class="agenda-title">Diseña tu oficina virtual</div>
+                                <div class="agenda-speaker">Herramientas y estrategias ganadoras</div>
+                                <div class="agenda-location">📍 AULA 3</div>
+                                <span class="agenda-type type-workshop">Taller</span>
+                            </div>
+                        </div>
+
+                        <div class="agenda-item">
+                            <div class="agenda-time">11:30</div>
+                            <div class="agenda-content">
+                                <div class="agenda-title">Pausa café</div>
+                                <div class="agenda-location">📍 Área Común</div>
                                 <span class="agenda-type type-break">Descanso</span>
-                            </div>
-                        </div>
-
-                        <div class="agenda-item">
-                            <div class="agenda-time">11:00</div>
-                            <div class="agenda-content">
-                                <div class="agenda-title">Inteligencia Artificial en la Medicina</div>
-                                <div class="agenda-speaker">👤 Dra. Ana Rodríguez - Hospital Central</div>
-                                <div class="agenda-location">📍 Sala A</div>
-                                <span class="agenda-type type-talk">Charla</span>
                             </div>
                         </div>
 
                         <div class="agenda-item">
                             <div class="agenda-time">12:00</div>
                             <div class="agenda-content">
-                                <div class="agenda-title">Workshop: Desarrollo Web Moderno</div>
-                                <div class="agenda-speaker">👤 Ing. Pedro López - WebDev Solutions</div>
-                                <div class="agenda-location">📍 Laboratorio 1</div>
+                                <div class="agenda-title">Taller de diseño de espacios digitales para la ciudadanía - Grupo 1</div>
+                                <div class="agenda-speaker">👤 Fractal Strategy - Primera parte</div>
+                                <div class="agenda-location">📍 AULA 1</div>
                                 <span class="agenda-type type-workshop">Taller</span>
                             </div>
                         </div>
 
                         <div class="agenda-item">
-                            <div class="agenda-time">13:30</div>
+                            <div class="agenda-time">12:00</div>
+                            <div class="agenda-content">
+                                <div class="agenda-title">Showroom Certificación Gestiona for Developers</div>
+                                <div class="agenda-speaker">Automatizaciones vs integraciones</div>
+                                <div class="agenda-location">📍 AULA 2</div>
+                                <span class="agenda-type type-workshop">Taller</span>
+                            </div>
+                        </div>
+
+                        <div class="agenda-item">
+                            <div class="agenda-time">12:00</div>
+                            <div class="agenda-content">
+                                <div class="agenda-title">Taller de diseño de espacios digitales para la ciudadanía - Grupo 2</div>
+                                <div class="agenda-speaker">👤 Fractal Strategy - Primera parte</div>
+                                <div class="agenda-location">📍 AULA 3</div>
+                                <span class="agenda-type type-workshop">Taller</span>
+                            </div>
+                        </div>
+
+                        <div class="agenda-item">
+                            <div class="agenda-time">14:00</div>
                             <div class="agenda-content">
                                 <div class="agenda-title">Almuerzo</div>
-                                <div class="agenda-location">📍 Comedor Principal</div>
+                                <div class="agenda-location">📍 Comedor</div>
                                 <span class="agenda-type type-break">Descanso</span>
+                            </div>
+                        </div>
+
+                        <div class="agenda-item">
+                            <div class="agenda-time">16:00</div>
+                            <div class="agenda-content">
+                                <div class="agenda-title">Taller de diseño de espacios digitales para la ciudadanía - Grupo 1</div>
+                                <div class="agenda-speaker">👤 Fractal Strategy - Segunda parte</div>
+                                <div class="agenda-location">📍 AULA 1</div>
+                                <span class="agenda-type type-workshop">Taller</span>
+                            </div>
+                        </div>
+
+                        <div class="agenda-item">
+                            <div class="agenda-time">16:00</div>
+                            <div class="agenda-content">
+                                <div class="agenda-title">Gestiona Code: Low-code para desafíos complejos</div>
+                                <div class="agenda-location">📍 AULA 2</div>
+                                <span class="agenda-type type-workshop">Taller</span>
+                            </div>
+                        </div>
+
+                        <div class="agenda-item">
+                            <div class="agenda-time">16:00</div>
+                            <div class="agenda-content">
+                                <div class="agenda-title">Taller de diseño de espacios digitales para la ciudadanía - Grupo 2</div>
+                                <div class="agenda-speaker">👤 Fractal Strategy - Segunda parte</div>
+                                <div class="agenda-location">📍 AULA 3</div>
+                                <span class="agenda-type type-workshop">Taller</span>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Día 2 -->
+                    <!-- Día 2 - Congreso Jueves 6 de Noviembre -->
                     <div class="agenda-day" data-day="day2">
-                        <div class="day-header">
-                            Día 2 - Martes 16 de Enero, 2024
+                        <div class="day-header" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                            🎤 III Encuentro Anual - Jueves 6 de Noviembre
                         </div>
 
                         <div class="agenda-item">
-                            <div class="agenda-time">09:00</div>
+                            <div class="agenda-time">08:15</div>
                             <div class="agenda-content">
-                                <div class="agenda-title">Blockchain y Criptomonedas</div>
-                                <div class="agenda-speaker">👤 Prof. Luis Martínez - Universidad Tecnológica</div>
-                                <div class="agenda-location">📍 Auditorio Principal</div>
+                                <div class="agenda-title">Entrega de acreditaciones</div>
+                                <div class="agenda-location">📍 Hall Principal</div>
+                                <span class="agenda-type type-networking">Registro</span>
+                            </div>
+                        </div>
+
+                        <div class="agenda-item">
+                            <div class="agenda-time">08:45</div>
+                            <div class="agenda-content">
+                                <div class="agenda-title">Inauguración III Encuentro Expertos Administración Avanzada de Gestiona</div>
+                                <div class="agenda-speaker">👤 Ricardo Peñalver - Director programas de certificación de esPublico</div>
+                                <span class="agenda-type type-keynote">Inauguración</span>
+                            </div>
+                        </div>
+
+                        <div class="agenda-item">
+                            <div class="agenda-time">09:15</div>
+                            <div class="agenda-content">
+                                <div class="agenda-title">Bienvenida institucional</div>
+                                <div class="agenda-speaker">👤 Juancho Redondo - CEO Grupo esPublico</div>
                                 <span class="agenda-type type-keynote">Keynote</span>
                             </div>
                         </div>
 
                         <div class="agenda-item">
-                            <div class="agenda-time">10:00</div>
+                            <div class="agenda-time">09:45</div>
                             <div class="agenda-content">
-                                <div class="agenda-title">Ciberseguridad en el 2024</div>
-                                <div class="agenda-speaker">👤 Ing. Carmen Silva - CyberSec Corp</div>
-                                <div class="agenda-location">📍 Sala B</div>
+                                <div class="agenda-title">Gestión de ingresos en Torrevieja</div>
+                                <div class="agenda-speaker">👤 Aitor Bartolomé - Ayuntamiento de Torrevieja</div>
+                                <div class="agenda-location">Comodidad para el ciudadano y eficiencia en la gestión</div>
+                                <span class="agenda-type type-talk">Charla</span>
+                            </div>
+                        </div>
+
+                        <div class="agenda-item">
+                            <div class="agenda-time">10:15</div>
+                            <div class="agenda-content">
+                                <div class="agenda-title">La respuesta del Ayuntamiento de Alfafar ante la crisis de la DANA</div>
+                                <div class="agenda-speaker">👤 Juan Bonmatí y Encarna Muñoz Pons</div>
                                 <span class="agenda-type type-talk">Charla</span>
                             </div>
                         </div>
@@ -1170,8 +1269,8 @@
                         <div class="agenda-item">
                             <div class="agenda-time">11:00</div>
                             <div class="agenda-content">
-                                <div class="agenda-title">Pausa para Café</div>
-                                <div class="agenda-location">📍 Área de Exposición</div>
+                                <div class="agenda-title">Pausa café</div>
+                                <div class="agenda-location">📍 Área Común</div>
                                 <span class="agenda-type type-break">Descanso</span>
                             </div>
                         </div>
@@ -1179,46 +1278,146 @@
                         <div class="agenda-item">
                             <div class="agenda-time">11:30</div>
                             <div class="agenda-content">
-                                <div class="agenda-title">Panel: Innovación y Emprendimiento</div>
-                                <div class="agenda-speaker">👤 Varios ponentes</div>
-                                <div class="agenda-location">📍 Auditorio Principal</div>
-                                <span class="agenda-type type-talk">Panel</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Día 3 -->
-                    <div class="agenda-day" data-day="day3">
-                        <div class="day-header">
-                            Día 3 - Miércoles 17 de Enero, 2024
-                        </div>
-
-                        <div class="agenda-item">
-                            <div class="agenda-time">09:00</div>
-                            <div class="agenda-content">
-                                <div class="agenda-title">Sostenibilidad y Tecnología Verde</div>
-                                <div class="agenda-speaker">👤 Dra. Elena Vargas - EcoTech Institute</div>
-                                <div class="agenda-location">📍 Auditorio Principal</div>
-                                <span class="agenda-type type-keynote">Keynote</span>
-                            </div>
-                        </div>
-
-                        <div class="agenda-item">
-                            <div class="agenda-time">10:30</div>
-                            <div class="agenda-content">
-                                <div class="agenda-title">Sesión de Networking Final</div>
-                                <div class="agenda-location">📍 Área de Exposición</div>
-                                <span class="agenda-type type-networking">Networking</span>
+                                <div class="agenda-title">Del trámite al dato en el Ayuntamiento de Sentmenat</div>
+                                <div class="agenda-speaker">👤 Rafa Ruiz - Ajuntament de Sentmenat</div>
+                                <span class="agenda-type type-talk">Charla</span>
                             </div>
                         </div>
 
                         <div class="agenda-item">
                             <div class="agenda-time">12:00</div>
                             <div class="agenda-content">
-                                <div class="agenda-title">Clausura del Congreso</div>
-                                <div class="agenda-speaker">👤 Comité Organizador</div>
-                                <div class="agenda-location">📍 Auditorio Principal</div>
+                                <div class="agenda-title">Batalla de Lets</div>
+                                <div class="agenda-speaker">👤 Emilio Rovira (Hospital Valencia) • Emma Rodríguez (Guadarrama) • Isabel Berna (Diputación Alicante) • Eduard Vilamajó (Piera)</div>
+                                <span class="agenda-type type-talk">Panel</span>
+                            </div>
+                        </div>
+
+                        <div class="agenda-item">
+                            <div class="agenda-time">12:30</div>
+                            <div class="agenda-content">
+                                <div class="agenda-title">¡Sin esperas ni burocracia! El poder de los Anticipos de Caja Fija</div>
+                                <div class="agenda-speaker">👤 María Vázquez Cano - Ayuntamiento de Vera</div>
+                                <span class="agenda-type type-talk">Charla</span>
+                            </div>
+                        </div>
+
+                        <div class="agenda-item">
+                            <div class="agenda-time">13:00</div>
+                            <div class="agenda-content">
+                                <div class="agenda-title">Showroom producto Gestiona</div>
+                                <div class="agenda-speaker">Dpto. Producto I+D+i Gestiona</div>
+                                <div class="agenda-location">• Nueva app móvil • Mejoras motor de tramitación • Novedades módulo tributario</div>
+                                <span class="agenda-type type-workshop">Demo</span>
+                            </div>
+                        </div>
+
+                        <div class="agenda-item">
+                            <div class="agenda-time">14:00</div>
+                            <div class="agenda-content">
+                                <div class="agenda-title">Almuerzo</div>
+                                <div class="agenda-location">📍 Comedor</div>
+                                <span class="agenda-type type-break">Descanso</span>
+                            </div>
+                        </div>
+
+                        <div class="agenda-item">
+                            <div class="agenda-time">16:00</div>
+                            <div class="agenda-content">
+                                <div class="agenda-title">Novedades Gestiona 2026</div>
+                                <div class="agenda-speaker">👤 David Elías Ferrer - Director General esPublico</div>
+                                <span class="agenda-type type-keynote">Keynote</span>
+                            </div>
+                        </div>
+
+                        <div class="agenda-item">
+                            <div class="agenda-time">16:30</div>
+                            <div class="agenda-content">
+                                <div class="agenda-title">Mesa Redonda: "El developer como agente de modernización de la administración del siglo XXI"</div>
+                                <div class="agenda-speaker">Modera: Pablo Ferrer • Daniel Jarque (El Escorial) • Maika Pérez (Valdepeñas) • Toni Muñoz (Berguedá)</div>
+                                <span class="agenda-type type-talk">Panel</span>
+                            </div>
+                        </div>
+
+                        <div class="agenda-item">
+                            <div class="agenda-time">17:30</div>
+                            <div class="agenda-content">
+                                <div class="agenda-title">Novedades programa de certificación</div>
+                                <div class="agenda-speaker">👤 Ricardo Peñalver García - Director programas de certificación de esPublico</div>
+                                <span class="agenda-type type-talk">Charla</span>
+                            </div>
+                        </div>
+
+                        <div class="agenda-item">
+                            <div class="agenda-time">17:45</div>
+                            <div class="agenda-content">
+                                <div class="agenda-title">Entrega de premios y diplomas</div>
+                                <div class="agenda-speaker">👤 María Llorente Ruíz</div>
+                                <span class="agenda-type type-keynote">Ceremonia</span>
+                            </div>
+                        </div>
+
+                        <div class="agenda-item">
+                            <div class="agenda-time">18:15</div>
+                            <div class="agenda-content">
+                                <div class="agenda-title">Despedida y cierre del encuentro</div>
+                                <div class="agenda-speaker">👤 Elena Serrano - Responsable académica programas de certificación</div>
                                 <span class="agenda-type type-keynote">Clausura</span>
+                            </div>
+                        </div>
+
+                        <div class="agenda-item">
+                            <div class="agenda-time">21:00</div>
+                            <div class="agenda-content">
+                                <div class="agenda-title">Cena en Restaurante La Ontina</div>
+                                <div class="agenda-location">📍 Restaurante La Ontina</div>
+                                <span class="agenda-type type-networking">Networking</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Día 3 - Talleres Viernes 7 de Noviembre -->
+                    <div class="agenda-day" data-day="day3">
+                        <div class="day-header" style="background: linear-gradient(135deg, #FF6B6B 0%, #C44569 100%);">
+                            🛠️ Talleres - Viernes 7 de Noviembre
+                        </div>
+
+                        <div class="agenda-item">
+                            <div class="agenda-time">10:00</div>
+                            <div class="agenda-content">
+                                <div class="agenda-title">Estandarización de procedimientos reglados</div>
+                                <div class="agenda-speaker">Los subprocesos llegan a Gestiona</div>
+                                <div class="agenda-location">📍 AULA 1</div>
+                                <span class="agenda-type type-workshop">Taller</span>
+                            </div>
+                        </div>
+
+                        <div class="agenda-item">
+                            <div class="agenda-time">10:00</div>
+                            <div class="agenda-content">
+                                <div class="agenda-title">Gestiona Challenge</div>
+                                <div class="agenda-speaker">Trucos, retos y secretos ocultos</div>
+                                <div class="agenda-location">📍 AULA 2</div>
+                                <span class="agenda-type type-workshop">Taller</span>
+                            </div>
+                        </div>
+
+                        <div class="agenda-item">
+                            <div class="agenda-time">10:00</div>
+                            <div class="agenda-content">
+                                <div class="agenda-title">De caos a control</div>
+                                <div class="agenda-speaker">Centralización efectiva de la configuración de Gestiona en una entidad</div>
+                                <div class="agenda-location">📍 AULA 3</div>
+                                <span class="agenda-type type-workshop">Taller</span>
+                            </div>
+                        </div>
+
+                        <div class="agenda-item">
+                            <div class="agenda-time">12:00</div>
+                            <div class="agenda-content">
+                                <div class="agenda-title">Coffee lunch</div>
+                                <div class="agenda-location">📍 Área Común</div>
+                                <span class="agenda-type type-break">Descanso</span>
                             </div>
                         </div>
                     </div>
