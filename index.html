@@ -31,7 +31,12 @@
 
         body {
             font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
-            background: linear-gradient(135deg, #005F73 0%, #0B7A8F 50%, #006B7D 100%);
+            background:
+                radial-gradient(ellipse at 50% 20%, rgba(0, 217, 192, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 60%, rgba(0, 107, 125, 0.2) 0%, transparent 60%),
+                radial-gradient(ellipse at 20% 80%, rgba(0, 217, 192, 0.18) 0%, transparent 50%),
+                linear-gradient(180deg, #005F73 0%, #006B7D 40%, #0B7A8F 70%, rgba(0, 217, 192, 0.3) 100%),
+                #00414D;
             color: var(--color-dark);
             line-height: 1.6;
             overflow-x: hidden;
@@ -39,7 +44,7 @@
             min-height: 100vh;
         }
 
-        /* Patrón de red de fondo */
+        /* Overlay turquesa sutil */
         body::before {
             content: '';
             position: fixed;
@@ -47,23 +52,25 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-image:
-                radial-gradient(circle at 20% 50%, rgba(0, 217, 192, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 80% 80%, rgba(0, 217, 192, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 40% 20%, rgba(0, 245, 224, 0.08) 0%, transparent 50%);
+            background: linear-gradient(180deg,
+                rgba(0, 95, 115, 0.3) 0%,
+                rgba(0, 217, 192, 0.15) 50%,
+                rgba(0, 217, 192, 0.4) 100%
+            );
             pointer-events: none;
             z-index: 0;
         }
 
-        /* Trama de red decorativa inferior */
+        /* Efecto blur sutil en la parte inferior */
         body::after {
             content: '';
             position: fixed;
             bottom: 0;
             left: 0;
             width: 100%;
-            height: 150px;
-            background: linear-gradient(0deg, rgba(0, 217, 192, 0.03) 0%, transparent 100%);
+            height: 200px;
+            background: linear-gradient(0deg, rgba(0, 217, 192, 0.6) 0%, transparent 100%);
+            backdrop-filter: blur(2px);
             pointer-events: none;
             z-index: 0;
         }
@@ -1224,10 +1231,13 @@
 
         <div class="welcome-container" id="welcome-container">
             <div class="welcome-icon">
-                <span>🎉</span>
+                <svg viewBox="0 0 200 60" xmlns="http://www.w3.org/2000/svg" style="width: 150px; height: auto;">
+                    <text x="100" y="35" font-family="Roboto, sans-serif" font-size="28" font-weight="700" fill="#ffffff" text-anchor="middle">gestiona</text>
+                    <text x="100" y="50" font-family="Roboto, sans-serif" font-size="12" font-weight="300" fill="#00D9C0" text-anchor="middle">esPublico</text>
+                </svg>
             </div>
             <h1 class="welcome-title">¡Bienvenid@!</h1>
-            <p class="welcome-subtitle">Bienvenid@ a la app del III Encuentro de expertos en Administración Avanzada de Gestiona</p>
+            <p class="welcome-subtitle">Accede a la app del III Encuentro de Expertos en Administración Avanzada de Gestiona</p>
 
             <div id="error-container"></div>
 
