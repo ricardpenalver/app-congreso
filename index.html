@@ -917,7 +917,16 @@
         .welcome-icon {
             text-align: center;
             margin-bottom: 30px;
-            animation: float 3s ease-in-out infinite;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .welcome-icon img {
+            max-width: 200px;
+            height: auto;
+            display: block;
+            filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.3));
         }
 
         .welcome-icon span {
