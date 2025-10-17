@@ -2327,10 +2327,9 @@
                 const newTags = tagsText.split(',').map(tag => tag.trim().toLowerCase()).filter(tag => tag);
 
                 try {
-                    // Intentar guardar en Supabase con el ID de sesión del usuario
+                    // Intentar guardar en Supabase (sin created_by para permitir tags anónimas)
                     const tagsToInsert = newTags.map(tagName => ({
                         name: tagName,
-                        user_session_id: userSessionId,
                         color: '#' + Math.floor(Math.random()*16777215).toString(16)
                     }));
 
