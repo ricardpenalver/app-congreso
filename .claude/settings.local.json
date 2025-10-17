@@ -3,5 +3,27 @@
     "context7",
     "playwright-server"
   ],
-  "enableAllProjectMcpServers": true
+  "enableAllProjectMcpServers": true,
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "git pull"
+          }
+        ]
+      }
+    ],
+    "SessionEnd": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "if git diff --quiet && git diff --cached --quiet; then echo 'No changes to commit'; else git add . && git status; fi"
+          }
+        ]
+      }
+    ]
+  }
 }

@@ -139,6 +139,31 @@ npx serve .
 php -S localhost:8000
 ```
 
+### 🔄 Automatización Git Semi-automática (Hooks de Claude Code)
+
+**Configurado en `.claude/settings.local.json`:**
+
+- **Al iniciar sesión:** `git pull` automático (sincroniza cambios remotos)
+- **Al finalizar sesión:** `git add .` automático + muestra `git status`
+
+**Flujo semi-automático:**
+1. Abres Claude Code → `git pull` (sincroniza automáticamente)
+2. Trabajas en el proyecto → Claude realiza cambios
+3. Cierras Claude Code → `git add .` + `git status` (automático)
+4. **Tú haces manualmente:** `git commit -m "mensaje descriptivo"` + `git push`
+
+**✅ Ventajas:**
+- Sincronización automática al iniciar (nunca olvidas hacer pull)
+- Los cambios se añaden al staging automáticamente
+- Control total sobre mensajes de commit
+- Puedes revisar cambios antes de hacer push
+- Historial de Git limpio y descriptivo
+
+**💡 Perfecto para:**
+- Mantener control sobre el historial
+- Escribir mensajes de commit significativos
+- Trabajo individual o en equipo
+
 ## 🔐 Seguridad
 
 ### Implementada
