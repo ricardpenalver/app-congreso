@@ -1072,6 +1072,127 @@
             text-decoration: underline;
         }
 
+        /* Aviso legal */
+        .legal-notice {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 10001;
+        }
+
+        .legal-notice a {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 10px 15px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 20px;
+            color: white;
+            text-decoration: none;
+            font-size: 13px;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .legal-notice a:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Modal de aviso legal */
+        .legal-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 10002;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .legal-modal.active {
+            display: flex;
+        }
+
+        .legal-content {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+            color: white;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            animation: slideIn 0.3s ease-out;
+        }
+
+        .legal-content h2 {
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 24px;
+            text-align: center;
+        }
+
+        .legal-content h3 {
+            margin-top: 25px;
+            margin-bottom: 10px;
+            font-size: 18px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+            padding-bottom: 10px;
+        }
+
+        .legal-content p, .legal-content ul {
+            font-size: 14px;
+            line-height: 1.8;
+            margin-bottom: 15px;
+            opacity: 0.95;
+        }
+
+        .legal-content ul {
+            padding-left: 20px;
+        }
+
+        .legal-content li {
+            margin-bottom: 8px;
+        }
+
+        .legal-close {
+            display: block;
+            margin: 30px auto 0;
+            padding: 12px 30px;
+            background: white;
+            color: #667eea;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .legal-close:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
         /* Animación de salida */
         .welcome-overlay.fade-out {
             animation: fadeOut 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
@@ -1229,6 +1350,47 @@
 </head>
 <body>
     <!-- Overlay de bienvenida -->
+    <!-- Modal de Aviso Legal -->
+    <div id="legal-modal" class="legal-modal" onclick="closeLegalModal(event)">
+        <div class="legal-content" onclick="event.stopPropagation()">
+            <h2>ℹ️ Aviso Legal y Privacidad</h2>
+
+            <h3>📱 Objetivo de la Aplicación</h3>
+            <p>Esta aplicación tiene como único propósito facilitar la participación e interacción durante el <strong>III Encuentro de Usuarios Certificados de Gestiona</strong>.</p>
+
+            <h3>🔒 Protección de Datos</h3>
+            <p><strong>NO se almacenan datos personales identificables.</strong> La información recopilada se utiliza exclusivamente con fines estadísticos y de análisis del evento.</p>
+
+            <h3>📊 Información que Capturamos</h3>
+            <ul>
+                <li>Nombre (opcional, solo para personalización)</li>
+                <li>Email (hash anónimo para identificación de sesión)</li>
+                <li>Votos y preferencias de sesiones</li>
+                <li>Ideas y etiquetas compartidas</li>
+            </ul>
+
+            <h3>🚫 Lo que NO Capturamos</h3>
+            <ul>
+                <li>Información del dispositivo</li>
+                <li>Ubicación geográfica</li>
+                <li>Datos de navegación</li>
+                <li>Información de contacto adicional</li>
+                <li>Cookies de terceros</li>
+            </ul>
+
+            <h3>🔐 Seguridad</h3>
+            <p>Los datos se procesan de forma anónima mediante hash criptográfico del email. No es posible identificar a usuarios individuales a partir de la información almacenada.</p>
+
+            <h3>⏱️ Duración</h3>
+            <p>Los datos estadísticos se conservarán únicamente durante el evento y un período posterior para análisis. Posteriormente serán eliminados.</p>
+
+            <h3>📧 Contacto</h3>
+            <p>Para cualquier consulta sobre privacidad, contacta con el organizador del evento.</p>
+
+            <button class="legal-close" onclick="closeLegalModal(event)">Entendido</button>
+        </div>
+    </div>
+
     <div id="welcome-overlay">
         <!-- Canvas para partículas -->
         <canvas id="particles-canvas"></canvas>
@@ -1261,6 +1423,10 @@
                     <span>Acceder</span>
                 </button>
             </form>
+
+            <div class="legal-notice">
+                <a href="#" onclick="showLegalNotice(event)">ℹ️ Aviso legal y privacidad</a>
+            </div>
         </div>
     </div>
 
@@ -2878,6 +3044,20 @@
             }
         }
 
+
+        // Mostrar aviso legal
+        function showLegalNotice(event) {
+            event.preventDefault();
+            const modal = document.getElementById('legal-modal');
+            modal.classList.add('active');
+        }
+
+        // Cerrar modal de aviso legal
+        function closeLegalModal(event) {
+            event.preventDefault();
+            const modal = document.getElementById('legal-modal');
+            modal.classList.remove('active');
+        }
 
         // Cerrar overlay con animación
         function closeWelcomeOverlay() {
