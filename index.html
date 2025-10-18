@@ -1072,34 +1072,39 @@
             text-decoration: underline;
         }
 
-        /* Aviso legal */
-        .legal-notice {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            z-index: 10001;
+        /* Checkbox de aviso legal */
+        .legal-checkbox {
+            margin-top: 15px;
+            margin-bottom: 10px;
         }
 
-        .legal-notice a {
+        .legal-checkbox label {
             display: flex;
-            align-items: center;
-            gap: 5px;
-            padding: 10px 15px;
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            border-radius: 20px;
-            color: white;
-            text-decoration: none;
+            align-items: flex-start;
+            gap: 10px;
+            cursor: pointer;
             font-size: 13px;
-            transition: all 0.3s;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            color: white;
+            line-height: 1.4;
         }
 
-        .legal-notice a:hover {
-            background: rgba(255, 255, 255, 0.25);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        .legal-checkbox input[type="checkbox"] {
+            margin-top: 2px;
+            cursor: pointer;
+            width: 18px;
+            height: 18px;
+            flex-shrink: 0;
+        }
+
+        .legal-checkbox a {
+            color: white;
+            text-decoration: underline;
+            font-weight: 600;
+            transition: opacity 0.3s;
+        }
+
+        .legal-checkbox a:hover {
+            opacity: 0.8;
         }
 
         /* Modal de aviso legal */
@@ -1419,14 +1424,17 @@
                     <input type="email" id="user-email" placeholder="tu@email.com" required autocomplete="email">
                 </div>
 
+                <div class="legal-checkbox">
+                    <label>
+                        <input type="checkbox" id="legal-accept" required>
+                        <span>He leído y acepto el <a href="#" onclick="showLegalNotice(event)">aviso legal</a></span>
+                    </label>
+                </div>
+
                 <button type="submit" class="welcome-btn">
                     <span>Acceder</span>
                 </button>
             </form>
-
-            <div class="legal-notice">
-                <a href="#" onclick="showLegalNotice(event)">ℹ️ Aviso legal y privacidad</a>
-            </div>
         </div>
     </div>
 
