@@ -18,7 +18,7 @@
             --color-light: #f8f9fa;
             --color-white: #ffffff;
             --color-cyan-bright: #00F5E0;
-            --shadow-sm: 0 2px 8px rgba(0, 107, 125, 0.1);
+            --shadow-sm: 0 2px 8px rgba(0, 107, 125, 0.1);11
             --shadow-md: 0 4px 16px rgba(0, 107, 125, 0.15);
             --shadow-lg: 0 8px 32px rgba(0, 107, 125, 0.2);
         }
@@ -723,6 +723,97 @@
             color: #667eea;
         }
 
+        /* Estilos para nube de etiquetas (proyección) */
+        #tagcloud-container {
+            min-height: 400px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+
+        .tag-cloud-word {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 5px;
+            border-radius: 30px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            opacity: 1;
+        }
+
+        .tag-cloud-word:hover {
+            transform: scale(1.15) rotate(-2deg);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+            z-index: 10;
+        }
+
+        @keyframes float-in {
+            from {
+                opacity: 0;
+                transform: translateY(30px) scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .tag-cloud-word.animate-float {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        /* Tamaños de etiquetas basados en frecuencia */
+        .tag-size-1 { font-size: 14px; color: #95a5a6; }
+        .tag-size-2 { font-size: 18px; color: #7f8c8d; }
+        .tag-size-3 { font-size: 24px; color: #667eea; }
+        .tag-size-4 { font-size: 32px; color: #764ba2; }
+        .tag-size-5 { font-size: 42px; color: #f093fb; }
+        .tag-size-6 { font-size: 54px; color: #ff6b6b; }
+        .tag-size-7 { font-size: 68px; color: #ee5a6f; font-weight: 900; }
+
+        .tagcloud-stats {
+            text-align: center;
+            margin: 20px 0;
+            padding: 20px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .tagcloud-stat-item {
+            display: inline-block;
+            margin: 0 25px;
+            padding: 15px;
+        }
+
+        .tagcloud-stat-value {
+            font-size: 36px;
+            font-weight: bold;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .tagcloud-stat-label {
+            font-size: 14px;
+            color: #666;
+            margin-top: 5px;
+        }
+
         /* Estilos para etiquetas enviadas - Diseño tipo tarjetas uniforme */
         #tags-ranking-container {
             display: grid;
@@ -1072,174 +1163,6 @@
             text-decoration: underline;
         }
 
-        /* Checkbox de aviso legal */
-        .legal-checkbox {
-            margin-top: 15px;
-            margin-bottom: 15px;
-        }
-
-        .legal-checkbox label {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            cursor: pointer;
-            font-size: 14px;
-            color: white;
-            line-height: 1.5;
-        }
-
-        .legal-checkbox input[type="checkbox"] {
-            cursor: pointer;
-            width: 16px;
-            height: 16px;
-            flex-shrink: 0;
-            accent-color: #667eea;
-        }
-
-        .legal-checkbox a {
-            color: white;
-            text-decoration: underline;
-            font-weight: 600;
-            transition: opacity 0.3s;
-        }
-
-        .legal-checkbox a:hover {
-            opacity: 0.8;
-        }
-
-        /* Mensaje de aviso legal no aceptado */
-        .legal-required-message {
-            display: none;
-            text-align: center;
-            padding: 30px;
-            animation: slideIn 0.3s ease-out;
-        }
-
-        .legal-required-message.active {
-            display: block;
-        }
-
-        .legal-required-message h2 {
-            font-size: 32px;
-            margin-bottom: 15px;
-        }
-
-        .legal-required-message p {
-            font-size: 16px;
-            line-height: 1.6;
-            margin-bottom: 25px;
-            opacity: 0.95;
-        }
-
-        .legal-required-message button {
-            padding: 12px 30px;
-            background: white;
-            color: #667eea;
-            border: none;
-            border-radius: 10px;
-            font-weight: 600;
-            font-size: 16px;
-            cursor: pointer;
-            transition: all 0.3s;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-        }
-
-        .legal-required-message button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 7px 20px rgba(0, 0, 0, 0.3);
-        }
-
-        /* Modal de aviso legal */
-        .legal-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(10px);
-            z-index: 10002;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-
-        .legal-modal.active {
-            display: flex;
-        }
-
-        .legal-content {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 20px;
-            padding: 40px;
-            max-width: 600px;
-            max-height: 80vh;
-            overflow-y: auto;
-            color: white;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-            animation: slideIn 0.3s ease-out;
-        }
-
-        .legal-content h2 {
-            margin-top: 0;
-            margin-bottom: 20px;
-            font-size: 24px;
-            text-align: center;
-        }
-
-        .legal-content h3 {
-            margin-top: 25px;
-            margin-bottom: 10px;
-            font-size: 18px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
-            padding-bottom: 10px;
-        }
-
-        .legal-content p, .legal-content ul {
-            font-size: 14px;
-            line-height: 1.8;
-            margin-bottom: 15px;
-            opacity: 0.95;
-        }
-
-        .legal-content ul {
-            padding-left: 20px;
-        }
-
-        .legal-content li {
-            margin-bottom: 8px;
-        }
-
-        .legal-close {
-            display: block;
-            margin: 30px auto 0;
-            padding: 12px 30px;
-            background: white;
-            color: #667eea;
-            border: none;
-            border-radius: 10px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .legal-close:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-        }
-
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(-30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
         /* Animación de salida */
         .welcome-overlay.fade-out {
             animation: fadeOut 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
@@ -1397,47 +1320,6 @@
 </head>
 <body>
     <!-- Overlay de bienvenida -->
-    <!-- Modal de Aviso Legal -->
-    <div id="legal-modal" class="legal-modal" onclick="closeLegalModal(event)">
-        <div class="legal-content" onclick="event.stopPropagation()">
-            <h2>ℹ️ Aviso Legal y Privacidad</h2>
-
-            <h3>📱 Objetivo de la Aplicación</h3>
-            <p>Esta aplicación tiene como único propósito facilitar la participación e interacción durante el <strong>III Encuentro de Usuarios Certificados de Gestiona</strong>.</p>
-
-            <h3>🔒 Protección de Datos</h3>
-            <p><strong>NO se almacenan datos personales identificables.</strong> La información recopilada se utiliza exclusivamente con fines estadísticos y de análisis del evento.</p>
-
-            <h3>📊 Información que Capturamos</h3>
-            <ul>
-                <li>Nombre (opcional, solo para personalización)</li>
-                <li>Email (hash anónimo para identificación de sesión)</li>
-                <li>Votos y preferencias de sesiones</li>
-                <li>Ideas y etiquetas compartidas</li>
-            </ul>
-
-            <h3>🚫 Lo que NO Capturamos</h3>
-            <ul>
-                <li>Información del dispositivo</li>
-                <li>Ubicación geográfica</li>
-                <li>Datos de navegación</li>
-                <li>Información de contacto adicional</li>
-                <li>Cookies de terceros</li>
-            </ul>
-
-            <h3>🔐 Seguridad</h3>
-            <p>Los datos se procesan de forma anónima mediante hash criptográfico del email. No es posible identificar a usuarios individuales a partir de la información almacenada.</p>
-
-            <h3>⏱️ Duración</h3>
-            <p>Los datos estadísticos se conservarán únicamente durante el evento y un período posterior para análisis. Posteriormente serán eliminados.</p>
-
-            <h3>📧 Contacto</h3>
-            <p>Para cualquier consulta sobre privacidad, contacta con el organizador del evento.</p>
-
-            <button class="legal-close" onclick="closeLegalModal(event)">Entendido</button>
-        </div>
-    </div>
-
     <div id="welcome-overlay">
         <!-- Canvas para partículas -->
         <canvas id="particles-canvas"></canvas>
@@ -1449,9 +1331,10 @@
 
         <div class="welcome-container" id="welcome-container">
             <div class="welcome-icon">
-                <img src="https://design.g3stiona.com/recursos-nuevo-espublico/downloads/logos/Gestiona-blanco.png" alt="Gestiona Logo" style="max-width: 200px; height: auto; display: block;">
+                <img src="./Gestiona-blanco.png" alt="Gestiona Logo" style="max-width: 200px; height: auto; display: block;">
             </div>
-            <p class="welcome-subtitle">Bienvenid@ a la app del III Encuentro de Usuarios Certificados de Gestiona</p>
+            <h1 class="welcome-title">¡Bienvenid@!</h1>
+            <p class="welcome-subtitle">Accede a la app del III Encuentro de Expertos en Administración Avanzada de Gestiona</p>
 
             <div id="error-container"></div>
 
@@ -1466,25 +1349,13 @@
                     <input type="email" id="user-email" placeholder="tu@email.com" required autocomplete="email">
                 </div>
 
-                <div class="legal-checkbox">
-                    <label>
-                        <input type="checkbox" id="legal-accept">
-                        <span>He leído y acepto el <a href="#" onclick="showLegalNotice(event)">aviso legal</a></span>
-                    </label>
-                </div>
-
                 <button type="submit" class="welcome-btn">
-                    <span>Acceder</span>
+                    <span>Comenzar experiencia</span>
                 </button>
             </form>
 
-            <!-- Mensaje cuando no se acepta el aviso legal -->
-            <div class="legal-required-message" id="legal-required-message">
-                <h2>🤔</h2>
-                <p><strong>¡Vaya!</strong> Nos encantaría que pudieras acceder a la app del encuentro.</p>
-                <p>Sin embargo, para garantizar tu privacidad y cumplir con la normativa, necesitamos que leas y aceptes nuestro aviso legal antes de continuar.</p>
-                <p>Te prometemos que es breve y que valoramos muchísimo tu privacidad. 😊</p>
-                <button onclick="backToWelcomeForm()">Volver al formulario</button>
+            <div class="recovery-link">
+                <a href="#" onclick="showRecoveryMode(event)">¿Ya tienes una cuenta? Recuperar sesión</a>
             </div>
         </div>
     </div>
@@ -1494,7 +1365,7 @@
         <div id="home-screen" class="screen active">
             <div class="header">
                 <!-- Logo Gestiona esPublico -->
-                <img class="logo-gestiona" src="https://design.g3stiona.com/recursos-nuevo-espublico/downloads/logos/Gestiona-blanco.png" alt="Gestiona esPublico">
+                <img class="logo-gestiona" src="Gestiona-blanco.png" alt="Gestiona esPublico">
 
                 <h1>III Encuentro Anual</h1>
                 <p>Usuarios Certificados</p>
@@ -1970,6 +1841,32 @@
             </div>
         </div>
 
+        <!-- Pantalla de Nube de Etiquetas (Proyección) -->
+        <div id="tagcloud-screen" class="screen">
+            <div class="header">
+                <h1>💭 Nube de Etiquetas del Congreso</h1>
+                <p>Principales temas tratados según los asistentes</p>
+            </div>
+
+            <div class="section">
+                <div style="text-align: center; margin-bottom: 30px;">
+                    <button class="btn" onclick="loadTagCloud()" style="max-width: 300px; display: inline-block;">
+                        🔄 Actualizar Nube
+                    </button>
+                </div>
+
+                <div id="tagcloud-container">
+                    <!-- La nube de etiquetas se cargará aquí -->
+                </div>
+
+                <div style="text-align: center; margin-top: 30px;">
+                    <button class="back-btn" onclick="showScreen('home-screen')">
+                        ← Volver al inicio
+                    </button>
+                </div>
+            </div>
+        </div>
+
         <!-- Pantalla de Etiquetas -->
         <div id="tags-screen" class="screen">
             <button class="back-btn" onclick="showScreen('home-screen')">
@@ -2068,7 +1965,16 @@
 
             if (urlParams.has('results') || hashParams === '#results') {
                 console.log('🏆 Detectado parámetro de resultados en URL, mostrando pantalla...');
+                // Ocultar overlay de bienvenida para mostrar resultados directamente
+                document.getElementById('welcome-overlay').style.display = 'none';
                 showScreen('results-screen');
+            }
+
+            if (urlParams.has('tagcloud') || hashParams === '#tagcloud') {
+                console.log('💭 Detectado parámetro de nube de etiquetas en URL, mostrando pantalla...');
+                // Ocultar overlay de bienvenida para mostrar nube de etiquetas directamente
+                document.getElementById('welcome-overlay').style.display = 'none';
+                showScreen('tagcloud-screen');
             }
         };
 
@@ -2415,9 +2321,21 @@
                 console.log('🛑 Auto-refresh de tags detenido');
             }
 
+            // Si estamos saliendo de la pantalla de nube de etiquetas, detener auto-refresh
+            if (tagcloudRefreshInterval !== null && screenId !== 'tagcloud-screen') {
+                clearInterval(tagcloudRefreshInterval);
+                tagcloudRefreshInterval = null;
+                console.log('🛑 Auto-refresh de nube de etiquetas detenido');
+            }
+
             // Si estamos entrando a la pantalla de resultados, cargar datos
             if (screenId === 'results-screen') {
                 loadResults();
+            }
+
+            // Si estamos entrando a la pantalla de nube de etiquetas, cargar datos
+            if (screenId === 'tagcloud-screen') {
+                loadTagCloud();
             }
 
             // Si estamos entrando a la pantalla de tags, iniciar auto-refresh
@@ -2547,10 +2465,12 @@
                 const newTags = tagsText.split(',').map(tag => tag.trim().toLowerCase()).filter(tag => tag);
 
                 try {
-                    // Intentar guardar en Supabase (sin created_by para permitir tags anónimas)
+                    // Intentar guardar en Supabase (sin created_by para usuarios anónimos)
                     const tagsToInsert = newTags.map(tagName => ({
                         name: tagName,
-                        color: '#' + Math.floor(Math.random()*16777215).toString(16)
+                        description: `Tag creado por ${userSessionId || 'usuario anónimo'}`,
+                        color: '#' + Math.floor(Math.random()*16777215).toString(16),
+                        created_by: null // Permitir tags anónimos
                     }));
 
                     const { data, error } = await supabaseClient
@@ -2965,6 +2885,168 @@
             }
         }
 
+        // Variable para el intervalo de auto-refresh de la nube de etiquetas
+        let tagcloudRefreshInterval = null;
+
+        // Función para cargar y mostrar nube de etiquetas
+        async function loadTagCloud(autoRefresh = false) {
+            const tagcloudContainer = document.getElementById('tagcloud-container');
+
+            // Si es la primera llamada manual, iniciar auto-refresh
+            if (!autoRefresh && !tagcloudRefreshInterval) {
+                console.log('🔄 Iniciando auto-refresh de nube de etiquetas (cada 5 segundos)');
+                tagcloudRefreshInterval = setInterval(() => {
+                    loadTagCloud(true); // Llamada automática
+                }, 5000);
+            }
+
+            try {
+                console.log('💭 Cargando nube de etiquetas desde Supabase...');
+
+                // Consultar tags con su frecuencia (número de veces que aparece)
+                const { data: tagsData, error } = await supabaseClient
+                    .from('tags')
+                    .select('id, name, color')
+                    .order('created_at', { ascending: false });
+
+                if (error) {
+                    throw error;
+                }
+
+                console.log(`✅ ${tagsData.length} etiquetas cargadas`);
+
+                // Contar frecuencia de cada etiqueta (cuántas veces aparece el mismo nombre)
+                const tagFrequency = {};
+                const tagColors = {};
+
+                tagsData.forEach(tag => {
+                    const tagName = tag.name.toLowerCase().trim();
+                    tagFrequency[tagName] = (tagFrequency[tagName] || 0) + 1;
+                    if (!tagColors[tagName]) {
+                        tagColors[tagName] = tag.color;
+                    }
+                });
+
+                // Convertir a array y ordenar por frecuencia
+                const tagArray = Object.entries(tagFrequency).map(([name, count]) => ({
+                    name,
+                    count,
+                    color: tagColors[name]
+                })).sort((a, b) => b.count - a.count);
+
+                console.log('📊 Top 5 etiquetas:', tagArray.slice(0, 5));
+
+                // Calcular estadísticas
+                const totalTags = tagsData.length;
+                const uniqueTags = tagArray.length;
+                const maxCount = tagArray[0]?.count || 0;
+
+                // Función para calcular el tamaño de la etiqueta (1-7)
+                function getTagSize(count, maxCount) {
+                    if (maxCount === 1) return 3; // Si todas tienen frecuencia 1, tamaño medio
+                    const percentage = count / maxCount;
+                    if (percentage >= 0.9) return 7;
+                    if (percentage >= 0.7) return 6;
+                    if (percentage >= 0.5) return 5;
+                    if (percentage >= 0.3) return 4;
+                    if (percentage >= 0.2) return 3;
+                    if (percentage >= 0.1) return 2;
+                    return 1;
+                }
+
+                // Generar HTML
+                let html = '';
+
+                // Añadir indicador de última actualización
+                const now = new Date();
+                const timeString = now.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+                html += `
+                    <div style="text-align: center; margin-bottom: 20px; padding: 15px; background: #f8f9ff; border-radius: 10px;">
+                        <div style="font-size: 14px; color: #667eea;">
+                            🔄 Actualización automática activa
+                        </div>
+                        <div style="font-size: 12px; color: #999; margin-top: 5px;">
+                            Última actualización: ${timeString}
+                        </div>
+                    </div>
+                `;
+
+                // Estadísticas
+                html += `
+                    <div class="tagcloud-stats">
+                        <div class="tagcloud-stat-item">
+                            <div class="tagcloud-stat-value">${totalTags}</div>
+                            <div class="tagcloud-stat-label">Etiquetas Totales</div>
+                        </div>
+                        <div class="tagcloud-stat-item">
+                            <div class="tagcloud-stat-value">${uniqueTags}</div>
+                            <div class="tagcloud-stat-label">Etiquetas Únicas</div>
+                        </div>
+                        <div class="tagcloud-stat-item">
+                            <div class="tagcloud-stat-value">${maxCount}</div>
+                            <div class="tagcloud-stat-label">Más Repetida</div>
+                        </div>
+                    </div>
+                `;
+
+                if (tagArray.length === 0) {
+                    html += `
+                        <div style="text-align: center; padding: 60px 20px; color: #666;">
+                            <div style="font-size: 64px; margin-bottom: 20px;">💭</div>
+                            <p style="font-size: 20px;">Aún no hay etiquetas registradas</p>
+                            <p style="font-size: 16px; color: #999; margin-top: 10px;">
+                                Las etiquetas enviadas por los asistentes aparecerán aquí
+                            </p>
+                        </div>
+                    `;
+                } else {
+                    // Nube de palabras - las etiquetas se añaden directamente al contenedor
+                    tagArray.forEach((tag, index) => {
+                        const size = getTagSize(tag.count, maxCount);
+                        const animationDelay = (index * 0.05).toFixed(2);
+                        const randomFloat = Math.random() * 6 + 3; // 3-9 segundos
+
+                        html += `
+                            <span
+                                class="tag-cloud-word tag-size-${size} animate-float"
+                                style="
+                                    background-color: ${tag.color};
+                                    animation-delay: ${animationDelay}s;
+                                    animation-duration: ${randomFloat}s;
+                                "
+                                title="${tag.name}: ${tag.count} ${tag.count === 1 ? 'vez' : 'veces'}"
+                            >
+                                ${tag.name}
+                                ${tag.count > 1 ? `<span style="font-size: 0.7em; opacity: 0.8; margin-left: 5px;">×${tag.count}</span>` : ''}
+                            </span>
+                        `;
+                    });
+                }
+
+                // Actualizar contenedor sin parpadeo durante auto-refresh
+                if (autoRefresh) {
+                    tagcloudContainer.innerHTML = html;
+                } else {
+                    tagcloudContainer.style.opacity = '0';
+                    setTimeout(() => {
+                        tagcloudContainer.innerHTML = html;
+                        tagcloudContainer.style.transition = 'opacity 0.5s';
+                        tagcloudContainer.style.opacity = '1';
+                    }, 200);
+                }
+
+            } catch (error) {
+                console.error('❌ Error al cargar nube de etiquetas:', error);
+                tagcloudContainer.innerHTML = `
+                    <div style="text-align: center; padding: 40px; color: #dc3545;">
+                        <div style="font-size: 48px; margin-bottom: 15px;">⚠️</div>
+                        <p style="font-size: 18px;">Error al cargar la nube de etiquetas</p>
+                        <p style="font-size: 14px; color: #666;">${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+
         // Sistema de partículas animadas
         (function() {
             const canvas = document.getElementById('particles-canvas');
@@ -3060,19 +3142,12 @@
 
             const name = document.getElementById('user-name').value.trim();
             const email = document.getElementById('user-email').value.trim();
-            const legalAccept = document.getElementById('legal-accept').checked;
             const submitBtn = event.target.querySelector('.welcome-btn');
             const errorContainer = document.getElementById('error-container');
 
             // Validar
             if (!name || !email || !email.includes('@')) {
                 showError('Por favor, completa todos los campos correctamente');
-                return;
-            }
-
-            // Validar aceptación de aviso legal
-            if (!legalAccept) {
-                showLegalRequiredMessage();
                 return;
             }
 
@@ -3106,41 +3181,89 @@
                 console.error('Error:', error);
                 showError('Hubo un problema. Intenta nuevamente.');
                 submitBtn.classList.remove('loading');
-                submitBtn.querySelector('span').textContent = 'Acceder';
+                submitBtn.querySelector('span').textContent = 'Comenzar experiencia';
             }
         }
 
-
-        // Mostrar aviso legal
-        function showLegalNotice(event) {
+        // Mostrar modo recuperación
+        function showRecoveryMode(event) {
             event.preventDefault();
-            const modal = document.getElementById('legal-modal');
-            modal.classList.add('active');
+
+            const container = document.getElementById('welcome-container');
+            container.classList.add('recovery-mode');
+
+            container.innerHTML = `
+                <div class="welcome-icon">
+                    <span>🔑</span>
+                </div>
+                <h1 class="welcome-title">Recuperar Sesión</h1>
+                <p class="welcome-subtitle">Introduce los mismos datos que usaste antes</p>
+
+                <div id="error-container"></div>
+
+                <form class="welcome-form" onsubmit="recoverSession(event)">
+                    <div class="input-group with-icon">
+                        <span class="input-icon">👤</span>
+                        <input type="text" id="recover-name" placeholder="Tu nombre" required>
+                    </div>
+
+                    <div class="input-group with-icon">
+                        <span class="input-icon">📧</span>
+                        <input type="email" id="recover-email" placeholder="tu@email.com" required>
+                    </div>
+
+                    <button type="submit" class="welcome-btn">
+                        <span>Recuperar sesión</span>
+                    </button>
+                </form>
+
+                <div class="back-to-welcome">
+                    <a href="#" onclick="location.reload()">
+                        ← Volver a crear nueva sesión
+                    </a>
+                </div>
+            `;
         }
 
-        // Cerrar modal de aviso legal
-        function closeLegalModal(event) {
+        // Recuperar sesión
+        async function recoverSession(event) {
             event.preventDefault();
-            const modal = document.getElementById('legal-modal');
-            modal.classList.remove('active');
-        }
 
-        // Mostrar mensaje de aviso legal requerido
-        function showLegalRequiredMessage() {
-            const form = document.getElementById('welcome-form');
-            const message = document.getElementById('legal-required-message');
+            const name = document.getElementById('recover-name').value.trim();
+            const email = document.getElementById('recover-email').value.trim();
+            const submitBtn = event.target.querySelector('.welcome-btn');
 
-            form.style.display = 'none';
-            message.classList.add('active');
-        }
+            submitBtn.classList.add('loading');
+            submitBtn.querySelector('span').textContent = 'Verificando';
 
-        // Volver al formulario desde mensaje de aviso legal
-        function backToWelcomeForm() {
-            const form = document.getElementById('welcome-form');
-            const message = document.getElementById('legal-required-message');
+            try {
+                // Generar código a partir del email
+                const userCode = await hashEmail(email);
 
-            message.classList.remove('active');
-            form.style.display = 'flex';
+                // TODO: Verificar que el código existe en Supabase
+                // const { data } = await supabaseClient.from('attendee_codes').select('code').eq('code', userCode).single();
+                // if (!data) { throw new Error('No encontrado'); }
+
+                // Guardar en localStorage
+                localStorage.setItem('userName', name);
+                localStorage.setItem('userEmail', email);
+                localStorage.setItem('attendeeCode', userCode);
+
+                // Éxito
+                submitBtn.querySelector('span').textContent = '¡Bienvenido de nuevo!';
+                submitBtn.style.background = 'linear-gradient(135deg, #4CAF50 0%, #45a049 100%)';
+                submitBtn.style.color = 'white';
+
+                setTimeout(() => {
+                    closeWelcomeOverlay();
+                }, 800);
+
+            } catch (error) {
+                console.error('Error:', error);
+                showError('No encontramos tu registro. Verifica tus datos.');
+                submitBtn.classList.remove('loading');
+                submitBtn.querySelector('span').textContent = 'Recuperar sesión';
+            }
         }
 
         // Cerrar overlay con animación
