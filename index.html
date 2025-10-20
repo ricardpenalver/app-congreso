@@ -1960,24 +1960,16 @@
         <div id="tagcloud-screen" class="screen">
             <div class="header">
                 <h1>💭 Nube de Etiquetas del Congreso</h1>
-                <p>Principales temas tratados según los asistentes</p>
             </div>
 
             <div class="section">
-                <div style="text-align: center; margin-bottom: 30px;">
-                    <button class="btn" onclick="loadTagCloud()" style="max-width: 300px; display: inline-block;">
-                        🔄 Actualizar Nube
-                    </button>
-                </div>
-
                 <div id="tagcloud-container">
                     <!-- La nube de etiquetas se cargará aquí -->
                 </div>
 
-                <div style="text-align: center; margin-top: 30px;">
-                    <button class="back-btn" onclick="showScreen('home-screen')">
-                        ← Volver al inicio
-                    </button>
+                <!-- Timestamp en esquina inferior derecha -->
+                <div id="tagcloud-timestamp" style="position: fixed; bottom: 20px; right: 20px; font-size: 12px; color: rgba(255,255,255,0.5); background: rgba(0,0,0,0.3); padding: 8px 15px; border-radius: 20px; backdrop-filter: blur(10px);">
+                    Última actualización: --:--:--
                 </div>
             </div>
         </div>
@@ -3072,19 +3064,13 @@
                 // Generar HTML
                 let html = '';
 
-                // Añadir indicador de última actualización
+                // Actualizar timestamp en esquina inferior derecha
                 const now = new Date();
                 const timeString = now.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-                html += `
-                    <div style="text-align: center; margin-bottom: 20px; padding: 15px; background: rgba(102, 126, 234, 0.1); border-radius: 10px; border: 1px solid rgba(102, 126, 234, 0.3);">
-                        <div style="font-size: 14px; color: #667eea; font-weight: 600;">
-                            🔄 Actualización automática activa
-                        </div>
-                        <div style="font-size: 12px; color: rgba(255,255,255,0.6); margin-top: 5px;">
-                            Última actualización: ${timeString}
-                        </div>
-                    </div>
-                `;
+                const timestampElement = document.getElementById('tagcloud-timestamp');
+                if (timestampElement) {
+                    timestampElement.textContent = `Última actualización: ${timeString}`;
+                }
 
                 // Estadísticas
                 html += `
