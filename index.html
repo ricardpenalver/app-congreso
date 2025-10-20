@@ -1319,6 +1319,20 @@
     </style>
 </head>
 <body>
+    <!-- Script para ocultar overlay antes del render si hay parámetros públicos -->
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const hashParams = window.location.hash;
+
+            // Si hay parámetros públicos, ocultar overlay inmediatamente
+            if (urlParams.has('results') || hashParams === '#results' ||
+                urlParams.has('tagcloud') || hashParams === '#tagcloud') {
+                document.write('<style>#welcome-overlay { display: none !important; }</style>');
+            }
+        })();
+    </script>
+
     <!-- Overlay de bienvenida -->
     <div id="welcome-overlay">
         <!-- Canvas para partículas -->
