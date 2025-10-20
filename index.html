@@ -723,74 +723,172 @@
             color: #667eea;
         }
 
-        /* Estilos para nube de etiquetas (proyección) */
+        /* Estilos para nube de etiquetas (proyección) - Tag Wall Jerárquico */
         #tagcloud-container {
             min-height: 400px;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        }
+
+        /* Secciones jerárquicas */
+        .tagcloud-tier {
+            margin-bottom: 30px;
+            padding: 20px;
+            border-radius: 15px;
+            animation: fadeInUp 0.6s ease-out forwards;
+            opacity: 0;
+        }
+
+        .tagcloud-tier-title {
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            opacity: 0.7;
+            text-align: center;
+        }
+
+        /* Top 5 - Nivel Elite */
+        .tier-elite {
+            background: linear-gradient(135deg, rgba(255, 107, 107, 0.15) 0%, rgba(238, 90, 111, 0.15) 100%);
+            border: 2px solid rgba(255, 107, 107, 0.3);
+            animation-delay: 0.1s;
+        }
+
+        .tier-elite .tagcloud-tier-title {
+            color: #ff6b6b;
+            text-shadow: 0 0 10px rgba(255, 107, 107, 0.5);
+        }
+
+        /* Top 6-15 - Nivel Premium */
+        .tier-premium {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.15) 0%, rgba(118, 75, 162, 0.15) 100%);
+            border: 2px solid rgba(102, 126, 234, 0.3);
+            animation-delay: 0.2s;
+        }
+
+        .tier-premium .tagcloud-tier-title {
+            color: #667eea;
+            text-shadow: 0 0 10px rgba(102, 126, 234, 0.5);
+        }
+
+        /* 16+ - Nivel Standard */
+        .tier-standard {
+            background: linear-gradient(135deg, rgba(149, 165, 166, 0.1) 0%, rgba(127, 140, 141, 0.1) 100%);
+            border: 2px solid rgba(149, 165, 166, 0.2);
+            animation-delay: 0.3s;
+        }
+
+        .tier-standard .tagcloud-tier-title {
+            color: #95a5a6;
+        }
+
+        /* Grid de etiquetas dentro de cada tier */
+        .tagcloud-tier-content {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
             align-items: center;
             gap: 15px;
-            padding: 40px 20px;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            border-radius: 20px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
         }
 
+        /* Etiqueta base */
         .tag-cloud-word {
-            display: inline-block;
-            padding: 10px 20px;
-            margin: 5px;
-            border-radius: 30px;
-            font-weight: bold;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-weight: 700;
             cursor: pointer;
-            transition: all 0.3s ease;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
-            opacity: 1;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .tag-cloud-word::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .tag-cloud-word:hover::before {
+            left: 100%;
         }
 
         .tag-cloud-word:hover {
-            transform: scale(1.15) rotate(-2deg);
-            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
-            z-index: 10;
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
         }
 
-        @keyframes float-in {
+        /* Badge de contador */
+        .tag-count-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 28px;
+            height: 28px;
+            padding: 0 8px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            font-size: 0.75em;
+            font-weight: 900;
+            backdrop-filter: blur(10px);
+        }
+
+        /* Jerarquía Elite - Top 5 */
+        .tag-tier-elite {
+            font-size: 42px;
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+            color: white;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Jerarquía Premium - Top 6-15 */
+        .tag-tier-premium {
+            font-size: 28px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Jerarquía Standard - 16+ */
+        .tag-tier-standard {
+            font-size: 18px;
+            background: linear-gradient(135deg, #95a5a6 0%, #7f8c8d 100%);
+            color: white;
+            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        @keyframes fadeInUp {
             from {
                 opacity: 0;
-                transform: translateY(30px) scale(0.8);
+                transform: translateY(30px);
             }
             to {
                 opacity: 1;
-                transform: translateY(0) scale(1);
+                transform: translateY(0);
             }
         }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
-        }
-
-        .tag-cloud-word.animate-float {
-            animation: float 3s ease-in-out infinite;
-        }
-
-        /* Tamaños de etiquetas basados en frecuencia */
-        .tag-size-1 { font-size: 14px; color: #95a5a6; }
-        .tag-size-2 { font-size: 18px; color: #7f8c8d; }
-        .tag-size-3 { font-size: 24px; color: #667eea; }
-        .tag-size-4 { font-size: 32px; color: #764ba2; }
-        .tag-size-5 { font-size: 42px; color: #f093fb; }
-        .tag-size-6 { font-size: 54px; color: #ff6b6b; }
-        .tag-size-7 { font-size: 68px; color: #ee5a6f; font-weight: 900; }
 
         .tagcloud-stats {
             text-align: center;
             margin: 20px 0;
-            padding: 20px;
-            background: white;
+            padding: 25px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
             border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
         }
 
         .tagcloud-stat-item {
@@ -800,18 +898,20 @@
         }
 
         .tagcloud-stat-value {
-            font-size: 36px;
-            font-weight: bold;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            font-size: 42px;
+            font-weight: 900;
+            color: white;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+            letter-spacing: -1px;
         }
 
         .tagcloud-stat-label {
-            font-size: 14px;
-            color: #666;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.7);
             margin-top: 5px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
         }
 
         /* Estilos para etiquetas enviadas - Diseño tipo tarjetas uniforme */
@@ -2975,11 +3075,11 @@
                 const now = new Date();
                 const timeString = now.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
                 html += `
-                    <div style="text-align: center; margin-bottom: 20px; padding: 15px; background: #f8f9ff; border-radius: 10px;">
-                        <div style="font-size: 14px; color: #667eea;">
+                    <div style="text-align: center; margin-bottom: 20px; padding: 15px; background: rgba(102, 126, 234, 0.1); border-radius: 10px; border: 1px solid rgba(102, 126, 234, 0.3);">
+                        <div style="font-size: 14px; color: #667eea; font-weight: 600;">
                             🔄 Actualización automática activa
                         </div>
-                        <div style="font-size: 12px; color: #999; margin-top: 5px;">
+                        <div style="font-size: 12px; color: rgba(255,255,255,0.6); margin-top: 5px;">
                             Última actualización: ${timeString}
                         </div>
                     </div>
@@ -3005,36 +3105,65 @@
 
                 if (tagArray.length === 0) {
                     html += `
-                        <div style="text-align: center; padding: 60px 20px; color: #666;">
+                        <div style="text-align: center; padding: 60px 20px; color: white;">
                             <div style="font-size: 64px; margin-bottom: 20px;">💭</div>
                             <p style="font-size: 20px;">Aún no hay etiquetas registradas</p>
-                            <p style="font-size: 16px; color: #999; margin-top: 10px;">
+                            <p style="font-size: 16px; color: rgba(255,255,255,0.7); margin-top: 10px;">
                                 Las etiquetas enviadas por los asistentes aparecerán aquí
                             </p>
                         </div>
                     `;
                 } else {
-                    // Nube de palabras - las etiquetas se añaden directamente al contenedor
-                    tagArray.forEach((tag, index) => {
-                        const size = getTagSize(tag.count, maxCount);
-                        const animationDelay = (index * 0.05).toFixed(2);
-                        const randomFloat = Math.random() * 6 + 3; // 3-9 segundos
+                    // Separar etiquetas por jerarquía
+                    const top5 = tagArray.slice(0, 5);
+                    const top15 = tagArray.slice(5, 15);
+                    const rest = tagArray.slice(15);
 
-                        html += `
-                            <span
-                                class="tag-cloud-word tag-size-${size} animate-float"
-                                style="
-                                    background-color: ${tag.color};
-                                    animation-delay: ${animationDelay}s;
-                                    animation-duration: ${randomFloat}s;
-                                "
-                                title="${tag.name}: ${tag.count} ${tag.count === 1 ? 'vez' : 'veces'}"
-                            >
-                                ${tag.name}
-                                ${tag.count > 1 ? `<span style="font-size: 0.7em; opacity: 0.8; margin-left: 5px;">×${tag.count}</span>` : ''}
-                            </span>
+                    // Función para generar HTML de etiqueta
+                    function renderTag(tag, tierClass) {
+                        return `
+                            <div class="tag-cloud-word ${tierClass}">
+                                <span>${tag.name}</span>
+                                <span class="tag-count-badge">${tag.count}</span>
+                            </div>
                         `;
-                    });
+                    }
+
+                    // Top 5 - Elite
+                    if (top5.length > 0) {
+                        html += `
+                            <div class="tagcloud-tier tier-elite">
+                                <div class="tagcloud-tier-title">🏆 Top 5 - Elite</div>
+                                <div class="tagcloud-tier-content">
+                                    ${top5.map(tag => renderTag(tag, 'tag-tier-elite')).join('')}
+                                </div>
+                            </div>
+                        `;
+                    }
+
+                    // Top 6-15 - Premium
+                    if (top15.length > 0) {
+                        html += `
+                            <div class="tagcloud-tier tier-premium">
+                                <div class="tagcloud-tier-title">⭐ Top 6-15 - Premium</div>
+                                <div class="tagcloud-tier-content">
+                                    ${top15.map(tag => renderTag(tag, 'tag-tier-premium')).join('')}
+                                </div>
+                            </div>
+                        `;
+                    }
+
+                    // 16+ - Standard
+                    if (rest.length > 0) {
+                        html += `
+                            <div class="tagcloud-tier tier-standard">
+                                <div class="tagcloud-tier-title">💬 Resto de Etiquetas</div>
+                                <div class="tagcloud-tier-content">
+                                    ${rest.map(tag => renderTag(tag, 'tag-tier-standard')).join('')}
+                                </div>
+                            </div>
+                        `;
+                    }
                 }
 
                 // Actualizar contenedor sin parpadeo durante auto-refresh
