@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aquí se habla de... (v2 - Diseño Minimalista)</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>💭</text></svg>">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* DISEÑO ALTERNATIVO: Minimalista, Limpio, Card-Based */
+
+        :root {
+            --bg-primary: #FAFBFC;
+            --bg-secondary: #FFFFFF;
+            --bg-accent: #F0F4F8;
+            --text-primary: #1A202C;
+            --text-secondary: #718096;
+            --text-light: #A0AEC0;
+            --accent-purple: #7C3AED;
+            --accent-blue: #3B82F6;
+            --accent-teal: #14B8A6;
+            --accent-pink: #EC4899;
+            --border-light: #E2E8F0;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+            --shadow-lg: 0 10px 30px rgba(0,0,0,0.12);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        /* Header Minimalista */
+        .header {
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-light);
+            padding: 24px 20px;
+            text-align: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+            background: rgba(255,255,255,0.95);
+        }
+
+        .header h1 {
+            font-size: 24px;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 6px;
+        }
+
+        .header p {
+            font-size: 14px;
+            color: var(--text-secondary);
+            font-weight: 400;
+        }
+
+        /* Container Principal */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+
+        /* Sección de Input - Card Style */
+        .input-section {
+            background: var(--bg-secondary);
+            border-radius: 16px;
+            padding: 32px;
+            box-shadow: var(--shadow-md);
+            margin-bottom: 32px;
+            border: 1px solid var(--border-light);
+        }
+
+        .input-section h2 {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .input-section .subtitle {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 10px;
+        }
+
+        .form-group textarea {
+            width: 100%;
+            padding: 16px;
+            border: 2px solid var(--border-light);
+            border-radius: 12px;
+            font-size: 15px;
+            font-family: inherit;
+            resize: vertical;
+            transition: all 0.2s ease;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+        }
+
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--accent-purple);
+            background: var(--bg-secondary);
+            box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+        }
+
+        .form-group textarea::placeholder {
+            color: var(--text-light);
+        }
+
+        /* Botón Primario */
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-blue));
+            color: white;
+            border: none;
+            padding: 14px 32px;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(124, 58, 237, 0.4);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        /* Sección de Resultados - Grid de Cards */
+        .results-section {
+            background: var(--bg-secondary);
+            border-radius: 16px;
+            padding: 32px;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border-light);
+        }
+
+        .results-section h3 {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .results-section .subtitle {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+        }
+
+        /* Grid de Tags Cards */
+        .tags-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 16px;
+        }
+
+        .tag-card {
+            background: var(--bg-primary);
+            border: 2px solid var(--border-light);
+            border-radius: 12px;
+            padding: 20px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tag-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, var(--accent-purple), var(--accent-blue));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .tag-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--accent-purple);
+        }
+
+        .tag-card:hover::before {
+            opacity: 1;
+        }
+
+        .tag-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 12px;
+        }
+
+        .tag-name {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text-primary);
+            flex: 1;
+            text-transform: capitalize;
+        }
+
+        .tag-rank {
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-blue));
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            white-space: nowrap;
+            margin-left: 10px;
+        }
+
+        .tag-rank.top-1 {
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            box-shadow: 0 2px 8px rgba(255, 215, 0, 0.4);
+        }
+
+        .tag-rank.top-3 {
+            background: linear-gradient(135deg, #C0C0C0, #A9A9A9);
+        }
+
+        .tag-rank.top-5 {
+            background: linear-gradient(135deg, #CD7F32, #A0522D);
+        }
+
+        .tag-stats {
+            display: flex;
+            gap: 16px;
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .tag-stat {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .tag-stat-value {
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        /* Barra de Progreso */
+        .progress-bar {
+            margin-top: 12px;
+            height: 6px;
+            background: var(--bg-accent);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-purple), var(--accent-blue));
+            border-radius: 10px;
+            transition: width 0.5s ease;
+        }
+
+        /* Mensaje vacío */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-secondary);
+        }
+
+        .empty-state-icon {
+            font-size: 64px;
+            margin-bottom: 16px;
+            opacity: 0.3;
+        }
+
+        .empty-state h4 {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .empty-state p {
+            font-size: 14px;
+        }
+
+        /* Mensaje de éxito */
+        .success-message {
+            background: linear-gradient(135deg, #10B981, #14B8A6);
+            color: white;
+            padding: 16px 20px;
+            border-radius: 12px;
+            margin-top: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Timestamp */
+        .timestamp {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-light);
+            padding: 10px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            color: var(--text-secondary);
+            box-shadow: var(--shadow-sm);
+            backdrop-filter: blur(10px);
+            background: rgba(255,255,255,0.95);
+        }
+
+        /* Botón de volver */
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 20px;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .back-link:hover {
+            background: var(--bg-accent);
+            color: var(--accent-purple);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px 16px;
+            }
+
+            .input-section,
+            .results-section {
+                padding: 24px 20px;
+            }
+
+            .tags-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header h1 {
+                font-size: 20px;
+            }
+        }
+
+        /* Badge de "Nuevo Diseño" */
+        .version-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--accent-pink), var(--accent-purple));
+            color: white;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-left: 10px;
+            box-shadow: 0 2px 8px rgba(236, 72, 153, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <h1>💭 Aquí se habla de... <span class="version-badge">V2 Minimalista</span></h1>
+        <p>Comparte tus ideas y descubre qué temas están en tendencia</p>
+    </div>
+
+    <!-- Container Principal -->
+    <div class="container">
+        <!-- Link para volver -->
+        <a href="index.html?tags" class="back-link">
+            ← Volver a la versión original
+        </a>
+
+        <!-- Sección de Input -->
+        <div class="input-section">
+            <h2>✏️ Comparte tus Ideas</h2>
+            <p class="subtitle">Escribe las palabras clave que representen los temas del congreso</p>
+
+            <div class="form-group">
+                <label for="tags-input">Etiquetas (separadas por comas)</label>
+                <textarea
+                    id="tags-input"
+                    rows="4"
+                    placeholder="Ej: innovación, tecnología, colaboración, sostenibilidad, inteligencia artificial"></textarea>
+            </div>
+
+            <button onclick="submitTags()" class="btn-primary">
+                Enviar Etiquetas
+            </button>
+
+            <div id="tags-message"></div>
+        </div>
+
+        <!-- Sección de Resultados -->
+        <div class="results-section">
+            <h3>🏆 Tus Etiquetas en el Ranking</h3>
+            <p class="subtitle">Tu posición en el ranking global de etiquetas más populares</p>
+
+            <div id="tags-ranking-container" class="tags-grid">
+                <!-- Las etiquetas se cargarán aquí -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Timestamp -->
+    <div class="timestamp" id="tagcloud-timestamp">
+        Última actualización: --:--:--
+    </div>
+
+    <!-- Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script>
+        // Configuración de Supabase
+        const supabaseUrl = 'https://dacpkbftkzwnpnhirgny.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRhY3BrYmZ0a3p3bnBuaGlyZ255Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjAwMjIyMzMsImV4cCI6MjA3NTU5ODIzM30.fOIihFR2oiHSr5VWRrn5KczCZbf65Mdj7TE2kRXS6JQ';
+        const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
+
+        // ID de sesión del usuario
+        let userSessionId = localStorage.getItem('userSessionId');
+        if (!userSessionId) {
+            userSessionId = 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+            localStorage.setItem('userSessionId', userSessionId);
+        }
+
+        // Etiquetas del usuario
+        let userTags = JSON.parse(localStorage.getItem('userTags') || '[]');
+        let allTags = [];
+
+        // Cargar al iniciar
+        window.onload = async function() {
+            console.log('🚀 Iniciando aplicación v2...');
+            await displayTags();
+            updateTimestamp();
+
+            // Auto-refresh cada 60 segundos
+            setInterval(async () => {
+                await displayTags();
+                updateTimestamp();
+            }, 60000);
+        };
+
+        // Enviar etiquetas
+        async function submitTags() {
+            const tagsInput = document.getElementById('tags-input');
+            const tagsText = tagsInput.value.trim();
+
+            if (!tagsText) {
+                showMessage('Por favor escribe al menos una etiqueta', 'error');
+                return;
+            }
+
+            const newTags = tagsText.split(',').map(tag => tag.trim().toLowerCase()).filter(tag => tag);
+
+            if (newTags.length === 0) {
+                showMessage('Por favor escribe etiquetas válidas', 'error');
+                return;
+            }
+
+            try {
+                const tagsToInsert = newTags.map(tagName => ({
+                    name: tagName,
+                    description: `Tag creado por ${userSessionId}`,
+                    color: generateRandomColor(),
+                    created_by: null
+                }));
+
+                const { data, error } = await supabaseClient
+                    .from('tags')
+                    .insert(tagsToInsert)
+                    .select();
+
+                if (error) {
+                    console.log('Error al guardar tags, usando fallback local:', error);
+                    allTags.push(...newTags);
+                } else {
+                    console.log('✅ Tags guardadas exitosamente:', data);
+                }
+
+                // Guardar en localStorage
+                userTags.push(...newTags);
+                localStorage.setItem('userTags', JSON.stringify(userTags));
+
+                // Recargar ranking
+                await displayTags();
+
+                // Limpiar input
+                tagsInput.value = '';
+
+                // Mostrar mensaje de éxito
+                showMessage('¡Etiquetas enviadas correctamente!', 'success');
+
+            } catch (error) {
+                console.error('Error de conexión:', error);
+                allTags.push(...newTags);
+                userTags.push(...newTags);
+                localStorage.setItem('userTags', JSON.stringify(userTags));
+                showMessage('Etiquetas guardadas localmente', 'success');
+            }
+        }
+
+        // Mostrar etiquetas con diseño de cards
+        async function displayTags() {
+            const container = document.getElementById('tags-ranking-container');
+            if (!container) return;
+
+            // Si no hay etiquetas del usuario
+            if (userTags.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state" style="grid-column: 1/-1;">
+                        <div class="empty-state-icon">🏷️</div>
+                        <h4>Aún no has enviado etiquetas</h4>
+                        <p>Escribe tus palabras clave arriba y compártelas con todos</p>
+                    </div>
+                `;
+                return;
+            }
+
+            try {
+                // Obtener todas las etiquetas
+                const { data: tagsData, error } = await supabaseClient
+                    .from('tags')
+                    .select('name');
+
+                if (error) {
+                    console.error('Error al cargar etiquetas:', error);
+                    displayLocalTagsRanking();
+                    return;
+                }
+
+                // Contar frecuencia global
+                const globalTagCounts = {};
+                let totalTags = tagsData ? tagsData.length : 0;
+
+                if (tagsData) {
+                    tagsData.forEach(tag => {
+                        const tagName = tag.name.toLowerCase().trim();
+                        globalTagCounts[tagName] = (globalTagCounts[tagName] || 0) + 1;
+                    });
+                }
+
+                // Crear ranking global
+                const globalRanking = Object.entries(globalTagCounts)
+                    .map(([name, count]) => ({
+                        name: name,
+                        count: count,
+                        percentage: totalTags > 0 ? ((count / totalTags) * 100).toFixed(1) : 0
+                    }))
+                    .sort((a, b) => b.count - a.count);
+
+                // Obtener etiquetas únicas del usuario
+                const uniqueUserTags = [...new Set(userTags.map(t => t.toLowerCase().trim()))];
+
+                // Filtrar etiquetas del usuario con ranking
+                const userTagsWithRanking = uniqueUserTags.map(userTag => {
+                    const globalIndex = globalRanking.findIndex(t => t.name === userTag);
+                    const tagInfo = globalRanking[globalIndex];
+
+                    return {
+                        name: userTag,
+                        rank: globalIndex + 1,
+                        count: tagInfo ? tagInfo.count : 0,
+                        percentage: tagInfo ? tagInfo.percentage : 0,
+                        total: totalTags
+                    };
+                }).sort((a, b) => a.rank - b.rank);
+
+                // Renderizar cards
+                container.innerHTML = userTagsWithRanking.map(tag => {
+                    const rankClass = tag.rank === 1 ? 'top-1' : (tag.rank <= 3 ? 'top-3' : (tag.rank <= 5 ? 'top-5' : ''));
+                    const rankIcon = tag.rank === 1 ? '🥇' : (tag.rank === 2 ? '🥈' : (tag.rank === 3 ? '🥉' : ''));
+
+                    return `
+                        <div class="tag-card">
+                            <div class="tag-card-header">
+                                <div class="tag-name">${rankIcon} ${tag.name}</div>
+                                <div class="tag-rank ${rankClass}">#${tag.rank}</div>
+                            </div>
+                            <div class="tag-stats">
+                                <div class="tag-stat">
+                                    <span>📊</span>
+                                    <span class="tag-stat-value">${tag.count}</span>
+                                    <span>votos</span>
+                                </div>
+                                <div class="tag-stat">
+                                    <span>📈</span>
+                                    <span class="tag-stat-value">${tag.percentage}%</span>
+                                </div>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: ${tag.percentage}%"></div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+
+            } catch (error) {
+                console.error('Error al cargar tags:', error);
+                displayLocalTagsRanking();
+            }
+        }
+
+        // Fallback local
+        function displayLocalTagsRanking() {
+            const container = document.getElementById('tags-ranking-container');
+            container.innerHTML = `
+                <div class="empty-state" style="grid-column: 1/-1;">
+                    <div class="empty-state-icon">⚠️</div>
+                    <h4>No se pudo conectar con el servidor</h4>
+                    <p>Tus etiquetas se han guardado localmente</p>
+                </div>
+            `;
+        }
+
+        // Mostrar mensajes
+        function showMessage(text, type) {
+            const messageDiv = document.getElementById('tags-message');
+            messageDiv.innerHTML = `<div class="${type}-message">${type === 'success' ? '✅' : '⚠️'} ${text}</div>`;
+
+            setTimeout(() => {
+                messageDiv.innerHTML = '';
+            }, 3000);
+        }
+
+        // Generar color aleatorio
+        function generateRandomColor() {
+            const colors = ['#7C3AED', '#3B82F6', '#14B8A6', '#EC4899', '#F59E0B', '#10B981', '#6366F1'];
+            return colors[Math.floor(Math.random() * colors.length)];
+        }
+
+        // Actualizar timestamp
+        function updateTimestamp() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('es-ES', {
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            });
+            document.getElementById('tagcloud-timestamp').textContent = `Última actualización: ${timeString}`;
+        }
+    </script>
+</body>
+</html>

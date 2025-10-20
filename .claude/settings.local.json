@@ -1,9 +1,17 @@
 {
+  "permissions": {
+    "allow": [
+      "mcp__playwright-server__browser_navigate",
+      "mcp__playwright-server__browser_take_screenshot",
+      "mcp__playwright-server__browser_type",
+      "mcp__playwright-server__browser_click"
+    ]
+  },
+  "enableAllProjectMcpServers": true,
   "enabledMcpjsonServers": [
     "context7",
     "playwright-server"
   ],
-  "enableAllProjectMcpServers": true,
   "hooks": {
     "SessionStart": [
       {

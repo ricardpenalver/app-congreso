@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aquí hablamos de...</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>💭</text></svg>">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* DISEÑO V3: Minimalista inspirado en shadcn/ui - Sobrio y Elegante */
+
+        /* Variables CSS - shadcn/ui design tokens con colores corporativos */
+        :root {
+            --background: 180 100% 98%;           /* #F0FFFE - Turquesa muy claro */
+            --foreground: 190 100% 10%;           /* #003338 - Teal muy oscuro */
+            --card: 0 0% 100%;                    /* #FFFFFF - Blanco puro */
+            --card-foreground: 190 100% 10%;     /* #003338 - Teal oscuro */
+            --popover: 0 0% 100%;
+            --popover-foreground: 190 100% 10%;
+            --primary: 174 100% 42.5%;            /* #00D9C0 - Turquesa corporativo */
+            --primary-foreground: 0 0% 100%;      /* #FFFFFF - Blanco */
+            --secondary: 180 50% 96%;             /* #EFFCFB - Turquesa muy suave */
+            --secondary-foreground: 188 65% 25%;  /* #006B7D - Teal medio */
+            --muted: 180 40% 94%;                 /* #E8F8F7 - Gris turquesa */
+            --muted-foreground: 188 50% 40%;      /* #339DAC - Teal medio claro */
+            --accent: 174 100% 85%;               /* #99F5E9 - Turquesa claro */
+            --accent-foreground: 190 100% 15%;    /* #004D54 - Teal oscuro */
+            --destructive: 0 84.2% 60.2%;
+            --destructive-foreground: 0 0% 98%;
+            --border: 180 30% 88%;                /* #D4EDEB - Borde turquesa claro */
+            --input: 180 30% 90%;
+            --ring: 174 100% 42.5%;               /* #00D9C0 - Turquesa */
+            --radius: 0.5rem;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: hsl(var(--background));
+            color: hsl(var(--foreground));
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+            min-height: 100vh;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3rem 1.5rem;
+        }
+
+        /* Header minimalista */
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .header h1 {
+            font-size: 2.25rem;
+            font-weight: 700;
+            letter-spacing: -0.05em;
+            color: hsl(var(--foreground));
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            font-size: 1rem;
+            color: hsl(var(--muted-foreground));
+            font-weight: 400;
+        }
+
+        /* Stats Grid - estilo Card de shadcn */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .stat-card {
+            background: hsl(var(--card));
+            border: 1px solid hsl(var(--border));
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: #0F766E;
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .stat-card:hover {
+            border-color: rgba(15, 118, 110, 0.3);
+            box-shadow: 0 4px 12px -1px rgba(15, 118, 110, 0.08), 0 2px 6px -2px rgba(15, 118, 110, 0.05);
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: hsl(var(--muted-foreground));
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            letter-spacing: -0.025em;
+            color: #0F766E;
+        }
+
+        /* Main Card Container */
+        .main-card {
+            background: hsl(var(--card));
+            border: 1px solid hsl(var(--border));
+            border-radius: var(--radius);
+            padding: 2rem;
+            min-height: 500px;
+        }
+
+        /* Tags Container - Grupos separados */
+        .tags-container {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        /* Grupo de etiquetas */
+        .tag-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            justify-content: center;
+            padding: 1.5rem;
+            border-radius: var(--radius);
+            background: hsl(var(--muted) / 0.3);
+            border: 1px solid hsl(var(--border));
+        }
+
+        .tag-group-title {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: hsl(var(--muted-foreground));
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        /* Badge estilo shadcn/ui */
+        .tag-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            border-radius: calc(var(--radius) - 2px);
+            padding: 0.375rem 0.75rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: default;
+            background: hsl(var(--secondary));
+            color: hsl(var(--secondary-foreground));
+            border: 1px solid hsl(var(--border));
+        }
+
+        /* Tamaños proporcionales al ranking */
+        .tag-size-1 {
+            font-size: 0.75rem;
+            padding: 0.25rem 0.625rem;
+        }
+        .tag-size-2 {
+            font-size: 0.813rem;
+            padding: 0.313rem 0.688rem;
+        }
+        .tag-size-3 {
+            font-size: 0.875rem;
+            padding: 0.375rem 0.75rem;
+        }
+        .tag-size-4 {
+            font-size: 0.938rem;
+            padding: 0.438rem 0.875rem;
+            font-weight: 600;
+        }
+        .tag-size-5 {
+            font-size: 1rem;
+            padding: 0.5rem 1rem;
+            font-weight: 600;
+        }
+        .tag-size-6 {
+            font-size: 1.125rem;
+            padding: 0.625rem 1.125rem;
+            font-weight: 700;
+        }
+        .tag-size-7 {
+            font-size: 1.25rem;
+            padding: 0.75rem 1.25rem;
+            font-weight: 700;
+        }
+
+        /* Hover effect sutil */
+        .tag-badge:hover {
+            background: hsl(var(--accent));
+            border-color: hsl(var(--primary) / 0.4);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px -2px hsl(var(--primary) / 0.15);
+        }
+
+        /* Grupo 1: Posiciones 1-5 - Turquesa oscuro (segundo más oscuro) */
+        .tag-top-1,
+        .tag-top-2,
+        .tag-top-3,
+        .tag-top-4,
+        .tag-top-5 {
+            background: #0D9488;
+            color: white;
+            border-color: transparent;
+            box-shadow: 0 3px 10px -1px rgba(13, 148, 136, 0.4);
+        }
+
+        .tag-top-1:hover,
+        .tag-top-2:hover,
+        .tag-top-3:hover,
+        .tag-top-4:hover,
+        .tag-top-5:hover {
+            background: #0F766E;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px -2px rgba(13, 148, 136, 0.5);
+        }
+
+        /* Grupo 2: Posiciones 6-11 - Turquesa medio */
+        .tag-top-6,
+        .tag-top-7,
+        .tag-top-8,
+        .tag-top-9,
+        .tag-top-10,
+        .tag-top-11 {
+            background: #2DD4BF;
+            color: white;
+            border-color: transparent;
+            box-shadow: 0 3px 10px -1px rgba(45, 212, 191, 0.4);
+        }
+
+        .tag-top-6:hover,
+        .tag-top-7:hover,
+        .tag-top-8:hover,
+        .tag-top-9:hover,
+        .tag-top-10:hover,
+        .tag-top-11:hover {
+            background: #14B8A6;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px -2px rgba(45, 212, 191, 0.5);
+        }
+
+        /* Grupo 3: Posiciones 12-16 - Turquesa más claro */
+        .tag-top-12,
+        .tag-top-13,
+        .tag-top-14,
+        .tag-top-15,
+        .tag-top-16 {
+            background: #99F6E4;
+            color: #0F766E;
+            border-color: transparent;
+            box-shadow: 0 2px 8px -1px rgba(153, 246, 228, 0.4);
+        }
+
+        .tag-top-12:hover,
+        .tag-top-13:hover,
+        .tag-top-14:hover,
+        .tag-top-15:hover,
+        .tag-top-16:hover {
+            background: #5EEAD4;
+            color: #0F766E;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px -2px rgba(153, 246, 228, 0.5);
+        }
+
+        /* Resto (17+) - Turquesa muy claro con tono verdoso (más claro) */
+        .tag-badge:not([class*="tag-top-"]) {
+            background: #E6FFFA;
+            color: #0F766E;
+            border-color: transparent;
+            box-shadow: 0 2px 6px -1px rgba(230, 255, 250, 0.4);
+        }
+
+        .tag-badge:not([class*="tag-top-"]):hover {
+            background: #CCFBF1;
+            color: #0F766E;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px -2px rgba(230, 255, 250, 0.5);
+        }
+
+        /* Counter badge dentro del tag */
+        .tag-count {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 1.5rem;
+            height: 1.5rem;
+            padding: 0 0.375rem;
+            background: hsl(var(--background));
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: hsl(var(--foreground));
+        }
+
+        /* Contadores para Grupos 1 y 2 (fondos oscuros) */
+        .tag-top-1 .tag-count,
+        .tag-top-2 .tag-count,
+        .tag-top-3 .tag-count,
+        .tag-top-4 .tag-count,
+        .tag-top-5 .tag-count,
+        .tag-top-6 .tag-count,
+        .tag-top-7 .tag-count,
+        .tag-top-8 .tag-count,
+        .tag-top-9 .tag-count,
+        .tag-top-10 .tag-count,
+        .tag-top-11 .tag-count {
+            background: rgba(255, 255, 255, 0.25);
+            color: white;
+            backdrop-filter: blur(4px);
+        }
+
+        /* Contadores para Grupo 3 y Resto (fondos claros) */
+        .tag-top-12 .tag-count,
+        .tag-top-13 .tag-count,
+        .tag-top-14 .tag-count,
+        .tag-top-15 .tag-count,
+        .tag-top-16 .tag-count,
+        .tag-badge:not([class*="tag-top-"]) .tag-count {
+            background: rgba(15, 118, 110, 0.15);
+            color: #0F766E;
+            backdrop-filter: blur(4px);
+        }
+
+        /* Medal emoji para top 3 */
+        .tag-medal {
+            font-size: 1rem;
+            line-height: 1;
+        }
+
+        /* Empty state */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            width: 100%;
+        }
+
+        .tags-container .empty-state {
+            display: block;
+        }
+
+        .empty-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.3;
+        }
+
+        .empty-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: hsl(var(--foreground));
+            margin-bottom: 0.5rem;
+        }
+
+        .empty-description {
+            font-size: 0.875rem;
+            color: hsl(var(--muted-foreground));
+        }
+
+        /* Timestamp - badge secundario */
+        .timestamp {
+            position: fixed;
+            bottom: 1.5rem;
+            right: 1.5rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: hsl(var(--secondary));
+            border: 1px solid hsl(var(--border));
+            border-radius: calc(var(--radius) - 2px);
+            padding: 0.5rem 1rem;
+            font-size: 0.813rem;
+            font-weight: 500;
+            color: hsl(var(--muted-foreground));
+            box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.05);
+        }
+
+        /* Separator */
+        .separator {
+            height: 1px;
+            background: hsl(var(--border));
+            margin: 2rem 0;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 2rem 1rem;
+            }
+
+            .header h1 {
+                font-size: 1.875rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .main-card {
+                padding: 1.5rem;
+            }
+
+            .tag-size-7 { font-size: 1.125rem; padding: 0.625rem 1.125rem; }
+            .tag-size-6 { font-size: 1rem; padding: 0.5rem 1rem; }
+            .tag-size-5 { font-size: 0.938rem; padding: 0.438rem 0.875rem; }
+
+            .timestamp {
+                position: static;
+                margin: 2rem auto 1rem;
+                display: inline-flex;
+            }
+        }
+
+        /* Loading skeleton */
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.5;
+            }
+        }
+
+        .skeleton {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+            background: hsl(var(--muted));
+            border-radius: calc(var(--radius) - 2px);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>Aquí hablamos de...</h1>
+        </div>
+
+        <!-- Stats Grid -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-label">Etiquetas Totales</div>
+                <div class="stat-value" id="total-tags">—</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Etiquetas Únicas</div>
+                <div class="stat-value" id="unique-tags">—</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">de asistentes</div>
+                <div class="stat-value" id="attendees-count">—</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">de ponencias</div>
+                <div class="stat-value" id="presentations-count">0</div>
+            </div>
+        </div>
+
+        <!-- Main Card -->
+        <div class="main-card">
+            <div class="tags-container" id="tags-container">
+                <!-- Tags se cargarán aquí -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Timestamp -->
+    <div class="timestamp" id="timestamp">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <polyline points="12 6 12 12 16 14"></polyline>
+        </svg>
+        <span>Actualizado: --:--:--</span>
+    </div>
+
+    <!-- Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script>
+        // Configuración de Supabase
+        const supabaseUrl = 'https://dacpkbftkzwnpnhirgny.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRhY3BrYmZ0a3p3bnBuaGlyZ255Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjAwMjIyMzMsImV4cCI6MjA3NTU5ODIzM30.fOIihFR2oiHSr5VWRrn5KczCZbf65Mdj7TE2kRXS6JQ';
+        const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
+
+        let refreshInterval = null;
+
+        // Cargar al iniciar
+        window.onload = async function() {
+            console.log('🚀 Iniciando nube de etiquetas v3 (minimalista)...');
+            await loadTagCloud();
+
+            // Auto-refresh cada 60 segundos
+            refreshInterval = setInterval(async () => {
+                await loadTagCloud(true);
+            }, 60000);
+        };
+
+        // Función principal
+        async function loadTagCloud(autoRefresh = false) {
+            const container = document.getElementById('tags-container');
+
+            try {
+                console.log('💭 Cargando etiquetas...');
+
+                // Consultar tags
+                const { data: tagsData, error } = await supabaseClient
+                    .from('tags')
+                    .select('id, name, color')
+                    .order('created_at', { ascending: false });
+
+                if (error) throw error;
+
+                console.log(`✅ ${tagsData.length} etiquetas cargadas`);
+
+                // Contar frecuencia
+                const tagFrequency = {};
+                const tagColors = {};
+
+                tagsData.forEach(tag => {
+                    const tagName = tag.name.toLowerCase().trim();
+                    tagFrequency[tagName] = (tagFrequency[tagName] || 0) + 1;
+                    if (!tagColors[tagName]) {
+                        tagColors[tagName] = tag.color;
+                    }
+                });
+
+                // Ordenar por frecuencia
+                const tagArray = Object.entries(tagFrequency)
+                    .map(([name, count]) => ({
+                        name,
+                        count,
+                        color: tagColors[name]
+                    }))
+                    .sort((a, b) => b.count - a.count);
+
+                // Actualizar stats
+                const totalTags = tagsData.length;
+                const uniqueTags = tagArray.length;
+
+                document.getElementById('total-tags').textContent = totalTags;
+                document.getElementById('unique-tags').textContent = uniqueTags;
+
+                // Cargar contador de asistentes
+                await loadAttendeesCount();
+
+                // Actualizar timestamp
+                updateTimestamp();
+
+                // Renderizar
+                if (tagArray.length === 0) {
+                    container.innerHTML = `
+                        <div class="empty-state">
+                            <div class="empty-icon">💬</div>
+                            <div class="empty-title">Sin conversaciones aún</div>
+                            <div class="empty-description">Las etiquetas enviadas aparecerán aquí en tiempo real</div>
+                        </div>
+                    `;
+                } else {
+                    // Calcular tamaño (1-7)
+                    function getTagSize(count, maxCount) {
+                        if (maxCount === 1) return 3;
+                        const percentage = count / maxCount;
+                        if (percentage >= 0.9) return 7;
+                        if (percentage >= 0.7) return 6;
+                        if (percentage >= 0.5) return 5;
+                        if (percentage >= 0.3) return 4;
+                        if (percentage >= 0.2) return 3;
+                        if (percentage >= 0.1) return 2;
+                        return 1;
+                    }
+
+                    // Calcular maxCount
+                    const maxCount = tagArray[0]?.count || 0;
+
+                    // Separar en grupos
+                    const group1 = tagArray.slice(0, 5);   // Posiciones 1-5
+                    const group2 = tagArray.slice(5, 11);  // Posiciones 6-11
+                    const group3 = tagArray.slice(11, 16); // Posiciones 12-16
+                    const rest = tagArray.slice(16);       // Posiciones 17+
+
+                    // Función para generar HTML de etiqueta
+                    function generateTagHTML(tag, index, globalIndex) {
+                        const size = getTagSize(tag.count, maxCount);
+                        let classes = `tag-badge tag-size-${size}`;
+                        let medal = '';
+
+                        // Aplicar clases según posición global
+                        if (globalIndex === 0) {
+                            classes += ' tag-top-1';
+                            medal = '<span class="tag-medal">🥇</span>';
+                        } else if (globalIndex === 1) {
+                            classes += ' tag-top-2';
+                            medal = '<span class="tag-medal">🥈</span>';
+                        } else if (globalIndex === 2) {
+                            classes += ' tag-top-3';
+                            medal = '<span class="tag-medal">🥉</span>';
+                        } else if (globalIndex >= 3 && globalIndex <= 4) {
+                            classes += ` tag-top-${globalIndex + 1}`;
+                        } else if (globalIndex >= 5 && globalIndex <= 10) {
+                            classes += ` tag-top-${globalIndex + 1}`;
+                        } else if (globalIndex >= 11 && globalIndex <= 15) {
+                            classes += ` tag-top-${globalIndex + 1}`;
+                        }
+
+                        return `
+                            <div class="${classes}">
+                                ${medal}
+                                <span style="text-transform: capitalize;">${tag.name}</span>
+                                <span class="tag-count">${tag.count}</span>
+                            </div>
+                        `;
+                    }
+
+                    // Generar HTML por grupos
+                    let tagsHTML = '';
+
+                    if (group1.length > 0) {
+                        tagsHTML += `
+                            <div class="tag-group">
+                                ${group1.map((tag, idx) => generateTagHTML(tag, idx, idx)).join('')}
+                            </div>
+                        `;
+                    }
+
+                    if (group2.length > 0) {
+                        tagsHTML += `
+                            <div class="tag-group">
+                                ${group2.map((tag, idx) => generateTagHTML(tag, idx, idx + 5)).join('')}
+                            </div>
+                        `;
+                    }
+
+                    if (group3.length > 0) {
+                        tagsHTML += `
+                            <div class="tag-group">
+                                ${group3.map((tag, idx) => generateTagHTML(tag, idx, idx + 11)).join('')}
+                            </div>
+                        `;
+                    }
+
+                    if (rest.length > 0) {
+                        tagsHTML += `
+                            <div class="tag-group">
+                                ${rest.map((tag, idx) => generateTagHTML(tag, idx, idx + 16)).join('')}
+                            </div>
+                        `;
+                    }
+
+                    // Actualizar sin parpadeo
+                    if (autoRefresh) {
+                        container.innerHTML = tagsHTML;
+                    } else {
+                        container.style.opacity = '0';
+                        setTimeout(() => {
+                            container.innerHTML = tagsHTML;
+                            container.style.transition = 'opacity 0.3s ease';
+                            container.style.opacity = '1';
+                        }, 150);
+                    }
+                }
+
+            } catch (error) {
+                console.error('❌ Error:', error);
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">⚠️</div>
+                        <div class="empty-title">Error de conexión</div>
+                        <div class="empty-description">No se pudieron cargar las etiquetas</div>
+                    </div>
+                `;
+            }
+        }
+
+        // Cargar contador de asistentes
+        async function loadAttendeesCount() {
+            try {
+                const { count, error } = await supabaseClient
+                    .from('attendees')
+                    .select('*', { count: 'exact', head: true });
+
+                if (error) {
+                    console.error('Error al cargar asistentes:', error);
+                    document.getElementById('attendees-count').textContent = '—';
+                } else {
+                    document.getElementById('attendees-count').textContent = count || 0;
+                }
+            } catch (error) {
+                console.error('Error de conexión al cargar asistentes:', error);
+                document.getElementById('attendees-count').textContent = '—';
+            }
+        }
+
+        // Actualizar timestamp
+        function updateTimestamp() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('es-ES', {
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            });
+            const timestampSpan = document.querySelector('#timestamp span');
+            if (timestampSpan) {
+                timestampSpan.textContent = `Actualizado: ${timeString}`;
+            }
+        }
+    </script>
+</body>
+</html>
