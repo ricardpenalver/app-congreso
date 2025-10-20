@@ -2975,10 +2975,19 @@
 
                 // Actualizar contenedor sin parpadeo durante auto-refresh
                 if (autoRefresh) {
-                    // En auto-refresh, actualizar directamente sin animación
-                    resultsContainer.innerHTML = html;
+                    // Transición suave durante auto-refresh
+                    resultsContainer.style.transition = 'opacity 0.3s ease-in-out';
+                    resultsContainer.style.opacity = '0';
+
+                    setTimeout(() => {
+                        resultsContainer.innerHTML = html;
+                        // Fade in suave
+                        requestAnimationFrame(() => {
+                            resultsContainer.style.opacity = '1';
+                        });
+                    }, 300);
                 } else {
-                    // Solo en carga inicial, mostrar animación suave
+                    // Carga inicial con animación completa
                     resultsContainer.style.opacity = '0';
                     setTimeout(() => {
                         resultsContainer.innerHTML = html;
@@ -3168,8 +3177,28 @@
 
                 // Actualizar contenedor sin parpadeo durante auto-refresh
                 if (autoRefresh) {
-                    tagcloudContainer.innerHTML = html;
+                    // Desactivar animaciones temporalmente durante auto-refresh
+                    tagcloudContainer.style.transition = 'opacity 0.3s ease-in-out';
+                    tagcloudContainer.style.opacity = '0';
+
+                    setTimeout(() => {
+                        // Actualizar contenido
+                        tagcloudContainer.innerHTML = html;
+
+                        // Desactivar animaciones CSS de entrada para evitar parpadeo
+                        const tiers = tagcloudContainer.querySelectorAll('.tagcloud-tier');
+                        tiers.forEach(tier => {
+                            tier.style.animation = 'none';
+                            tier.style.opacity = '1';
+                        });
+
+                        // Fade in suave
+                        requestAnimationFrame(() => {
+                            tagcloudContainer.style.opacity = '1';
+                        });
+                    }, 300);
                 } else {
+                    // Carga inicial con animaciones completas
                     tagcloudContainer.style.opacity = '0';
                     setTimeout(() => {
                         tagcloudContainer.innerHTML = html;
