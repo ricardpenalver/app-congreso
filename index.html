@@ -2455,11 +2455,11 @@
             // Si estamos entrando a la pantalla de tags, iniciar auto-refresh
             if (screenId === 'tags-screen') {
                 displayTags(); // Cargar inicial
-                // Auto-refresh cada 5 segundos
+                // Auto-refresh cada 60 segundos
                 tagsRefreshInterval = setInterval(() => {
                     displayTags();
-                }, 5000);
-                console.log('✅ Auto-refresh de tags activado (cada 5 segundos)');
+                }, 60000);
+                console.log('✅ Auto-refresh de tags activado (cada 60 segundos)');
             }
 
             // Mostrar la pantalla seleccionada
@@ -2818,8 +2818,8 @@
             if (!autoRefresh && resultsRefreshInterval === null) {
                 resultsRefreshInterval = setInterval(() => {
                     loadResults(true);
-                }, 5000); // Actualizar cada 5 segundos
-                console.log('✅ Auto-refresh de resultados activado (cada 5 segundos)');
+                }, 60000); // Actualizar cada 60 segundos
+                console.log('✅ Auto-refresh de resultados activado (cada 60 segundos)');
             }
 
             // Mostrar mensaje de carga solo si no es auto-refresh
@@ -2975,17 +2975,8 @@
 
                 // Actualizar contenedor sin parpadeo durante auto-refresh
                 if (autoRefresh) {
-                    // Transición suave durante auto-refresh
-                    resultsContainer.style.transition = 'opacity 0.3s ease-in-out';
-                    resultsContainer.style.opacity = '0';
-
-                    setTimeout(() => {
-                        resultsContainer.innerHTML = html;
-                        // Fade in suave
-                        requestAnimationFrame(() => {
-                            resultsContainer.style.opacity = '1';
-                        });
-                    }, 300);
+                    // Auto-refresh: actualización directa sin transición
+                    resultsContainer.innerHTML = html;
                 } else {
                     // Carga inicial con animación completa
                     resultsContainer.style.opacity = '0';
@@ -3017,10 +3008,10 @@
 
             // Si es la primera llamada manual, iniciar auto-refresh
             if (!autoRefresh && !tagcloudRefreshInterval) {
-                console.log('🔄 Iniciando auto-refresh de nube de etiquetas (cada 5 segundos)');
+                console.log('🔄 Iniciando auto-refresh de nube de etiquetas (cada 60 segundos)');
                 tagcloudRefreshInterval = setInterval(() => {
                     loadTagCloud(true); // Llamada automática
-                }, 5000);
+                }, 60000);
             }
 
             try {
@@ -3177,26 +3168,15 @@
 
                 // Actualizar contenedor sin parpadeo durante auto-refresh
                 if (autoRefresh) {
-                    // Desactivar animaciones temporalmente durante auto-refresh
-                    tagcloudContainer.style.transition = 'opacity 0.3s ease-in-out';
-                    tagcloudContainer.style.opacity = '0';
+                    // Auto-refresh: actualización directa sin transición
+                    tagcloudContainer.innerHTML = html;
 
-                    setTimeout(() => {
-                        // Actualizar contenido
-                        tagcloudContainer.innerHTML = html;
-
-                        // Desactivar animaciones CSS de entrada para evitar parpadeo
-                        const tiers = tagcloudContainer.querySelectorAll('.tagcloud-tier');
-                        tiers.forEach(tier => {
-                            tier.style.animation = 'none';
-                            tier.style.opacity = '1';
-                        });
-
-                        // Fade in suave
-                        requestAnimationFrame(() => {
-                            tagcloudContainer.style.opacity = '1';
-                        });
-                    }, 300);
+                    // Desactivar animaciones CSS de entrada para evitar parpadeo
+                    const tiers = tagcloudContainer.querySelectorAll('.tagcloud-tier');
+                    tiers.forEach(tier => {
+                        tier.style.animation = 'none';
+                        tier.style.opacity = '1';
+                    });
                 } else {
                     // Carga inicial con animaciones completas
                     tagcloudContainer.style.opacity = '0';
