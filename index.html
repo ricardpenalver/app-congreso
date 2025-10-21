@@ -1626,23 +1626,29 @@
 
         /* Botón de cerrar sesión */
         .logout-btn {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background: rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            padding: 10px 20px;
-            border-radius: 20px;
+            position: static;
+            margin-top: 15px;
+            background: #0B7A8F;
+            border: 2px solid #006B7D;
+            padding: 12px 24px;
+            border-radius: 12px;
             color: white;
-            font-size: 12px;
+            font-size: 14px;
+            font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(11, 122, 143, 0.3);
         }
 
         .logout-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
+            background: #006B7D;
+            border-color: #005F73;
             transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(11, 122, 143, 0.4);
+        }
+
+        .logout-btn:active {
+            transform: translateY(0);
         }
 
         /* Vista de recuperación */
