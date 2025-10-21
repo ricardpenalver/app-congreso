@@ -1265,6 +1265,82 @@
             text-decoration: underline;
         }
 
+        /* Checkbox de aviso legal */
+        .legal-checkbox {
+            margin-top: 15px;
+            margin-bottom: 15px;
+        }
+
+        .legal-checkbox label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            color: white;
+            line-height: 1.5;
+        }
+
+        .legal-checkbox input[type="checkbox"] {
+            cursor: pointer;
+            width: 16px;
+            height: 16px;
+            flex-shrink: 0;
+            accent-color: #667eea;
+        }
+
+        .legal-checkbox a {
+            color: white;
+            text-decoration: underline;
+            font-weight: 600;
+        }
+
+        .legal-checkbox a:hover {
+            opacity: 0.8;
+        }
+
+        /* Mensaje de aviso legal no aceptado */
+        .legal-required-message {
+            display: none;
+            text-align: center;
+            padding: 30px;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        .legal-required-message.active {
+            display: block;
+        }
+
+        .legal-required-message h2 {
+            font-size: 32px;
+            margin-bottom: 15px;
+        }
+
+        .legal-required-message p {
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 25px;
+            opacity: 0.95;
+        }
+
+        .legal-required-message button {
+            padding: 12px 30px;
+            background: white;
+            color: #667eea;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .legal-required-message button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 7px 20px rgba(0, 0, 0, 0.3);
+        }
+
         /* Animación de salida */
         .welcome-overlay.fade-out {
             animation: fadeOut 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
@@ -1824,10 +1900,26 @@
                     <input type="email" id="user-email" placeholder="tu@email.com" required autocomplete="email">
                 </div>
 
+                <div class="legal-checkbox">
+                    <label>
+                        <input type="checkbox" id="legal-accept">
+                        <span>He leído y acepto el <a href="#" onclick="showLegalNotice(event)">aviso legal</a></span>
+                    </label>
+                </div>
+
                 <button type="submit" class="welcome-btn">
-                    <span>Comenzar experiencia</span>
+                    <span>Acceder</span>
                 </button>
             </form>
+
+            <!-- Mensaje cuando no se acepta el aviso legal -->
+            <div class="legal-required-message" id="legal-required-message">
+                <h2>🤔</h2>
+                <p><strong>¡Vaya!</strong> Nos encantaría que pudieras acceder a la app del encuentro.</p>
+                <p>Sin embargo, para garantizar tu privacidad y cumplir con la normativa, necesitamos que leas y aceptes nuestro aviso legal antes de continuar.</p>
+                <p>Te prometemos que es breve y que valoramos muchísimo tu privacidad. 😊</p>
+                <button onclick="backToWelcomeForm()">Volver al formulario</button>
+            </div>
 
             <div class="recovery-link">
                 <a href="#" onclick="showRecoveryMode(event)">¿Ya tienes una cuenta? Recuperar sesión</a>
@@ -3750,12 +3842,19 @@
 
             const name = document.getElementById('user-name').value.trim();
             const email = document.getElementById('user-email').value.trim();
+            const legalAccept = document.getElementById('legal-accept').checked;
             const submitBtn = event.target.querySelector('.welcome-btn');
             const errorContainer = document.getElementById('error-container');
 
             // Validar
             if (!name || !email || !email.includes('@')) {
                 showError('Por favor, completa todos los campos correctamente');
+                return;
+            }
+
+            // Validar aceptación de aviso legal
+            if (!legalAccept) {
+                showLegalRequiredMessage();
                 return;
             }
 
@@ -3791,6 +3890,24 @@
                 submitBtn.classList.remove('loading');
                 submitBtn.querySelector('span').textContent = 'Comenzar experiencia';
             }
+        }
+
+        // Mostrar mensaje de aviso legal requerido
+        function showLegalRequiredMessage() {
+            const form = document.getElementById('welcome-form');
+            const message = document.getElementById('legal-required-message');
+
+            form.style.display = 'none';
+            message.classList.add('active');
+        }
+
+        // Volver al formulario desde mensaje de aviso legal
+        function backToWelcomeForm() {
+            const form = document.getElementById('welcome-form');
+            const message = document.getElementById('legal-required-message');
+
+            message.classList.remove('active');
+            form.style.display = 'flex';
         }
 
         // Mostrar modo recuperación
