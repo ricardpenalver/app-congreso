@@ -299,6 +299,76 @@
             }
         }
 
+        /* Estilos para títulos fuera de contenedores */
+        .screen-title {
+            color: var(--color-secondary-dark);
+            font-size: 32px;
+            font-weight: 800;
+            text-align: center;
+            margin: 20px 20px 15px 20px;
+            padding: 0;
+        }
+
+        .screen-subtitle {
+            color: #666;
+            font-size: 16px;
+            font-weight: 400;
+            text-align: center;
+            margin: 0 20px 25px 20px;
+            line-height: 1.6;
+        }
+
+        /* Leyenda de certificados */
+        .certificate-notice {
+            margin: 20px;
+            padding: 20px;
+            background: linear-gradient(135deg, rgba(255, 193, 7, 0.1) 0%, rgba(255, 152, 0, 0.1) 100%);
+            border-left: 4px solid #FF9800;
+            border-radius: 8px;
+        }
+
+        .certificate-notice p {
+            margin: 0;
+            color: #555;
+            font-size: 14px;
+            line-height: 1.8;
+        }
+
+        .certificate-notice strong {
+            color: #F57C00;
+            font-weight: 600;
+        }
+
+        .certificate-notice a {
+            color: #0B7A8F;
+            text-decoration: none;
+            font-weight: 600;
+            word-break: break-all;
+        }
+
+        .certificate-notice a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .screen-title {
+                font-size: 26px;
+            }
+
+            .screen-subtitle {
+                font-size: 15px;
+            }
+
+            .certificate-notice {
+                margin: 15px;
+                padding: 15px;
+            }
+
+            .certificate-notice p {
+                font-size: 13px;
+            }
+        }
+
         .section h2 {
             color: var(--color-secondary-dark);
             margin-bottom: 24px;
@@ -2490,12 +2560,13 @@
                 ← Volver al inicio
             </button>
 
-            <div class="section">
-                <h2>📝 Registro de Asistencia</h2>
-                <p style="color: #666; margin-bottom: 20px; text-align: center;">
-                    Completa el formulario para registrarte en el III Encuentro Anual
-                </p>
+            <!-- Título fuera del contenedor -->
+            <h2 class="screen-title">📝 Registro de Asistencia</h2>
+            <p class="screen-subtitle">
+                Registra tu asistencia a las actividades del congreso y obtén tu certificado de asistencia
+            </p>
 
+            <div class="section" style="padding-top: 20px;">
                 <!-- Microsoft Forms Embedded -->
                 <div class="microsoft-forms-container">
                     <iframe
@@ -2512,10 +2583,12 @@
                         msallowfullscreen>
                     </iframe>
                 </div>
+            </div>
 
-                <p style="color: #999; font-size: 13px; margin-top: 15px; text-align: center;">
-                    <strong>🔒 Privacidad:</strong> Este formulario es gestionado por Microsoft Forms.
-                    Tus datos son procesados por Microsoft Corporation y esPublico SAU según sus políticas de privacidad.
+            <!-- Leyenda informativa sobre certificados -->
+            <div class="certificate-notice">
+                <p>
+                    <strong>📜 Certificados de asistencia:</strong> Los certificados de asistencia se enviarán mediante notificación electrónica al NIF registrado por el alumno, que podrá recogerlo previa comparecencia electrónica en la sede electrónica de esPublico (<a href="https://dptogestiona.sedelectronica.es" target="_blank">https://dptogestiona.sedelectronica.es</a>).
                 </p>
             </div>
         </div>
