@@ -705,21 +705,21 @@
             }
         }
 
-        // Cargar contador de asistentes
+        // Cargar contador de asistentes (basado en etiquetas creadas)
         async function loadAttendeesCount() {
             try {
                 const { count, error } = await supabaseClient
-                    .from('attendees')
+                    .from('tags')
                     .select('*', { count: 'exact', head: true });
 
                 if (error) {
-                    console.error('Error al cargar asistentes:', error);
+                    console.error('Error al cargar contador de etiquetas:', error);
                     document.getElementById('attendees-count').textContent = '—';
                 } else {
                     document.getElementById('attendees-count').textContent = count || 0;
                 }
             } catch (error) {
-                console.error('Error de conexión al cargar asistentes:', error);
+                console.error('Error de conexión al cargar contador de etiquetas:', error);
                 document.getElementById('attendees-count').textContent = '—';
             }
         }
