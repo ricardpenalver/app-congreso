@@ -4795,52 +4795,60 @@
 
             <div class="legal-highlight">
                 <p><strong>🔒 GARANTÍA DE PRIVACIDAD - QUÉ GUARDAMOS Y QUÉ NO:</strong></p>
-                <p><strong>✅ SÍ guardamos:</strong> Nombre, email, teléfono (opcional) y organización (opcional) si te registras como asistente.</p>
-                <p><strong>✅ SÍ guardamos:</strong> Tus votos de forma anónima (vinculados a un hash, no a tu email real).</p>
-                <p><strong>❌ NO guardamos:</strong> Información de tu dispositivo, navegador o sistema operativo.</p>
-                <p><strong>❌ NO obtenemos:</strong> Tu geolocalización ni datos de seguimiento.</p>
-                <p><strong>❌ NO utilizamos:</strong> Cookies de rastreo ni publicidad.</p>
-                <p><strong>❌ NO compartimos:</strong> Tus datos con terceros bajo ningún concepto.</p>
-                <p><strong>❌ NO vinculamos:</strong> Tu identidad real con tus votos específicos (se usa hash anónimo).</p>
+                <p><strong>🟢 EN TU NAVEGADOR (localStorage):</strong> Nombre y email (solo local, tú controlas)</p>
+                <p><strong>🟢 EN NUESTRA BD (Supabase):</strong> Solo votos anónimos (vinculados a hash, NO a tu email real) + etiquetas</p>
+                <p><strong>🔵 EN MICROSOFT FORMS:</strong> Datos de registro del evento (gestionado por Microsoft y esPublico, NO por esta app)</p>
+                <p><strong>❌ NO guardamos en nuestra BD:</strong> Nombres, emails, teléfonos ni datos de identificación personal</p>
+                <p><strong>❌ NO obtenemos:</strong> Información de dispositivo, navegador, geolocalización ni seguimiento</p>
+                <p><strong>❌ NO utilizamos:</strong> Cookies de rastreo ni publicidad</p>
+                <p><strong>❌ NO vinculamos:</strong> Tu identidad real con tus votos específicos (anonimato total)</p>
             </div>
 
             <h3>3. Datos Recopilados</h3>
-            <p>La aplicación recopila y almacena los siguientes datos en dos ubicaciones diferentes:</p>
+            <p>La aplicación recopila y almacena los siguientes datos:</p>
 
             <h4>A) En tu navegador (localStorage):</h4>
             <ul>
                 <li><strong>Nombre completo:</strong> Para personalizar tu experiencia (ej: "¡Hola, Ricardo!")</li>
-                <li><strong>Email:</strong> Para permitir recuperar tu sesión</li>
+                <li><strong>Email:</strong> Para generar tu código de identificación y permitir recuperar tu sesión</li>
                 <li><strong>Código de identificación:</strong> Hash SHA-256 de 16 caracteres derivado de tu email</li>
             </ul>
-            <p><em>Estos datos solo existen en tu dispositivo y puedes eliminarlos en cualquier momento cerrando sesión.</em></p>
+            <p><em>Estos datos solo existen en tu dispositivo y puedes eliminarlos en cualquier momento cerrando sesión o borrando los datos del navegador.</em></p>
 
-            <h4>B) En la base de datos (solo si te registras desde el formulario de asistencia):</h4>
+            <h4>B) En nuestra base de datos (Supabase):</h4>
             <ul>
-                <li><strong>Nombre completo:</strong> Almacenado directamente</li>
-                <li><strong>Email:</strong> Almacenado directamente en la tabla de asistentes</li>
-                <li><strong>Teléfono:</strong> Si lo proporcionas (opcional)</li>
-                <li><strong>Organización:</strong> Si la proporcionas (opcional)</li>
-            </ul>
-            <p><em>Estos datos se guardan para gestionar el registro de asistentes al evento.</em></p>
-
-            <h4>C) Datos de interacción (anónimos):</h4>
-            <ul>
-                <li><strong>Votos de ponencias:</strong> Almacenados vinculados a un hash de tu email (no al email real)</li>
-                <li><strong>Votos de posters:</strong> Almacenados vinculados a un hash de tu email (no al email real)</li>
+                <li><strong>Votos de ponencias:</strong> Almacenados vinculados a un hash de tu email (NO al email real)</li>
+                <li><strong>Votos de posters:</strong> Almacenados vinculados a un hash de tu email (NO al email real)</li>
                 <li><strong>Etiquetas creadas:</strong> Texto libre compartido de forma anónima</li>
             </ul>
+            <p><em>Solo se almacenan datos anónimos de interacción. NO guardamos nombres ni emails en nuestra base de datos.</em></p>
+
+            <h4>C) Registro de asistencia (Microsoft Forms):</h4>
+            <p>El formulario de registro de asistentes está gestionado por <strong>Microsoft Forms</strong>, una plataforma externa:</p>
+            <ul>
+                <li><strong>Responsable:</strong> Microsoft Corporation (servicio Microsoft 365)</li>
+                <li><strong>Datos recopilados:</strong> Los que solicite el formulario (nombre, email, organización, etc.)</li>
+                <li><strong>Ubicación:</strong> Servidores de Microsoft (cumplimiento RGPD en UE)</li>
+                <li><strong>Política de privacidad:</strong> <a href="https://privacy.microsoft.com/es-es/privacystatement" target="_blank" style="color: #667eea;">Microsoft Privacy Statement</a></li>
+            </ul>
+            <p><em><strong>Importante:</strong> Estos datos de registro NO se almacenan en nuestra aplicación ni en nuestra base de datos. Son gestionados exclusivamente por Microsoft Forms y esPublico como organizador del evento.</em></p>
 
             <h4>¿Cómo funciona el sistema de hash para votaciones?</h4>
-            <p>Para las <strong>votaciones únicamente</strong>, tu email se transforma mediante SHA-256 en un código irreversible de 16 caracteres. Esto significa que:</p>
+            <p>Para garantizar el <strong>anonimato en las votaciones</strong>, tu email se transforma mediante SHA-256 en un código irreversible de 16 caracteres:</p>
             <ul>
                 <li>✅ En las tablas de votos NO se guarda tu email real, solo el hash</li>
-                <li>✅ Nadie puede obtener tu email a partir del hash almacenado en los votos</li>
+                <li>✅ Nadie puede obtener tu email a partir del hash almacenado</li>
                 <li>✅ El mismo email siempre genera el mismo hash (para evitar votos duplicados)</li>
                 <li>✅ Es imposible vincular un voto específico con una persona identificable</li>
+                <li>✅ Ni siquiera los administradores pueden saber quién votó qué</li>
             </ul>
 
-            <p><strong>⚠️ Importante:</strong> Tu email SÍ se almacena directamente en la tabla de asistentes (si te registras), pero NO se vincula directamente con tus votos específicos. Las votaciones usan solo el hash para mantener el anonimato.</p>
+            <p><strong>📊 Resumen de almacenamiento:</strong></p>
+            <ul>
+                <li>🟢 <strong>Tu navegador:</strong> Nombre + Email + Código hash (solo local, tú controlas)</li>
+                <li>🟢 <strong>Nuestra BD (Supabase):</strong> Solo hash anónimo + votos + etiquetas (sin datos personales)</li>
+                <li>🔵 <strong>Microsoft Forms:</strong> Datos de registro del evento (gestionado por Microsoft y esPublico)</li>
+            </ul>
 
             <h3>4. Seguridad de los Datos</h3>
             <p>La aplicación implementa las siguientes medidas de seguridad:</p>
@@ -4869,9 +4877,25 @@
             </ul>
 
             <h3>6. Responsable de los Datos</h3>
-            <p><strong>Organizador:</strong> esPublico Servicios para la Administración SAU</p>
-            <p><strong>Infraestructura:</strong> Supabase (base de datos PostgreSQL en la nube)</p>
-            <p><strong>Ubicación de servidores:</strong> Unión Europea (cumplimiento RGPD)</p>
+
+            <h4>Datos de votaciones y etiquetas (Supabase):</h4>
+            <ul>
+                <li><strong>Organizador del evento:</strong> esPublico Servicios para la Administración SAU</li>
+                <li><strong>Infraestructura:</strong> Supabase (base de datos PostgreSQL en la nube)</li>
+                <li><strong>Ubicación de servidores:</strong> Unión Europea (cumplimiento RGPD)</li>
+                <li><strong>Datos almacenados:</strong> Solo hash anónimo + votos + etiquetas (sin identificación personal)</li>
+            </ul>
+
+            <h4>Datos de registro de asistentes (Microsoft Forms):</h4>
+            <ul>
+                <li><strong>Organizador del evento:</strong> esPublico Servicios para la Administración SAU</li>
+                <li><strong>Plataforma:</strong> Microsoft Forms (Microsoft 365)</li>
+                <li><strong>Responsable del tratamiento:</strong> Microsoft Corporation</li>
+                <li><strong>Ubicación de servidores:</strong> Microsoft Azure (cumplimiento RGPD en UE)</li>
+                <li><strong>Política de privacidad:</strong> <a href="https://privacy.microsoft.com/es-es/privacystatement" target="_blank" style="color: #667eea;">https://privacy.microsoft.com/es-es/privacystatement</a></li>
+            </ul>
+
+            <p><em><strong>Importante:</strong> Los datos de registro (nombre, email, etc.) son gestionados por Microsoft Forms según sus políticas de privacidad. Nuestra aplicación NO tiene acceso a estos datos de registro.</em></p>
 
             <h3>7. Tus Derechos</h3>
             <p>Conforme al RGPD (Reglamento General de Protección de Datos), tienes derecho a:</p>
