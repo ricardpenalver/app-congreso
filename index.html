@@ -4285,8 +4285,16 @@
                 posterVotingState.votesUsed += posterVotingState.selectedPosters.size;
                 posterVotingState.votesAvailable = posterVotingState.maxVotes - posterVotingState.votesUsed;
 
-                // Mostrar resumen de votos en la pantalla de confirmación
-                showPosterVoteConfirmation();
+                // Agregar votos actuales a previousVotes
+                const newVotes = Array.from(posterVotingState.selectedPosters);
+                posterVotingState.previousVotes = [...posterVotingState.previousVotes, ...newVotes];
+
+                // Limpiar selección actual
+                const justVoted = new Set(posterVotingState.selectedPosters);
+                posterVotingState.selectedPosters.clear();
+
+                // Mostrar resumen de votos en la pantalla de confirmación (pasando los que acaba de votar)
+                showPosterVoteConfirmation(justVoted);
 
             } catch (error) {
                 console.error('Error:', error);
@@ -4295,8 +4303,8 @@
         }
 
         // Mostrar pantalla de confirmación
-        function showPosterVoteConfirmation() {
-            const selectedPosterIds = Array.from(posterVotingState.selectedPosters);
+        function showPosterVoteConfirmation(justVotedSet) {
+            const selectedPosterIds = Array.from(justVotedSet);
             const selectedPosterData = posterVotingState.allPosters.filter(p => selectedPosterIds.includes(p.id));
 
             const canVoteMore = posterVotingState.votesAvailable > 0;
