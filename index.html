@@ -2388,6 +2388,16 @@
                 <div class="posters-grid" id="posters-grid">
                     <!-- Los posters se cargarán dinámicamente desde Supabase -->
                 </div>
+
+                <!-- Botón de envío de votos -->
+                <div id="submit-votes-container" style="text-align: center; margin-top: 30px; display: none;">
+                    <button class="btn" id="submit-poster-votes-btn" onclick="submitPosterVotes()">
+                        Enviar Votos
+                    </button>
+                    <p style="color: #666; font-size: 14px; margin-top: 10px;">
+                        Has seleccionado <span id="selected-count">0</span> poster(es)
+                    </p>
+                </div>
             </div>
         </div>
 
@@ -3945,8 +3955,21 @@
         let posterVotingState = {
             selectedPosters: new Set(),
             maxVotes: 3,
-            allPosters: []
+            votesUsed: 0, // Votos ya emitidos anteriormente
+            votesAvailable: 3, // Votos disponibles para esta sesión
+            allPosters: [],
+            previousVotes: [] // IDs de posters votados anteriormente
         };
+
+        // Obtener hash del usuario (mismo sistema que ponencias)
+        async function getUserHash() {
+            const userEmail = localStorage.getItem('userEmail');
+            if (!userEmail) {
+                console.error('No hay email de usuario en localStorage');
+                return null;
+            }
+            return await hashEmail(userEmail);
+        }
 
         // Cargar posters desde Supabase
         async function loadPosters() {
@@ -3983,38 +4006,100 @@
         // Verificar si el usuario ya votó
         async function checkUserPosterVotes() {
             try {
-                const deviceId = getDeviceFingerprint();
+                const userHash = await getUserHash();
+                if (!userHash) {
+                    showPosterMessage('Por favor, inicia sesión para votar.', 'error');
+                    return;
+                }
 
                 const { data: votes, error } = await supabaseClient
                     .from('poster_votes')
                     .select('poster_id')
-                    .eq('device_fingerprint', deviceId);
+                    .eq('device_fingerprint', userHash);
 
                 if (error) {
                     console.error('Error al verificar votos:', error);
                     return;
                 }
 
-                if (votes && votes.length > 0) {
-                    // El usuario ya votó
-                    posterVotingState.selectedPosters = new Set(votes.map(v => v.poster_id));
+                const votesCount = votes ? votes.length : 0;
+                posterVotingState.votesUsed = votesCount;
+                posterVotingState.votesAvailable = posterVotingState.maxVotes - votesCount;
+                posterVotingState.previousVotes = votes ? votes.map(v => v.poster_id) : [];
 
-                    // Mostrar mensaje de confirmación
-                    const statusDiv = document.getElementById('poster-vote-status');
+                console.log(`📊 Usuario ha usado ${votesCount}/3 votos`);
+
+                const statusDiv = document.getElementById('poster-vote-status');
+
+                if (votesCount >= posterVotingState.maxVotes) {
+                    // Ya usó sus 3 votos - NO puede votar más
                     statusDiv.innerHTML = `
                         <div class="poster-confirmation-message">
-                            <h3>✅ Ya has votado</h3>
-                            <p>Has seleccionado ${votes.length} poster(es). Tus votos están registrados.</p>
+                            <h3>✅ Ya has usado tus 3 votos</h3>
+                            <p>Has votado por ${votesCount} posters. ¡Gracias por tu participación!</p>
+                            <button class="btn" onclick="showMyPosterVotes()" style="margin-top: 15px; max-width: 300px;">
+                                👁️ Ver mis votos
+                            </button>
                         </div>
                     `;
-
-                    // Ocultar contador
+                    // Ocultar contador y botón de envío
                     document.getElementById('vote-counter').style.display = 'none';
+                    document.getElementById('submit-votes-container').style.display = 'none';
+
+                } else if (votesCount > 0) {
+                    // Tiene votos previos pero puede votar más
+                    statusDiv.innerHTML = `
+                        <div class="poster-confirmation-message">
+                            <h3>💎 Tienes votos disponibles</h3>
+                            <p>Ya has votado por ${votesCount} poster(es). Puedes agregar hasta ${posterVotingState.votesAvailable} voto(s) más.</p>
+                            <button class="btn" onclick="showMyPosterVotes()" style="margin-top: 15px; max-width: 300px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                                👁️ Ver mis votos anteriores
+                            </button>
+                        </div>
+                    `;
+                } else {
+                    // No ha votado aún
+                    statusDiv.innerHTML = '';
                 }
+
+                // Actualizar contador de votos
+                updateVoteCounter();
 
             } catch (error) {
                 console.error('Error:', error);
             }
+        }
+
+        // Mostrar votos previos del usuario
+        function showMyPosterVotes() {
+            const previousPosters = posterVotingState.allPosters.filter(p =>
+                posterVotingState.previousVotes.includes(p.id)
+            );
+
+            if (previousPosters.length === 0) {
+                alert('No tienes votos registrados.');
+                return;
+            }
+
+            const html = previousPosters.map((poster, index) => `
+                <div style="background: rgba(0, 217, 192, 0.1); padding: 15px; border-radius: 8px; margin-bottom: 10px; border-left: 4px solid var(--color-primary);">
+                    <strong>${index + 1}. ${poster.title}</strong><br>
+                    <small style="color: #666;">por ${poster.author_name}</small>
+                </div>
+            `).join('');
+
+            const container = document.createElement('div');
+            container.style.cssText = 'position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 10000; display: flex; align-items: center; justify-content: center; padding: 20px;';
+            container.innerHTML = `
+                <div style="background: white; border-radius: 20px; padding: 30px; max-width: 500px; width: 100%; max-height: 80vh; overflow-y: auto;">
+                    <h2 style="color: var(--color-secondary-dark); margin-bottom: 20px;">✅ Tus Votos Anteriores</h2>
+                    ${html}
+                    <button class="btn" onclick="this.parentElement.parentElement.remove()" style="margin-top: 20px;">
+                        Cerrar
+                    </button>
+                </div>
+            `;
+            document.body.appendChild(container);
         }
 
         // Renderizar posters en la grilla
@@ -4032,16 +4117,25 @@
 
             container.innerHTML = posterVotingState.allPosters.map(poster => {
                 const isSelected = posterVotingState.selectedPosters.has(poster.id);
-                const votesRemaining = posterVotingState.maxVotes - posterVotingState.selectedPosters.size;
-                const isDisabled = !isSelected && votesRemaining === 0;
-                const hasVoted = document.getElementById('poster-vote-status').innerHTML.includes('Ya has votado');
+                const isPreviouslyVoted = posterVotingState.previousVotes.includes(poster.id);
+                const currentSelectionCount = posterVotingState.selectedPosters.size;
+                const isDisabled = !isSelected && (currentSelectionCount >= posterVotingState.votesAvailable);
+                const cannotVoteMore = posterVotingState.votesAvailable === 0;
+
+                // Determinar el badge a mostrar
+                let badge = '';
+                if (isPreviouslyVoted) {
+                    badge = '<div class="poster-vote-badge" style="background: #667eea;">✅ Ya votado</div>';
+                } else if (isSelected) {
+                    badge = '<div class="poster-vote-badge">✓ Seleccionado</div>';
+                }
 
                 return `
-                    <div class="poster-card ${isSelected ? 'voted' : ''} ${isDisabled || hasVoted ? 'disabled' : ''}"
-                         onclick="${hasVoted ? 'openPosterModal' : 'togglePosterVote'}('${poster.id}')"
+                    <div class="poster-card ${isSelected ? 'voted' : ''} ${isPreviouslyVoted ? 'voted' : ''} ${isDisabled || cannotVoteMore ? 'disabled' : ''}"
+                         onclick="${cannotVoteMore || isPreviouslyVoted ? 'openPosterModal' : 'togglePosterVote'}('${poster.id}')"
                          data-poster-id="${poster.id}">
                         <div class="poster-image-container">
-                            ${isSelected ? '<div class="poster-vote-badge">✓ Votado</div>' : ''}
+                            ${badge}
                             <div class="poster-zoom-icon" onclick="event.stopPropagation(); openPosterModal('${poster.id}')">🔍</div>
                             <img class="poster-image"
                                  src="${poster.thumbnail_url}"
@@ -4061,19 +4155,24 @@
 
         // Toggle voto de poster
         function togglePosterVote(posterId) {
-            const hasVoted = document.getElementById('poster-vote-status').innerHTML.includes('Ya has votado');
-            if (hasVoted) {
-                // Si ya votó, solo abrir modal
+            // No permitir votar si ya usó todos sus votos
+            if (posterVotingState.votesAvailable === 0) {
+                openPosterModal(posterId);
+                return;
+            }
+
+            // No permitir votar por posters ya votados anteriormente
+            if (posterVotingState.previousVotes.includes(posterId)) {
                 openPosterModal(posterId);
                 return;
             }
 
             if (posterVotingState.selectedPosters.has(posterId)) {
-                // Remover voto
+                // Remover voto de la selección actual
                 posterVotingState.selectedPosters.delete(posterId);
             } else {
-                // Agregar voto si no se alcanzó el máximo
-                if (posterVotingState.selectedPosters.size < posterVotingState.maxVotes) {
+                // Agregar voto si no se alcanzó el límite disponible
+                if (posterVotingState.selectedPosters.size < posterVotingState.votesAvailable) {
                     posterVotingState.selectedPosters.add(posterId);
                 }
             }
@@ -4081,28 +4180,47 @@
             // Actualizar UI
             updateVoteCounter();
             renderPosters();
-
-            // Si alcanzó 3 votos, preguntar si quiere enviar
-            if (posterVotingState.selectedPosters.size === posterVotingState.maxVotes) {
-                setTimeout(() => {
-                    if (confirm('Has seleccionado 3 posters. ¿Deseas enviar tus votos ahora?')) {
-                        submitPosterVotes();
-                    }
-                }, 300);
-            }
+            updateSubmitButton();
         }
 
         // Actualizar contador de votos
         function updateVoteCounter() {
-            const remaining = posterVotingState.maxVotes - posterVotingState.selectedPosters.size;
-            document.getElementById('votes-remaining').textContent = remaining;
+            const currentSelections = posterVotingState.selectedPosters.size;
+            const remaining = posterVotingState.votesAvailable - currentSelections;
+            const totalUsed = posterVotingState.votesUsed + currentSelections;
+
+            const counterDiv = document.getElementById('vote-counter');
+            counterDiv.innerHTML = `
+                Votos disponibles: <span class="votes-remaining">${remaining}</span> de ${posterVotingState.votesAvailable}
+                <br>
+                <small style="font-size: 12px; opacity: 0.8;">Total usado: ${totalUsed}/3</small>
+            `;
 
             if (remaining === 0) {
-                document.getElementById('vote-counter').style.background = 'rgba(0, 217, 192, 0.2)';
-                document.getElementById('vote-counter').style.borderColor = 'var(--color-primary)';
+                counterDiv.style.background = 'rgba(0, 217, 192, 0.2)';
+                counterDiv.style.borderColor = 'var(--color-primary)';
             } else {
-                document.getElementById('vote-counter').style.background = 'rgba(0, 107, 125, 0.1)';
-                document.getElementById('vote-counter').style.borderColor = 'var(--color-secondary)';
+                counterDiv.style.background = 'rgba(0, 107, 125, 0.1)';
+                counterDiv.style.borderColor = 'var(--color-secondary)';
+            }
+        }
+
+        // Actualizar botón de envío de votos
+        function updateSubmitButton() {
+            const selectedCount = posterVotingState.selectedPosters.size;
+            const container = document.getElementById('submit-votes-container');
+            const countSpan = document.getElementById('selected-count');
+
+            if (selectedCount > 0) {
+                // Mostrar botón si hay al menos 1 voto seleccionado
+                container.style.display = 'block';
+                countSpan.textContent = selectedCount;
+
+                // Animar entrada del botón
+                container.style.animation = 'fadeIn 0.3s ease-in-out';
+            } else {
+                // Ocultar botón si no hay votos
+                container.style.display = 'none';
             }
         }
 
@@ -4114,15 +4232,26 @@
             }
 
             try {
-                const deviceId = getDeviceFingerprint();
+                const userHash = await getUserHash();
+                if (!userHash) {
+                    alert('Por favor, inicia sesión para votar.');
+                    return;
+                }
 
-                // Preparar votos
+                // Verificar que no exceda el límite
+                const totalVotesAfter = posterVotingState.votesUsed + posterVotingState.selectedPosters.size;
+                if (totalVotesAfter > posterVotingState.maxVotes) {
+                    alert(`No puedes votar por más de ${posterVotingState.maxVotes} posters en total.`);
+                    return;
+                }
+
+                // Preparar votos con hash del usuario
                 const votes = Array.from(posterVotingState.selectedPosters).map(posterId => ({
                     poster_id: posterId,
-                    device_fingerprint: deviceId
+                    device_fingerprint: userHash
                 }));
 
-                console.log('📤 Enviando votos de posters:', votes);
+                console.log(`📤 Enviando ${votes.length} voto(s) de posters (total: ${totalVotesAfter}/3)`);
 
                 const { data, error } = await supabaseClient
                     .from('poster_votes')
@@ -4131,9 +4260,17 @@
                 if (error) {
                     console.error('Error al enviar votos:', error);
 
-                    // Verificar si ya votó
+                    // Verificar si ya votó por estos posters
                     if (error.code === '23505') {
-                        alert('Ya has votado anteriormente. No se pueden registrar votos duplicados.');
+                        alert('Ya has votado por alguno de estos posters anteriormente.');
+                        await checkUserPosterVotes();
+                        renderPosters();
+                        return;
+                    }
+
+                    // Verificar si excede el límite
+                    if (error.message && error.message.includes('Maximum 3 votes')) {
+                        alert('Has alcanzado el máximo de 3 votos permitidos.');
                         await checkUserPosterVotes();
                         renderPosters();
                         return;
@@ -4143,6 +4280,10 @@
                 }
 
                 console.log('✅ Votos registrados:', data);
+
+                // Actualizar estado local
+                posterVotingState.votesUsed += posterVotingState.selectedPosters.size;
+                posterVotingState.votesAvailable = posterVotingState.maxVotes - posterVotingState.votesUsed;
 
                 // Mostrar resumen de votos en la pantalla de confirmación
                 showPosterVoteConfirmation();
@@ -4158,15 +4299,31 @@
             const selectedPosterIds = Array.from(posterVotingState.selectedPosters);
             const selectedPosterData = posterVotingState.allPosters.filter(p => selectedPosterIds.includes(p.id));
 
+            const canVoteMore = posterVotingState.votesAvailable > 0;
+            const votesUsedTotal = posterVotingState.votesUsed;
+
             const summaryHtml = `
                 <div style="text-align: left; max-width: 400px; margin: 0 auto;">
-                    <h3 style="margin-bottom: 15px; color: var(--color-secondary-dark);">Tus votos:</h3>
+                    <h3 style="margin-bottom: 15px; color: var(--color-secondary-dark);">Votos registrados en esta sesión:</h3>
                     ${selectedPosterData.map(poster => `
                         <div style="background: rgba(0, 217, 192, 0.1); padding: 12px; border-radius: 8px; margin-bottom: 10px; border-left: 4px solid var(--color-primary);">
                             <strong>${escapeHtml(poster.title)}</strong><br>
                             <small style="color: #666;">por ${escapeHtml(poster.author_name)}</small>
                         </div>
                     `).join('')}
+
+                    <div style="background: rgba(102, 126, 234, 0.1); padding: 15px; border-radius: 8px; margin-top: 20px; text-align: center;">
+                        <strong style="color: var(--color-secondary-dark);">Total de votos usados: ${votesUsedTotal}/3</strong>
+                        ${canVoteMore ? `
+                            <p style="color: #666; font-size: 14px; margin-top: 8px;">
+                                💎 ¡Todavía puedes votar por ${posterVotingState.votesAvailable} poster(es) más!
+                            </p>
+                        ` : `
+                            <p style="color: #666; font-size: 14px; margin-top: 8px;">
+                                ✅ Has usado todos tus votos. ¡Gracias por participar!
+                            </p>
+                        `}
+                    </div>
                 </div>
             `;
 
