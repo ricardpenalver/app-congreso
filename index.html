@@ -4794,49 +4794,55 @@
             </ul>
 
             <div class="legal-highlight">
-                <p><strong>🔒 GARANTÍA DE PRIVACIDAD:</strong></p>
-                <p><strong>NO</strong> se guardan datos personales más allá del nombre y email que proporcionas voluntariamente.</p>
-                <p><strong>NO</strong> se almacena información de tu sesión después de cerrar la aplicación.</p>
-                <p><strong>NO</strong> se recopila información de tu dispositivo, navegador o sistema operativo.</p>
-                <p><strong>NO</strong> se obtiene ni almacena tu geolocalización.</p>
-                <p><strong>NO</strong> se utilizan cookies de rastreo ni publicidad.</p>
-                <p><strong>NO</strong> se comparten tus datos con terceros.</p>
+                <p><strong>🔒 GARANTÍA DE PRIVACIDAD - QUÉ GUARDAMOS Y QUÉ NO:</strong></p>
+                <p><strong>✅ SÍ guardamos:</strong> Nombre, email, teléfono (opcional) y organización (opcional) si te registras como asistente.</p>
+                <p><strong>✅ SÍ guardamos:</strong> Tus votos de forma anónima (vinculados a un hash, no a tu email real).</p>
+                <p><strong>❌ NO guardamos:</strong> Información de tu dispositivo, navegador o sistema operativo.</p>
+                <p><strong>❌ NO obtenemos:</strong> Tu geolocalización ni datos de seguimiento.</p>
+                <p><strong>❌ NO utilizamos:</strong> Cookies de rastreo ni publicidad.</p>
+                <p><strong>❌ NO compartimos:</strong> Tus datos con terceros bajo ningún concepto.</p>
+                <p><strong>❌ NO vinculamos:</strong> Tu identidad real con tus votos específicos (se usa hash anónimo).</p>
             </div>
 
             <h3>3. Datos Recopilados</h3>
-            <p>La aplicación únicamente recopila y almacena:</p>
+            <p>La aplicación recopila y almacena los siguientes datos en dos ubicaciones diferentes:</p>
+
+            <h4>A) En tu navegador (localStorage):</h4>
             <ul>
-                <li><strong>Nombre:</strong> Para personalizar tu experiencia en la app (ej: "¡Hola, Ricardo!")</li>
-                <li><strong>Email:</strong> Usado exclusivamente para:
-                    <ul>
-                        <li>Generar un código de identificación único (hash SHA-256)</li>
-                        <li>Permitir recuperar tu sesión en caso de cierre accidental</li>
-                        <li>Evitar votos duplicados mediante identificación anónima</li>
-                    </ul>
-                </li>
-                <li><strong>Votos emitidos:</strong> Almacenados de forma anónima vinculados a un hash (no al email real)</li>
+                <li><strong>Nombre completo:</strong> Para personalizar tu experiencia (ej: "¡Hola, Ricardo!")</li>
+                <li><strong>Email:</strong> Para permitir recuperar tu sesión</li>
+                <li><strong>Código de identificación:</strong> Hash SHA-256 de 16 caracteres derivado de tu email</li>
+            </ul>
+            <p><em>Estos datos solo existen en tu dispositivo y puedes eliminarlos en cualquier momento cerrando sesión.</em></p>
+
+            <h4>B) En la base de datos (solo si te registras desde el formulario de asistencia):</h4>
+            <ul>
+                <li><strong>Nombre completo:</strong> Almacenado directamente</li>
+                <li><strong>Email:</strong> Almacenado directamente en la tabla de asistentes</li>
+                <li><strong>Teléfono:</strong> Si lo proporcionas (opcional)</li>
+                <li><strong>Organización:</strong> Si la proporcionas (opcional)</li>
+            </ul>
+            <p><em>Estos datos se guardan para gestionar el registro de asistentes al evento.</em></p>
+
+            <h4>C) Datos de interacción (anónimos):</h4>
+            <ul>
+                <li><strong>Votos de ponencias:</strong> Almacenados vinculados a un hash de tu email (no al email real)</li>
+                <li><strong>Votos de posters:</strong> Almacenados vinculados a un hash de tu email (no al email real)</li>
                 <li><strong>Etiquetas creadas:</strong> Texto libre compartido de forma anónima</li>
             </ul>
 
-            <h4>¿Cómo se protege tu email?</h4>
-            <p>Tu dirección de email <strong>nunca</strong> se almacena directamente. Se transforma mediante un algoritmo criptográfico (SHA-256) en un código irreversible de 16 caracteres. Esto significa que:</p>
+            <h4>¿Cómo funciona el sistema de hash para votaciones?</h4>
+            <p>Para las <strong>votaciones únicamente</strong>, tu email se transforma mediante SHA-256 en un código irreversible de 16 caracteres. Esto significa que:</p>
             <ul>
-                <li>✅ Nadie puede obtener tu email a partir del código almacenado</li>
-                <li>✅ El mismo email siempre genera el mismo código (para evitar votos duplicados)</li>
-                <li>✅ Es imposible saber quién votó qué, solo que cada persona votó una vez</li>
+                <li>✅ En las tablas de votos NO se guarda tu email real, solo el hash</li>
+                <li>✅ Nadie puede obtener tu email a partir del hash almacenado en los votos</li>
+                <li>✅ El mismo email siempre genera el mismo hash (para evitar votos duplicados)</li>
+                <li>✅ Es imposible vincular un voto específico con una persona identificable</li>
             </ul>
 
-            <h3>4. Almacenamiento Local (localStorage)</h3>
-            <p>La aplicación utiliza <strong>localStorage</strong> del navegador para mejorar tu experiencia:</p>
-            <ul>
-                <li><strong>¿Qué se guarda?</strong> Tu nombre, email y código de identificación</li>
-                <li><strong>¿Dónde?</strong> Solo en tu dispositivo, en tu navegador</li>
-                <li><strong>¿Quién puede acceder?</strong> Solo tú, desde el mismo navegador y dispositivo</li>
-                <li><strong>¿Se sincroniza?</strong> No, solo existe localmente</li>
-                <li><strong>¿Cómo eliminarlo?</strong> Desde el botón "🚪 Cerrar sesión" o borrando los datos del navegador</li>
-            </ul>
+            <p><strong>⚠️ Importante:</strong> Tu email SÍ se almacena directamente en la tabla de asistentes (si te registras), pero NO se vincula directamente con tus votos específicos. Las votaciones usan solo el hash para mantener el anonimato.</p>
 
-            <h3>5. Seguridad de los Datos</h3>
+            <h3>4. Seguridad de los Datos</h3>
             <p>La aplicación implementa las siguientes medidas de seguridad:</p>
             <ul>
                 <li><strong>HTTPS:</strong> Todas las comunicaciones están cifradas</li>
@@ -4846,7 +4852,7 @@
                 <li><strong>Sin almacenamiento de sesión:</strong> No hay tokens, cookies de sesión ni información persistente</li>
             </ul>
 
-            <h3>6. Uso de los Datos</h3>
+            <h3>5. Uso de los Datos</h3>
             <p>Los datos recopilados se utilizan <strong>exclusivamente</strong> para:</p>
             <ul>
                 <li>Personalizar tu experiencia en la aplicación</li>
@@ -4862,12 +4868,12 @@
                 <li>Comunicaciones posteriores al evento (salvo que lo solicites expresamente)</li>
             </ul>
 
-            <h3>7. Responsable de los Datos</h3>
+            <h3>6. Responsable de los Datos</h3>
             <p><strong>Organizador:</strong> esPublico Servicios para la Administración SAU</p>
             <p><strong>Infraestructura:</strong> Supabase (base de datos PostgreSQL en la nube)</p>
             <p><strong>Ubicación de servidores:</strong> Unión Europea (cumplimiento RGPD)</p>
 
-            <h3>8. Tus Derechos</h3>
+            <h3>7. Tus Derechos</h3>
             <p>Conforme al RGPD (Reglamento General de Protección de Datos), tienes derecho a:</p>
             <ul>
                 <li><strong>Acceso:</strong> Consultar qué datos tuyos almacenamos</li>
@@ -4879,12 +4885,12 @@
             </ul>
             <p>Para ejercer estos derechos, puedes contactar a los organizadores del evento durante el congreso.</p>
 
-            <h3>9. Retención de Datos</h3>
+            <h3>8. Retención de Datos</h3>
             <p><strong>Duración:</strong> Los datos se conservarán únicamente durante el evento y hasta 30 días después para generar estadísticas finales.</p>
             <p><strong>Eliminación:</strong> Pasado este periodo, todos los datos personales serán eliminados de forma irreversible.</p>
             <p><strong>Datos agregados:</strong> Solo se conservarán estadísticas anónimas (ej: "150 personas votaron", sin identificar a ninguna).</p>
 
-            <h3>10. Advertencias de Seguridad</h3>
+            <h3>9. Advertencias de Seguridad</h3>
             <div class="legal-highlight">
                 <p><strong>⚠️ IMPORTANTE - Recomendaciones de seguridad:</strong></p>
                 <ul>
@@ -4897,7 +4903,7 @@
                 </ul>
             </div>
 
-            <h3>11. Limitación de Responsabilidad</h3>
+            <h3>10. Limitación de Responsabilidad</h3>
             <p>Esta aplicación se proporciona "tal cual" para uso exclusivo durante el evento. Los organizadores no se responsabilizan de:</p>
             <ul>
                 <li>Pérdida de datos por fallos técnicos o de conexión</li>
@@ -4906,15 +4912,15 @@
                 <li>Problemas derivados del mal uso de la aplicación</li>
             </ul>
 
-            <h3>12. Cookies y Tecnologías Similares</h3>
+            <h3>11. Cookies y Tecnologías Similares</h3>
             <p><strong>Esta aplicación NO utiliza cookies.</strong></p>
             <p>Únicamente utiliza <strong>localStorage</strong> (almacenamiento local del navegador) para mejorar tu experiencia, que no se comparte con ningún servidor externo.</p>
 
-            <h3>13. Cambios en este Aviso Legal</h3>
+            <h3>12. Cambios en este Aviso Legal</h3>
             <p>Nos reservamos el derecho a modificar este aviso legal. Cualquier cambio será notificado a través de la propia aplicación.</p>
             <p><strong>Última actualización:</strong> 21 de octubre de 2025</p>
 
-            <h3>14. Consentimiento</h3>
+            <h3>13. Consentimiento</h3>
             <p>Al marcar la casilla "He leído y acepto el aviso legal" y hacer clic en "Acceder", manifiestas que:</p>
             <ul>
                 <li>✅ Has leído y comprendido este aviso legal completo</li>
