@@ -299,22 +299,36 @@
             }
         }
 
-        /* Estilos para títulos fuera de contenedores */
+        /* Contenedor del título y subtítulo */
+        .screen-header {
+            background: rgba(255, 255, 255, 0.98);
+            margin: 20px;
+            padding: 30px 25px;
+            border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            border-top: 3px solid;
+            border-image: linear-gradient(90deg, var(--color-primary) 0%, var(--color-cyan-bright) 100%) 1;
+            border-image-slice: 1;
+            border-left: 0;
+            border-right: 0;
+            border-bottom: 0;
+        }
+
         .screen-title {
             color: #2c3e50;
             font-size: 32px;
             font-weight: 800;
             text-align: center;
-            margin: 20px 20px 15px 20px;
+            margin: 0 0 12px 0;
             padding: 0;
         }
 
         .screen-subtitle {
-            color: #666;
+            color: #555;
             font-size: 16px;
             font-weight: 400;
             text-align: center;
-            margin: 0 20px 25px 20px;
+            margin: 0;
             line-height: 1.6;
         }
 
@@ -351,6 +365,11 @@
         }
 
         @media (max-width: 768px) {
+            .screen-header {
+                margin: 15px;
+                padding: 25px 20px;
+            }
+
             .screen-title {
                 font-size: 26px;
             }
@@ -2560,11 +2579,13 @@
                 ← Volver al inicio
             </button>
 
-            <!-- Título fuera del contenedor -->
-            <h2 class="screen-title">Registro de Asistencia</h2>
-            <p class="screen-subtitle">
-                Registra tu asistencia a las actividades del congreso y obtén tu certificado de asistencia
-            </p>
+            <!-- Contenedor del título y subtítulo -->
+            <div class="screen-header">
+                <h2 class="screen-title">Registro de Asistencia</h2>
+                <p class="screen-subtitle">
+                    Registra tu asistencia a las actividades del congreso y obtén tu certificado de asistencia
+                </p>
+            </div>
 
             <div class="section" style="padding-top: 20px;">
                 <!-- Microsoft Forms Embedded -->
