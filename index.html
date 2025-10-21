@@ -1287,9 +1287,9 @@
             text-align: center;
             padding: 20px;
             margin-bottom: 20px;
-            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            background: linear-gradient(135deg, rgba(0, 217, 192, 0.15) 0%, rgba(0, 245, 224, 0.1) 100%);
             border-radius: 20px;
-            border: 2px solid rgba(102, 126, 234, 0.2);
+            border: 2px solid rgba(0, 217, 192, 0.3);
             animation: slideDown 0.6s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
@@ -1307,28 +1307,24 @@
         .user-greeting-text {
             font-size: 24px;
             font-weight: 700;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #00D9C0 0%, #0B7A8F 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            margin-bottom: 5px;
-        }
-
-        .user-greeting-subtitle {
-            font-size: 14px;
-            color: #666;
+            margin-bottom: 15px;
         }
 
         .user-code-badge {
             display: inline-block;
             margin-top: 10px;
-            padding: 8px 15px;
+            padding: 10px 20px;
             background: white;
             border-radius: 20px;
-            font-size: 12px;
-            color: #667eea;
+            font-size: 14px;
+            color: var(--color-secondary-dark);
             font-weight: 600;
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.2);
+            box-shadow: 0 4px 15px rgba(0, 217, 192, 0.25);
+            border: 2px solid var(--color-primary);
         }
 
         /* Botón de cerrar sesión */
@@ -1847,13 +1843,12 @@
                 <img class="logo-gestiona" src="https://design.g3stiona.com/recursos-nuevo-espublico/downloads/logos/Gestiona-blanco.png" alt="Gestiona esPublico">
 
                 <h1>III Encuentro Anual de usuarios certificados</h1>
-                <div class="event-badge">Caixaforum Zaragoza, del 5 al 7 de noviembre de 2025</div>
+                <div class="event-badge">5 al 7 de noviembre de 2025</div>
             </div>
 
             <!-- Saludo personalizado del usuario (se muestra después de identificarse) -->
             <div class="user-greeting" id="user-greeting" style="display: none;">
                 <div class="user-greeting-text">¡Hola, <span id="greeting-name"></span>!</div>
-                <div class="user-greeting-subtitle">Tu código de identificación</div>
                 <div class="user-code-badge" id="greeting-code"></div>
                 <button class="logout-btn" onclick="logout()" style="position: static; margin-top: 15px;">
                     🚪 Cerrar sesión
