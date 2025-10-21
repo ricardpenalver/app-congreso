@@ -486,7 +486,7 @@
             </div>
             <div class="stat-card">
                 <div class="stat-label">de ponencias</div>
-                <div class="stat-value" id="presentations-count">0</div>
+                <div class="stat-value" id="presentations-count">—</div>
             </div>
         </div>
 
@@ -568,14 +568,15 @@
                     .sort((a, b) => b.count - a.count);
 
                 // Actualizar stats
-                const totalTags = tagsData.length;
+                const attendeesTags = tagsData.length;
                 const uniqueTags = tagArray.length;
+                const presentationsTags = 0; // Por ahora 0, vendrá de otra fuente en el futuro
+                const totalTags = attendeesTags + presentationsTags;
 
                 document.getElementById('total-tags').textContent = totalTags;
                 document.getElementById('unique-tags').textContent = uniqueTags;
-
-                // Cargar contador de asistentes
-                await loadAttendeesCount();
+                document.getElementById('attendees-count').textContent = attendeesTags;
+                document.getElementById('presentations-count').textContent = presentationsTags;
 
                 // Actualizar timestamp
                 updateTimestamp();
@@ -702,25 +703,6 @@
                         <div class="empty-description">No se pudieron cargar las etiquetas</div>
                     </div>
                 `;
-            }
-        }
-
-        // Cargar contador de asistentes (basado en etiquetas creadas)
-        async function loadAttendeesCount() {
-            try {
-                const { count, error } = await supabaseClient
-                    .from('tags')
-                    .select('*', { count: 'exact', head: true });
-
-                if (error) {
-                    console.error('Error al cargar contador de etiquetas:', error);
-                    document.getElementById('attendees-count').textContent = '—';
-                } else {
-                    document.getElementById('attendees-count').textContent = count || 0;
-                }
-            } catch (error) {
-                console.error('Error de conexión al cargar contador de etiquetas:', error);
-                document.getElementById('attendees-count').textContent = '—';
             }
         }
 
