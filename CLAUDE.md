@@ -21,6 +21,7 @@
 /Users/rilihouse/PROYECTOS/CLAUDE CODE/
 ├── index.html                           # Aplicación principal (SPA)
 ├── congress_app_schema.sql              # Esquema completo de BD
+├── poster_voting_schema.sql             # Esquema de votación de posters
 ├── security_fixes.sql                   # Políticas RLS y mejoras de seguridad
 ├── fix_error_1_organizations_rls.sql    # Corrección RLS organizations
 ├── fix_function_search_path_warnings.sql # Corrección search_path en funciones
@@ -30,6 +31,7 @@
 ├── .env                                 # Variables de entorno
 ├── README.md                            # Documentación del usuario
 ├── CLAUDE.md                            # Esta documentación
+├── POSTER_VOTING_README.md              # Documentación sistema de posters
 └── .claude/                             # Configuración Claude Code
 ```
 
@@ -39,7 +41,8 @@
 - **attendees** - Perfiles de asistentes
 - **sessions** - Agenda y cronogramas
 - **speakers** - Información de ponentes
-- **voting_topics** + **votes** - Sistema de votaciones
+- **voting_topics** + **votes** - Sistema de votaciones de ponencias
+- **posters** + **poster_votes** - Sistema de votación de posters ⭐ NUEVO
 - **tags** + **ideas** - Sistema de etiquetas
 - **networking_connections** - Red de contactos
 - **notifications** - Sistema de alertas
@@ -47,9 +50,9 @@
 - **feedback** - Encuestas y evaluaciones
 
 ### Características de BD
-- **25+ tablas** interconectadas
+- **27+ tablas** interconectadas
 - **Row Level Security** habilitado en todas las tablas
-- **40+ políticas RLS** configuradas y activas
+- **46+ políticas RLS** configuradas y activas
 - **Índices optimizados** para rendimiento
 - **Triggers** para contadores automáticos
 - **Vistas seguras** con SECURITY INVOKER
@@ -69,8 +72,9 @@
 Home Screen
 ├── 📅 Agenda (implementada)
 ├── 📝 Registro (implementada)
-├── 🗳️ Votación (implementada)
-└── 🏷️ Etiquetas (implementada)
+├── 🗳️ Votación Ponencias (implementada)
+├── 🏷️ Etiquetas (implementada)
+└── 📊 Votación Posters (implementada) ⭐ NUEVO
 ```
 
 ## ⚙️ Funcionalidades
@@ -111,6 +115,18 @@ Home Screen
    - Input de texto libre
    - Almacenamiento híbrido
    - Display visual con colores
+
+6. **Sistema de Votación de Posters** ⭐ NUEVO
+   - Máximo 3 votos por usuario
+   - Galería visual de posters con miniaturas
+   - Modal de ampliación de imágenes
+   - Contador de votos restantes en tiempo real
+   - Prevención de votos duplicados (device fingerprinting)
+   - Pantalla de confirmación con resumen
+   - Visualización de resultados en tiempo real
+   - Auto-refresh cada 10 segundos
+   - Ranking con badge de ganador
+   - Acceso público para proyección: `?poster-results` o `#poster-results`
 
 ### 🔄 En Desarrollo
 - Información detallada de ponentes
