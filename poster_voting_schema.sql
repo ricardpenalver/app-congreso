@@ -107,7 +107,8 @@ CREATE TRIGGER validate_max_poster_votes_trigger
 -- ============================================
 
 -- Public voting results view
-CREATE OR REPLACE VIEW public_poster_results AS
+CREATE OR REPLACE VIEW public_poster_results
+WITH (security_invoker = true) AS
 SELECT
     p.id,
     p.title,

@@ -2453,7 +2453,7 @@
         <div id="poster-modal" class="poster-modal">
             <button class="poster-modal-close" onclick="closePosterModal()">×</button>
             <div class="poster-modal-content">
-                <img id="poster-modal-image" class="poster-modal-image" src="" alt="Poster completo">
+                <img id="poster-modal-image" class="poster-modal-image" src="" alt="Poster completo" onerror="if(!this.dataset.fallbackUsed){this.dataset.fallbackUsed='true';this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22800%22 height=%221200%22%3E%3Crect width=%22800%22 height=%221200%22 fill=%22%23f0f0f0%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 font-family=%22Arial%22 font-size=%2240%22 fill=%22%23999%22%3EPoster no disponible%3C/text%3E%3C/svg%3E';}">
                 <div class="poster-modal-info">
                     <h3 class="poster-modal-title" id="poster-modal-title"></h3>
                     <p class="poster-modal-subtitle" id="poster-modal-subtitle"></p>
@@ -4052,7 +4052,7 @@
                         <div class="poster-confirmation-message">
                             <h3>💎 Tienes votos disponibles</h3>
                             <p>Ya has votado por ${votesCount} poster(es). Puedes agregar hasta ${posterVotingState.votesAvailable} voto(s) más.</p>
-                            <button class="btn" onclick="showMyPosterVotes()" style="margin-top: 15px; max-width: 300px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                            <button class="btn" onclick="showMyPosterVotes()" style="margin-top: 15px; max-width: 300px; background: linear-gradient(135deg, #0B7A8F 0%, #006B7D 100%);">
                                 👁️ Ver mis votos anteriores
                             </button>
                         </div>
@@ -4125,7 +4125,7 @@
                 // Determinar el badge a mostrar
                 let badge = '';
                 if (isPreviouslyVoted) {
-                    badge = '<div class="poster-vote-badge" style="background: #667eea;">✅ Ya votado</div>';
+                    badge = '<div class="poster-vote-badge" style="background: linear-gradient(135deg, #0B7A8F 0%, #006B7D 100%); color: white;">✅ Ya votado</div>';
                 } else if (isSelected) {
                     badge = '<div class="poster-vote-badge">✓ Seleccionado</div>';
                 }
@@ -4140,7 +4140,7 @@
                             <img class="poster-image"
                                  src="${poster.thumbnail_url}"
                                  alt="${escapeHtml(poster.title)}"
-                                 onerror="this.src='https://via.placeholder.com/300x400?text=Poster'">
+                                 onerror="if(!this.dataset.fallbackUsed){this.dataset.fallbackUsed='true';this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22400%22%3E%3Crect width=%22300%22 height=%22400%22 fill=%22%23f0f0f0%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 font-family=%22Arial%22 font-size=%2220%22 fill=%22%23999%22%3EPoster%3C/text%3E%3C/svg%3E';}">
                         </div>
                         <div class="poster-info">
                             <div class="poster-title">${escapeHtml(poster.title)}</div>
