@@ -2224,6 +2224,118 @@
             }
         }
 
+        /* Estilos para sección de Información de interés (Ubicaciones) */
+        .locations-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .location-card {
+            background: rgba(255, 255, 255, 0.98);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 2px solid rgba(11, 122, 143, 0.1);
+        }
+
+        .location-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--color-primary);
+        }
+
+        .location-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--color-secondary-dark);
+            margin: 0;
+            padding: 20px 20px 10px 20px;
+            background: linear-gradient(135deg, rgba(11, 122, 143, 0.05) 0%, rgba(0, 217, 192, 0.05) 100%);
+        }
+
+        .location-address {
+            font-size: 14px;
+            color: #666;
+            margin: 0;
+            padding: 0 20px 15px 20px;
+            background: linear-gradient(135deg, rgba(11, 122, 143, 0.05) 0%, rgba(0, 217, 192, 0.05) 100%);
+        }
+
+        .map-container {
+            position: relative;
+            width: 100%;
+            height: 250px;
+            overflow: hidden;
+        }
+
+        .map-link {
+            display: block;
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-decoration: none;
+        }
+
+        .map-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(11, 122, 143, 0.85);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        .map-link:hover .map-overlay {
+            opacity: 1;
+        }
+
+        .map-overlay span {
+            color: white;
+            font-size: 18px;
+            font-weight: 700;
+            padding: 12px 24px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 25px;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(10px);
+        }
+
+        .map-container iframe {
+            width: 100%;
+            height: 100%;
+            border: 0;
+            pointer-events: none;
+        }
+
+        .map-link:hover iframe {
+            pointer-events: all;
+        }
+
+        @media (max-width: 768px) {
+            .locations-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .location-title {
+                font-size: 18px;
+            }
+
+            .map-container {
+                height: 200px;
+            }
+        }
+
     </style>
 </head>
 <body>
@@ -2369,6 +2481,12 @@
                     <span class="icon">📅</span>
                     <h3>Agenda</h3>
                     <p>Cronograma completo del congreso</p>
+                </div>
+
+                <div class="menu-option" onclick="showScreen('locations-screen')">
+                    <span class="icon">📍</span>
+                    <h3>Información de interés</h3>
+                    <p>Ubicaciones y mapas del evento</p>
                 </div>
 
                 <div class="menu-option" onclick="showScreen('attendance-screen')">
@@ -2733,6 +2851,132 @@
                                 <div class="agenda-location">📍 Área Común</div>
                                 <span class="agenda-type type-break">Descanso</span>
                             </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pantalla de Información de Interés (Ubicaciones) -->
+        <div id="locations-screen" class="screen">
+            <button class="back-btn" onclick="showScreen('home-screen')">
+                ← Volver al inicio
+            </button>
+
+            <div class="section">
+                <h2>📍 Información de interés</h2>
+                <p style="text-align: center; color: #666; margin-bottom: 30px; font-size: 16px;">
+                    Ubicaciones importantes del evento. Toca en el mapa para abrir en Google Maps.
+                </p>
+
+                <div class="locations-grid">
+                    <!-- Sede del Congreso -->
+                    <div class="location-card">
+                        <h3 class="location-title">🏛️ Sede del Congreso</h3>
+                        <p class="location-address">Centro de Convenciones Principal</p>
+                        <div class="map-container">
+                            <a href="https://maps.google.com/?q=40.416775,-3.703790" target="_blank" rel="noopener" class="map-link">
+                                <iframe
+                                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3037.5!2d-3.703790!3d40.416775!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNDDCsDI1JzAwLjQiTiAzwrA0MicxMy42Ilc!5e0!3m2!1ses!2ses!4v1234567890"
+                                    width="100%"
+                                    height="250"
+                                    style="border:0; border-radius: 12px;"
+                                    allowfullscreen=""
+                                    loading="lazy"
+                                    referrerpolicy="no-referrer-when-downgrade">
+                                </iframe>
+                                <div class="map-overlay">
+                                    <span>🗺️ Abrir en Google Maps</span>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Cena -->
+                    <div class="location-card">
+                        <h3 class="location-title">🍽️ Cena de Gala</h3>
+                        <p class="location-address">Restaurante El Encuentro</p>
+                        <div class="map-container">
+                            <a href="https://maps.google.com/?q=40.417000,-3.704000" target="_blank" rel="noopener" class="map-link">
+                                <iframe
+                                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3037.5!2d-3.704000!3d40.417000!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNDDCsDI1JzAxLjIiTiAzwrA0MicxNC40Ilc!5e0!3m2!1ses!2ses!4v1234567890"
+                                    width="100%"
+                                    height="250"
+                                    style="border:0; border-radius: 12px;"
+                                    allowfullscreen=""
+                                    loading="lazy"
+                                    referrerpolicy="no-referrer-when-downgrade">
+                                </iframe>
+                                <div class="map-overlay">
+                                    <span>🗺️ Abrir en Google Maps</span>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Aula 1 -->
+                    <div class="location-card">
+                        <h3 class="location-title">🚪 Aula 1</h3>
+                        <p class="location-address">Talleres técnicos - Planta 2</p>
+                        <div class="map-container">
+                            <a href="https://maps.google.com/?q=40.416800,-3.703800" target="_blank" rel="noopener" class="map-link">
+                                <iframe
+                                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3037.5!2d-3.703800!3d40.416800!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNDDCsDI1JzAwLjUiTiAzwrA0MicxMy43Ilc!5e0!3m2!1ses!2ses!4v1234567890"
+                                    width="100%"
+                                    height="250"
+                                    style="border:0; border-radius: 12px;"
+                                    allowfullscreen=""
+                                    loading="lazy"
+                                    referrerpolicy="no-referrer-when-downgrade">
+                                </iframe>
+                                <div class="map-overlay">
+                                    <span>🗺️ Abrir en Google Maps</span>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Aula 2 -->
+                    <div class="location-card">
+                        <h3 class="location-title">🚪 Aula 2</h3>
+                        <p class="location-address">Talleres prácticos - Planta 2</p>
+                        <div class="map-container">
+                            <a href="https://maps.google.com/?q=40.416850,-3.703850" target="_blank" rel="noopener" class="map-link">
+                                <iframe
+                                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3037.5!2d-3.703850!3d40.416850!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNDDCsDI1JzAwLjciTiAzwrA0MicxMy45Ilc!5e0!3m2!1ses!2ses!4v1234567890"
+                                    width="100%"
+                                    height="250"
+                                    style="border:0; border-radius: 12px;"
+                                    allowfullscreen=""
+                                    loading="lazy"
+                                    referrerpolicy="no-referrer-when-downgrade">
+                                </iframe>
+                                <div class="map-overlay">
+                                    <span>🗺️ Abrir en Google Maps</span>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Aula Escenario -->
+                    <div class="location-card">
+                        <h3 class="location-title">🎭 Aula Escenario</h3>
+                        <p class="location-address">Auditorio principal - Planta 1</p>
+                        <div class="map-container">
+                            <a href="https://maps.google.com/?q=40.416900,-3.703900" target="_blank" rel="noopener" class="map-link">
+                                <iframe
+                                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3037.5!2d-3.703900!3d40.416900!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNDDCsDI1JzAwLjgiTiAzwrA0MicxNC4wIlc!5e0!3m2!1ses!2ses!4v1234567890"
+                                    width="100%"
+                                    height="250"
+                                    style="border:0; border-radius: 12px;"
+                                    allowfullscreen=""
+                                    loading="lazy"
+                                    referrerpolicy="no-referrer-when-downgrade">
+                                </iframe>
+                                <div class="map-overlay">
+                                    <span>🗺️ Abrir en Google Maps</span>
+                                </div>
+                            </a>
                         </div>
                     </div>
                 </div>
