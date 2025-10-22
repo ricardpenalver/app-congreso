@@ -1651,6 +1651,40 @@
             transform: translateY(0);
         }
 
+        /* Copyright footer */
+        .copyright-footer {
+            position: fixed;
+            bottom: 12px;
+            left: 12px;
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.75);
+            line-height: 1.5;
+            max-width: 320px;
+            z-index: 100;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        }
+
+        .copyright-footer a {
+            color: rgba(255, 255, 255, 0.85);
+            text-decoration: none;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        .copyright-footer a:hover {
+            color: rgba(255, 255, 255, 1);
+            border-bottom-color: rgba(255, 255, 255, 0.8);
+        }
+
+        @media (max-width: 768px) {
+            .copyright-footer {
+                font-size: 10px;
+                max-width: 280px;
+                bottom: 10px;
+                left: 10px;
+            }
+        }
+
         /* Vista de recuperación */
         .recovery-mode .welcome-title {
             font-size: 28px;
@@ -4995,6 +5029,12 @@
                 <p><strong>¡Disfruta del III Encuentro Anual! 🎉</strong></p>
             </div>
         </div>
+    </div>
+
+    <!-- Copyright footer -->
+    <div class="copyright-footer">
+        Copyright © 2001-2025 esPublico Servicios para la Administración. Todos los derechos reservados.
+        <a href="#" onclick="showLegalNotice(event)">Consulta el Aviso legal</a>.
     </div>
 
 </body>
