@@ -2893,23 +2893,12 @@
         <!-- Pantalla de Resultados de Posters (Solo Admin) -->
         <div id="poster-results-screen" class="screen">
             <div class="header">
-                <h1>🏆 Resultados de Votación de Posters</h1>
-                <p>Los Mejores Posters del Congreso</p>
+                <h1>Votación de posters</h1>
             </div>
 
             <div class="section">
-                <div style="text-align: center; margin-bottom: 30px;">
-                    <button class="btn" onclick="loadPosterResults()" style="max-width: 300px; display: inline-block;">
-                        🔄 Actualizar Resultados
-                    </button>
-                </div>
-
                 <div class="poster-results-container" id="poster-results-container">
                     <!-- Los resultados se cargarán aquí -->
-                </div>
-
-                <div id="poster-results-timestamp" style="text-align: center; margin-top: 20px; color: #666; font-size: 14px;">
-                    Última actualización: --:--:--
                 </div>
 
                 <div style="text-align: center; margin-top: 30px;">
@@ -2917,6 +2906,11 @@
                         ← Volver al inicio
                     </button>
                 </div>
+            </div>
+
+            <!-- Timestamp en esquina inferior derecha -->
+            <div id="poster-results-timestamp" style="position: fixed; bottom: 20px; right: 20px; font-size: 12px; color: rgba(255,255,255,0.9); background: rgba(0,0,0,0.5); padding: 10px 16px; border-radius: 20px; backdrop-filter: blur(10px); z-index: 100;">
+                Última actualización: --:--:--
             </div>
         </div>
 
@@ -3018,7 +3012,7 @@
             if (urlParams.has('poster-results') || hashParams === '#poster-results') {
                 console.log('📊 Detectado parámetro de resultados de posters en URL, mostrando pantalla...');
                 // Cambiar título y favicon
-                document.title = 'Resultados Votación Posters - III Encuentro Anual';
+                document.title = 'Votación de posters - III Encuentro Anual';
                 document.querySelector('link[rel="icon"]').href = "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>📊</text></svg>";
                 // Ocultar overlay de bienvenida para mostrar resultados directamente
                 document.getElementById('welcome-overlay').style.display = 'none';
