@@ -1342,25 +1342,6 @@
             z-index: 1;
         }
 
-        .recovery-link {
-            text-align: center;
-            margin-top: 20px;
-        }
-
-        .recovery-link a {
-            color: white;
-            text-decoration: none;
-            font-size: 14px;
-            opacity: 0.8;
-            transition: opacity 0.3s;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-        }
-
-        .recovery-link a:hover {
-            opacity: 1;
-            text-decoration: underline;
-        }
-
         /* Checkbox de aviso legal */
         .legal-checkbox {
             margin-top: 15px;
@@ -1713,35 +1694,6 @@
                 left: 10px;
                 white-space: normal;
             }
-        }
-
-        /* Vista de recuperación */
-        .recovery-mode .welcome-title {
-            font-size: 28px;
-        }
-
-        .recovery-mode .welcome-subtitle {
-            margin-bottom: 30px;
-        }
-
-        .back-to-welcome {
-            text-align: center;
-            margin-top: 20px;
-        }
-
-        .back-to-welcome a {
-            color: white;
-            text-decoration: none;
-            font-size: 14px;
-            opacity: 0.8;
-            transition: opacity 0.3s;
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .back-to-welcome a:hover {
-            opacity: 1;
         }
 
         /* Mensaje de error */
@@ -2215,9 +2167,6 @@
                 </div>
             </div>
 
-            <div class="recovery-link">
-                <a href="#" onclick="showRecoveryMode(event)">¿Ya tienes una cuenta? Recuperar sesión</a>
-            </div>
         </div>
     </div>
 
@@ -4171,86 +4120,6 @@
         });
 
         // Mostrar modo recuperación
-        function showRecoveryMode(event) {
-            event.preventDefault();
-
-            const container = document.getElementById('welcome-container');
-            container.classList.add('recovery-mode');
-
-            container.innerHTML = `
-                <div class="welcome-icon">
-                    <span>🔑</span>
-                </div>
-                <h1 class="welcome-title">Recuperar Sesión</h1>
-                <p class="welcome-subtitle">Introduce los mismos datos que usaste antes</p>
-
-                <div id="error-container"></div>
-
-                <form class="welcome-form" onsubmit="recoverSession(event)">
-                    <div class="input-group with-icon">
-                        <span class="input-icon">👤</span>
-                        <input type="text" id="recover-name" placeholder="Tu nombre" required>
-                    </div>
-
-                    <div class="input-group with-icon">
-                        <span class="input-icon">📧</span>
-                        <input type="email" id="recover-email" placeholder="tu@email.com" required>
-                    </div>
-
-                    <button type="submit" class="welcome-btn">
-                        <span>Recuperar sesión</span>
-                    </button>
-                </form>
-
-                <div class="back-to-welcome">
-                    <a href="#" onclick="location.reload()">
-                        ← Volver a crear nueva sesión
-                    </a>
-                </div>
-            `;
-        }
-
-        // Recuperar sesión
-        async function recoverSession(event) {
-            event.preventDefault();
-
-            const name = document.getElementById('recover-name').value.trim();
-            const email = document.getElementById('recover-email').value.trim();
-            const submitBtn = event.target.querySelector('.welcome-btn');
-
-            submitBtn.classList.add('loading');
-            submitBtn.querySelector('span').textContent = 'Verificando';
-
-            try {
-                // Generar código a partir del email
-                const userCode = await hashEmail(email);
-
-                // TODO: Verificar que el código existe en Supabase
-                // const { data } = await supabaseClient.from('attendee_codes').select('code').eq('code', userCode).single();
-                // if (!data) { throw new Error('No encontrado'); }
-
-                // Guardar en localStorage
-                localStorage.setItem('userName', name);
-                localStorage.setItem('userEmail', email);
-                localStorage.setItem('attendeeCode', userCode);
-
-                // Éxito
-                submitBtn.querySelector('span').textContent = '¡Bienvenido de nuevo!';
-                submitBtn.style.background = 'linear-gradient(135deg, #4CAF50 0%, #45a049 100%)';
-                submitBtn.style.color = 'white';
-
-                setTimeout(() => {
-                    closeWelcomeOverlay();
-                }, 800);
-
-            } catch (error) {
-                console.error('Error:', error);
-                showError('No encontramos tu registro. Verifica tus datos.');
-                submitBtn.classList.remove('loading');
-                submitBtn.querySelector('span').textContent = 'Recuperar sesión';
-            }
-        }
-
         // Cerrar overlay con animación
         function closeWelcomeOverlay() {
             const overlay = document.getElementById('welcome-overlay');
@@ -4912,7 +4781,7 @@
             <h4>A) En tu navegador (localStorage):</h4>
             <ul>
                 <li><strong>Nombre completo:</strong> Para personalizar tu experiencia (ej: "¡Hola, Ricardo!")</li>
-                <li><strong>Email:</strong> Para generar tu código de identificación y permitir recuperar tu sesión</li>
+                <li><strong>Email:</strong> Para generar tu código de identificación único</li>
                 <li><strong>Código de identificación:</strong> Hash SHA-256 de 16 caracteres derivado de tu email</li>
             </ul>
             <p><em>Estos datos solo existen en tu dispositivo y puedes eliminarlos en cualquier momento cerrando sesión o borrando los datos del navegador.</em></p>
