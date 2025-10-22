@@ -4,7 +4,10 @@
       "mcp__playwright-server__browser_navigate",
       "mcp__playwright-server__browser_take_screenshot",
       "mcp__playwright-server__browser_type",
-      "mcp__playwright-server__browser_click"
+      "mcp__playwright-server__browser_click",
+      "Bash(git add:*)",
+      "Bash(git commit -m \"$(cat <<''EOF''\nfix: Restaurar funcionalidad de checkbox de aviso legal en formulario de bienvenida\n\nProblema detectado:\n- La funcionalidad del checkbox de aviso legal se perdió en el commit 29ff332\n  \"Refactor: Revertir acceso público solo a páginas de proyección\" (20-10-2025)\n- Este commit hizo cambios masivos (454 inserciones, 285 eliminaciones) que\n  eliminaron accidentalmente toda la validación de aviso legal\n\nCambios restaurados:\n✅ CSS:\n  - Estilos del checkbox de aviso legal (.legal-checkbox)\n  - Estilos del mensaje de aviso legal requerido (.legal-required-message)\n  - Animaciones y transiciones para UX fluida\n\n✅ HTML:\n  - Checkbox \"He leído y acepto el aviso legal\" en el formulario\n  - Mensaje amigable cuando no se acepta el aviso legal\n  - Botón \"Volver al formulario\"\n  - Cambio del texto del botón de \"Comenzar experiencia\" a \"Acceder\"\n\n✅ JavaScript:\n  - Validación del checkbox en submitWelcome()\n  - Función showLegalRequiredMessage() para mostrar mensaje\n  - Función backToWelcomeForm() para volver al formulario\n  - Integración completa con el flujo de registro\n\nFlujo de usuario:\n1. Usuario rellena nombre y email\n2. Debe marcar checkbox de aviso legal\n3. Si NO marca el checkbox y hace clic en \"Acceder\":\n   → Muestra mensaje amigable explicando la necesidad del aviso legal\n   → Botón para volver al formulario\n4. Si marca el checkbox:\n   → Proceso de registro continúa normalmente\n\nReferencias:\n- Commit original con esta funcionalidad: f3600d3 (18-10-2025)\n- Commit que eliminó la funcionalidad: 29ff332 (20-10-2025)\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")",
+      "Bash(git push:*)"
     ]
   },
   "enableAllProjectMcpServers": true,
