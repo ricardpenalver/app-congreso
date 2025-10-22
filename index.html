@@ -2781,12 +2781,6 @@
             </div>
 
             <div class="section">
-                <div style="text-align: center; margin-bottom: 30px;">
-                    <button class="btn" onclick="loadResults()" style="max-width: 300px; display: inline-block;">
-                        🔄 Actualizar Resultados
-                    </button>
-                </div>
-
                 <div id="results-container">
                     <!-- Los resultados se cargarán aquí -->
                 </div>
@@ -2796,6 +2790,11 @@
                         ← Volver al inicio
                     </button>
                 </div>
+            </div>
+
+            <!-- Timestamp en esquina inferior derecha -->
+            <div id="results-timestamp" style="position: fixed; bottom: 20px; right: 20px; font-size: 12px; color: rgba(255,255,255,0.9); background: rgba(0,0,0,0.5); padding: 10px 16px; border-radius: 20px; backdrop-filter: blur(10px); z-index: 100;">
+                Última actualización: --:--:--
             </div>
         </div>
 
@@ -3780,19 +3779,13 @@
                 // Generar HTML
                 let html = '';
 
-                // Añadir indicador de última actualización
+                // Actualizar timestamp en esquina inferior derecha
                 const now = new Date();
                 const timeString = now.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-                html += `
-                    <div style="text-align: center; margin-bottom: 20px; padding: 15px; background: #f8f9ff; border-radius: 10px;">
-                        <div style="font-size: 14px; color: #667eea;">
-                            🔄 Actualización automática activa
-                        </div>
-                        <div style="font-size: 12px; color: #999; margin-top: 5px;">
-                            Última actualización: ${timeString}
-                        </div>
-                    </div>
-                `;
+                const timestampElement = document.getElementById('results-timestamp');
+                if (timestampElement) {
+                    timestampElement.textContent = `Última actualización: ${timeString}`;
+                }
 
                 if (results.every(r => r.totalScore === 0)) {
                     html += `
