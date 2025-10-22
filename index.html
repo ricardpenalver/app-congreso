@@ -1660,9 +1660,10 @@
             font-size: 11px;
             color: rgba(255, 255, 255, 0.75);
             line-height: 1.5;
-            max-width: 320px;
+            max-width: 650px;
             z-index: 100;
             text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+            white-space: nowrap;
         }
 
         .copyright-footer a {
@@ -1670,6 +1671,7 @@
             text-decoration: none;
             border-bottom: 1px solid rgba(255, 255, 255, 0.4);
             transition: all 0.3s ease;
+            white-space: nowrap;
         }
 
         .copyright-footer a:hover {
@@ -1680,9 +1682,10 @@
         @media (max-width: 768px) {
             .copyright-footer {
                 font-size: 10px;
-                max-width: 280px;
+                max-width: calc(100% - 24px);
                 bottom: 10px;
                 left: 10px;
+                white-space: normal;
             }
         }
 
@@ -5034,8 +5037,7 @@
 
     <!-- Copyright footer -->
     <div class="copyright-footer">
-        Copyright © 2001-2025 esPublico Servicios para la Administración. Todos los derechos reservados.<br>
-        <a href="#" onclick="showLegalNotice(event)">Aviso legal</a>
+        Copyright © 2001-2025 esPublico Servicios para la Administración S.A.U. Todos los derechos reservados. <a href="#" onclick="showLegalNotice(event)">Aviso legal</a>
     </div>
 
 </body>
