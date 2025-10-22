@@ -2243,7 +2243,7 @@
     </script>
 
     <!-- Overlay de bienvenida -->
-    <div id="welcome-overlay">
+    <div id="welcome-overlay" style="display: none;">
         <!-- Canvas para partículas -->
         <canvas id="particles-canvas"></canvas>
 
@@ -2299,6 +2299,29 @@
         </div>
     </div>
 
+    <!-- Script para verificación inmediata de sesión (evita parpadeo del overlay) -->
+    <script>
+        // Este script se ejecuta inmediatamente después de que el overlay está en el DOM
+        (function() {
+            const userName = localStorage.getItem('userName');
+            const userEmail = localStorage.getItem('userEmail');
+            const overlay = document.getElementById('welcome-overlay');
+
+            if (!userName || !userEmail) {
+                // No hay sesión, mostrar overlay con animación
+                if (overlay) {
+                    overlay.style.display = 'flex';
+                    overlay.style.opacity = '0';
+                    setTimeout(() => {
+                        overlay.style.transition = 'opacity 0.3s ease';
+                        overlay.style.opacity = '1';
+                    }, 10);
+                }
+            }
+            // Si hay sesión, el overlay permanece oculto (display: none)
+        })();
+    </script>
+
     <div class="container">
         <!-- Pantalla de Inicio -->
         <div id="home-screen" class="screen active">
@@ -2318,6 +2341,28 @@
                     🚪 Cerrar sesión
                 </button>
             </div>
+
+            <!-- Script para mostrar saludo inmediatamente si hay sesión -->
+            <script>
+                (function() {
+                    const userName = localStorage.getItem('userName');
+                    const userCode = localStorage.getItem('attendeeCode');
+
+                    if (userName && userCode) {
+                        const greetingDiv = document.getElementById('user-greeting');
+                        const greetingName = document.getElementById('greeting-name');
+                        const greetingCode = document.getElementById('greeting-code');
+
+                        if (greetingDiv && greetingName && greetingCode) {
+                            greetingName.textContent = userName;
+                            greetingCode.textContent = userCode;
+                            greetingDiv.style.display = 'block';
+                            greetingDiv.style.opacity = '1';
+                            greetingDiv.style.transform = 'translateY(0)';
+                        }
+                    }
+                })();
+            </script>
 
             <div class="menu-grid">
                 <div class="menu-option" onclick="showScreen('agenda-screen')">
@@ -4274,9 +4319,22 @@
                 const greetingCode = document.getElementById('greeting-code');
 
                 if (greetingDiv && greetingName && greetingCode) {
-                    greetingName.textContent = userName;
-                    greetingCode.textContent = userCode;
-                    greetingDiv.style.display = 'block';
+                    // Solo actualizar si no está ya visible
+                    if (greetingDiv.style.display === 'none' || !greetingDiv.style.display) {
+                        greetingName.textContent = userName;
+                        greetingCode.textContent = userCode;
+                        // Usar opacity para transición suave en lugar de display
+                        greetingDiv.style.display = 'block';
+                        greetingDiv.style.opacity = '0';
+                        greetingDiv.style.transform = 'translateY(-10px)';
+
+                        // Animar la aparición
+                        setTimeout(() => {
+                            greetingDiv.style.transition = 'all 0.5s ease';
+                            greetingDiv.style.opacity = '1';
+                            greetingDiv.style.transform = 'translateY(0)';
+                        }, 100);
+                    }
                 }
             }
         }
@@ -4307,16 +4365,12 @@
             const userEmail = localStorage.getItem('userEmail');
 
             if (userName && userEmail) {
-                // Mostrar botón de logout en el overlay
-                const logoutBtn = document.getElementById('logout-btn');
-                if (logoutBtn) {
-                    logoutBtn.style.display = 'block';
-                }
-
-                // Cerrar overlay automáticamente
-                setTimeout(() => {
-                    closeWelcomeOverlay();
-                }, 500);
+                // El overlay ya está oculto por el script inline
+                // El saludo ya está mostrado por el script inline
+                // Solo aseguramos que estamos en la pantalla correcta
+                console.log('✅ Sesión existente detectada:', userName);
+            } else {
+                console.log('ℹ️ No hay sesión activa');
             }
         }
 
