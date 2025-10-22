@@ -3686,8 +3686,8 @@
             if (!autoRefresh && resultsRefreshInterval === null) {
                 resultsRefreshInterval = setInterval(() => {
                     loadResults(true);
-                }, 60000); // Actualizar cada 60 segundos
-                console.log('✅ Auto-refresh de resultados activado (cada 60 segundos)');
+                }, 120000); // Actualizar cada 2 minutos
+                console.log('✅ Auto-refresh de resultados activado (cada 2 minutos)');
             }
 
             // Mostrar mensaje de carga solo si no es auto-refresh
@@ -4864,10 +4864,10 @@
                 showScreen('poster-results-screen');
                 loadPosterResults();
 
-                // Auto-refresh cada 10 segundos
+                // Auto-refresh cada 2 minutos
                 setInterval(() => {
                     loadPosterResults();
-                }, 10000);
+                }, 120000);
             }
         })();
 
