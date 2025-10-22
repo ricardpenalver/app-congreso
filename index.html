@@ -1419,10 +1419,15 @@
             opacity: 0.95;
         }
 
+        .legal-required-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
         .legal-required-message button {
             padding: 12px 30px;
-            background: white;
-            color: #667eea;
             border: none;
             border-radius: 10px;
             font-weight: 600;
@@ -1432,9 +1437,30 @@
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
 
+        .legal-required-message .btn-secondary {
+            background: white;
+            color: #0B7A8F;
+            border: 2px solid white;
+        }
+
+        .legal-required-message .btn-primary {
+            background: #0B7A8F;
+            color: white;
+            border: 2px solid #0B7A8F;
+        }
+
         .legal-required-message button:hover {
             transform: translateY(-2px);
             box-shadow: 0 7px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .legal-required-message .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.95);
+        }
+
+        .legal-required-message .btn-primary:hover {
+            background: #006B7D;
+            border-color: #006B7D;
         }
 
         /* Modal de aviso legal */
@@ -2183,7 +2209,10 @@
                 <p><strong>¡Vaya!</strong> Nos encantaría que pudieras acceder a la app del encuentro.</p>
                 <p>Sin embargo, para garantizar tu privacidad y cumplir con la normativa, necesitamos que leas y aceptes nuestro aviso legal antes de continuar.</p>
                 <p>Te prometemos que es breve y que valoramos muchísimo tu privacidad. 😊</p>
-                <button onclick="backToWelcomeForm()">Volver al formulario</button>
+                <div class="legal-required-buttons">
+                    <button onclick="backToWelcomeForm()" class="btn-secondary">Volver al formulario</button>
+                    <button onclick="showLegalNotice(event)" class="btn-primary">Leer aviso legal</button>
+                </div>
             </div>
 
             <div class="recovery-link">
