@@ -2575,8 +2575,7 @@
                 <h2>📅 Agenda del Congreso</h2>
 
                 <div class="day-filter">
-                    <div class="filter-btn active" onclick="filterDay('all')">Todos</div>
-                    <div class="filter-btn workshop-btn" onclick="filterDay('day1')">🛠️ Talleres 5 Nov</div>
+                    <div class="filter-btn workshop-btn active" onclick="filterDay('day1')">🛠️ Talleres 5 Nov</div>
                     <div class="filter-btn congress-btn" onclick="filterDay('day2')">🎤 Congreso 6 Nov</div>
                     <div class="filter-btn workshop-btn" onclick="filterDay('day3')">🛠️ Talleres 7 Nov</div>
                 </div>
@@ -2697,7 +2696,7 @@
                     </div>
 
                     <!-- Día 2 - Congreso Jueves 6 de Noviembre -->
-                    <div class="agenda-day" data-day="day2">
+                    <div class="agenda-day" data-day="day2" style="display: none;">
                         <div class="day-header" style="background: linear-gradient(135deg, #0B7A8F 0%, #006B7D 100%);">
                             🎤 III Encuentro Anual - Jueves 6 de Noviembre
                         </div>
@@ -2859,7 +2858,7 @@
                     </div>
 
                     <!-- Día 3 - Talleres Viernes 7 de Noviembre -->
-                    <div class="agenda-day" data-day="day3">
+                    <div class="agenda-day" data-day="day3" style="display: none;">
                         <div class="day-header" style="background: linear-gradient(135deg, #FF6B6B 0%, #C44569 100%);">
                             🛠️ Talleres - Viernes 7 de Noviembre
                         </div>
@@ -4035,10 +4034,10 @@
             document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
             event.target.classList.add('active');
 
-            // Mostrar/ocultar días
+            // Mostrar solo el día seleccionado
             const days = document.querySelectorAll('.agenda-day');
             days.forEach(dayElement => {
-                if (day === 'all' || dayElement.dataset.day === day) {
+                if (dayElement.dataset.day === day) {
                     dayElement.style.display = 'block';
                 } else {
                     dayElement.style.display = 'none';
