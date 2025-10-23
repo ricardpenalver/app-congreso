@@ -643,7 +643,7 @@
             display: flex;
             justify-content: center;
             gap: 12px;
-            margin: 24px 0;
+            margin: 20px 0 30px 0;
             flex-wrap: wrap;
             padding: 0 10px;
         }
@@ -667,6 +667,7 @@
             border-color: var(--color-primary);
             transform: scale(1.05);
             box-shadow: 0 4px 16px rgba(0, 217, 192, 0.4);
+            font-weight: 700;
         }
 
         .filter-btn:hover {
@@ -675,25 +676,26 @@
             box-shadow: 0 4px 12px rgba(0, 217, 192, 0.2);
         }
 
-        /* Estilos diferenciados para talleres y congreso */
+        /* Estilos unificados - todos los botones usan el mismo color activo */
         .workshop-btn {
-            border-color: var(--color-teal);
+            border-color: var(--color-primary);
         }
 
         .workshop-btn:hover {
-            border-color: var(--color-primary);
+            border-color: var(--color-cyan-bright);
             background: rgba(0, 217, 192, 0.1);
         }
 
         .workshop-btn.active {
-            background: linear-gradient(135deg, var(--color-teal) 0%, var(--color-secondary) 100%);
-            color: var(--color-white);
-            border-color: var(--color-teal);
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-cyan-bright) 100%);
+            color: var(--color-dark);
+            border-color: var(--color-primary);
+            box-shadow: 0 4px 16px rgba(0, 217, 192, 0.4);
+            font-weight: 700;
         }
 
         .congress-btn {
             border-color: var(--color-primary);
-            font-weight: 600;
         }
 
         .congress-btn:hover {
@@ -705,7 +707,7 @@
             background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-cyan-bright) 100%);
             color: var(--color-dark);
             border-color: var(--color-primary);
-            box-shadow: 0 6px 20px rgba(0, 217, 192, 0.5);
+            box-shadow: 0 4px 16px rgba(0, 217, 192, 0.4);
             font-weight: 700;
         }
 
