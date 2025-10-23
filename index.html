@@ -5189,7 +5189,8 @@
                 const percentage = (result.total_votes / maxVotes) * 100;
 
                 return `
-                    <div class="poster-result-item">
+                    <div class="poster-result-item" style="position: relative;">
+                        ${isWinner ? '<div class="poster-winner-badge" style="position: absolute; top: 15px; right: 15px; z-index: 10;">🏆 GANADOR</div>' : ''}
                         <div class="poster-result-header">
                             <img class="poster-result-thumbnail"
                                  src="${result.thumbnail_url}"
@@ -5198,7 +5199,6 @@
                             <div class="poster-result-info">
                                 <div class="poster-result-title">
                                     ${index + 1}. ${escapeHtml(result.title)}
-                                    ${isWinner ? '<span class="poster-winner-badge">🏆 GANADOR</span>' : ''}
                                 </div>
                                 ${result.subtitle ? `<div style="color: var(--color-teal); font-size: 14px; margin-bottom: 8px;">${escapeHtml(result.subtitle)}</div>` : ''}
                                 <div class="poster-result-author">
