@@ -445,9 +445,12 @@
                         posters (
                             id,
                             title,
+                            subtitle,
                             description,
-                            author,
-                            image_url
+                            author_name,
+                            author_organization,
+                            thumbnail_url,
+                            full_image_url
                         )
                     `);
 
@@ -502,13 +505,14 @@
 
                     <div class="winner-card">
                         <img
-                            src="${winner.poster.image_url}"
+                            src="${winner.poster.full_image_url}"
                             alt="${winner.poster.title}"
                             class="winner-poster-image"
-                            onclick="openModal('${winner.poster.image_url}')"
+                            onclick="openModal('${winner.poster.full_image_url}')"
                         >
                         <div class="winner-name">${winner.poster.title}</div>
-                        ${winner.poster.author ? `<div class="winner-author">por ${winner.poster.author}</div>` : ''}
+                        ${winner.poster.subtitle ? `<div class="winner-description" style="font-style: italic; margin-top: 10px;">${winner.poster.subtitle}</div>` : ''}
+                        ${winner.poster.author_name ? `<div class="winner-author">por ${winner.poster.author_name}${winner.poster.author_organization ? ` - ${winner.poster.author_organization}` : ''}</div>` : ''}
                         ${winner.poster.description ? `<div class="winner-description">${winner.poster.description}</div>` : ''}
                         <div class="winner-votes">${winner.count} votos</div>
                         <div class="winner-badge">GANADOR</div>

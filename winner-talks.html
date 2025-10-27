@@ -332,29 +332,69 @@
             const container = document.getElementById('content-container');
 
             try {
-                // Obtener resultados de votación
-                const { data: results, error } = await supabaseClient
-                    .rpc('get_voting_results');
+                // IDs de las ponencias en competencia (ajusta estos IDs según tu base de datos)
+                const presentationIds = [
+                    'ce464d89-3a6c-46f1-94d9-92fb29e11e07', // Ponencia 1
+                    '3b7ccfed-41a4-4f3e-8a2c-c7ab7a8b13bc', // Ponencia 2
+                    'b5b7e48f-5485-48f9-9e66-84f68e2e1c3c', // Ponencia 3
+                    '4a1f27e2-6ec0-44bb-a1b7-51e3f9af7f1e'  // Ponencia 4
+                ];
 
-                if (error) {
-                    throw error;
+                // Obtener información de las ponencias
+                const { data: topics, error: topicsError } = await supabaseClient
+                    .from('voting_topics')
+                    .select('*')
+                    .in('id', presentationIds);
+
+                if (topicsError) {
+                    throw topicsError;
                 }
 
-                if (!results || results.length === 0) {
+                // Obtener todos los votos
+                const { data: allVotes, error: votesError } = await supabaseClient
+                    .from('votes')
+                    .select('*')
+                    .in('voting_topic_id', presentationIds);
+
+                if (votesError) {
+                    throw votesError;
+                }
+
+                if (!topics || topics.length === 0) {
                     container.innerHTML = `
                         <div class="error-message">
                             <h2>No hay resultados disponibles</h2>
-                            <p>Aún no se han registrado votos para las ponencias.</p>
+                            <p>Aún no se han registrado ponencias.</p>
                         </div>
                     `;
                     return;
                 }
 
+                // Calcular puntuaciones
+                const scores = [5, 3, 2, 1];
+                const results = topics.map(topic => {
+                    const topicVotes = allVotes.filter(v => v.voting_topic_id === topic.id);
+
+                    let totalScore = 0;
+                    topicVotes.forEach(vote => {
+                        if (vote.selected_options && vote.selected_options.length > 0) {
+                            const optionIndex = vote.selected_options[0];
+                            totalScore += scores[optionIndex] || 0;
+                        }
+                    });
+
+                    return {
+                        ...topic,
+                        vote_count: topicVotes.length,
+                        total_score: totalScore
+                    };
+                });
+
                 // Ordenar por puntuación total
                 const sortedResults = results.sort((a, b) => b.total_score - a.total_score);
                 const winner = sortedResults[0];
-                const totalVotes = results.reduce((sum, r) => sum + r.vote_count, 0);
-                const totalParticipants = new Set(results.flatMap(r => r.vote_count)).size;
+                const totalVotes = allVotes.length;
+                const totalParticipants = allVotes.length;
 
                 // Mostrar resultados del ganador
                 container.innerHTML = `
