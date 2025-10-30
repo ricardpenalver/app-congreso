@@ -74,36 +74,49 @@ git push
 ## Key Features & Implementation
 
 ### 1. Agenda System
-- 3-day conference schedule
-- Day selector buttons with active state highlighting
+- 3-day conference schedule (5-7 November 2025)
+- Individual day selector buttons (no "view all" option)
+- Unified turquoise color scheme for all day headers and active buttons
+- Day 1 visible by default, Days 2-3 hidden (`display: none`)
 - Session types: keynote, talk, workshop, break, networking
-- Data stored in `sessions` table with `speakers` join
+- Title positioned outside `.section` container for consistency
+- Function: `filterDay(day)` at `index.html:~4032`
 
-### 2. Attendee Registration
+### 2. Information of Interest (Locations)
+- Interactive maps section with Google Maps embeds
+- Two subsections:
+  - **Training Spaces**: Aula Escenario, Aula 1, Aula 2
+  - **Important Locations**: Congress venue, Gala dinner, esPublico HQ
+- Each location card includes: title, address, embedded map, Google Maps link
+- No navigation data collected (privacy-first)
+- Redirects to user's default maps app
+
+### 3. Attendee Registration
 - Form in welcome screen with name + email
 - Checkbox for legal notice acceptance (required)
 - Dual storage: Supabase `attendees` table + localStorage fallback
 - Function: `submitWelcome()` at `index.html:~3400`
 
-### 3. Competitive Voting System
-- 4 competing talks (`voting_topics` table)
+### 4. Competitive Voting System (Ponencias)
+- Card-based design with title, subtitle, author, organization
 - Scoring: 5, 3, 2, 1 points (unique per vote)
 - Multi-select interface with single submit
 - Real-time results screen accessible via `?results` or `#results`
-- Auto-refresh every 5 seconds without flicker
+- Auto-refresh every 2 minutes (120 seconds) to prevent flicker
 - Winner badge with animated gold styling
 - Functions: `submitVotes()`, `loadVotingResults()` at `index.html:~3600-3800`
 
-### 4. Poster Voting System
+### 5. Poster Voting System
 - Maximum 3 votes per user/device
 - Device fingerprinting for anonymous voting prevention
 - Gallery with thumbnail cards + full-image modal
+- Winner badge positioned in top-right corner (floating, not inline)
 - Results screen: `?poster-results` or `#poster-results`
-- Auto-refresh every 10 seconds
+- Auto-refresh every 2 minutes (120 seconds)
 - State management: `posterVotingState` object at `index.html:~3936`
 - Validation trigger: `validate_max_poster_votes` (database-level)
 
-### 5. Tags/Ideas System
+### 6. Tags/Ideas System
 - Free-text input with visual display
 - Hybrid storage (Supabase + localStorage)
 - Real-time tag cloud visualization in separate files (`tagcloud.html`)
@@ -144,15 +157,23 @@ Global objects for each feature:
 
 ## Visual Design
 
-### Color Palette
+### Color Palette (Corporate Teal/Turquoise)
 ```css
---color-primary: #00D9C0;        /* Turquoise */
+--color-primary: #00D9C0;        /* Turquoise (main accent) */
 --color-primary-dark: #00B8A3;
---color-secondary: #006B7D;      /* Teal */
+--color-secondary: #006B7D;      /* Teal (dark) */
 --color-secondary-dark: #005F73;
---color-teal: #0B7A8F;
---color-cyan-bright: #00F5E0;
+--color-teal: #0B7A8F;           /* Corporate teal */
+--color-cyan-bright: #00F5E0;    /* Bright turquoise */
 ```
+
+### Menu Icons
+- 🗓️ Agenda (spiral notebook)
+- 📍 Information of Interest (location pin)
+- 📝 Register Attendance
+- 🏷️ Tag/Label
+- 🗣️ Vote Ponencias (speaking head - oral presentations)
+- 📑 Vote Posters (stacked pages - written documents)
 
 ### Background
 Complex gradient system with:
@@ -184,7 +205,14 @@ Complex gradient system with:
 ### Modifying Voting Rules
 - Talk voting scores: Search for `const scores = [5, 3, 2, 1]` (line ~3600)
 - Poster vote limit: Change `maxVotes: 3` in `posterVotingState` (line ~3936)
-- Auto-refresh intervals: Search for `setInterval` calls (~3800 for talks, ~4319 for posters)
+- Auto-refresh intervals: Currently set to 120000ms (2 minutes) for both voting systems
+
+### Updating Location Maps
+1. Locations are in `locations-screen` section
+2. Two subsections: `.locations-section` (Training Spaces and Important Locations)
+3. Each location card has: title, address, Google Maps embed, and direct link
+4. Update coordinates in `href="https://maps.google.com/?q=..."` links
+5. Update embedded iframe `src` with proper Google Maps embed URL
 
 ### Database Schema Changes
 1. Write SQL migration script
@@ -245,7 +273,13 @@ Expected: 0 errors, 0 warnings, 0 suggestions
 
 7. **Screen management**: Single function `showScreen(screenId)` controls all view transitions. Maintains active state in `currentScreen` variable.
 
-8. **Auto-refresh patterns**: Results screens use `setInterval` with state management to prevent flicker during updates. Always check existing data before re-rendering.
+8. **Auto-refresh patterns**: Results screens use `setInterval` with state management to prevent flicker during updates. Always check existing data before re-rendering. Current interval: 120000ms (2 minutes).
+
+9. **Session management**: Inline scripts check `localStorage` before showing welcome overlay. If session exists, overlay stays hidden and user greeting appears immediately. Function: `checkExistingSession()`.
+
+10. **Legal notice**: Updated to include maps functionality with explicit "no tracking" guarantee. Maps redirect to user's default app without collecting navigation data.
+
+11. **UI consistency**: Titles should be outside `.section` containers, aligned with other sections. Active button states use turquoise gradient (#00D9C0 → #00F5E0) consistently across all features.
 
 ## Last Updated
 
