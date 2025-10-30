@@ -260,7 +260,7 @@ Votaciones desde Supabase: [Object, Object, Object, Object]
 6. `test-06-registro-exitoso.png` - Confirmación de registro
 7. `test-07-votacion-form.png` - Formulario de votación
 
-**Ubicación:** `/Users/rilihouse/PROYECTOS/CLAUDE CODE/.playwright-mcp/`
+**Ubicación:** `/Users/ricardopenalvergarcia/proyectos-espublico/app-congreso/app-congreso/.playwright-mcp/`
 
 ---
 

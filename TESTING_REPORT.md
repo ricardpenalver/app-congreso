@@ -397,7 +397,7 @@ TOTAL                    ✅ PASS   98.6%
 9. `test-9-tags-screen.png` - Pantalla de etiquetas vacía
 10. `test-10-tags-submitted.png` - Etiquetas enviadas con éxito
 
-**Ubicación:** `/Users/rilihouse/PROYECTOS/CLAUDE CODE/.playwright-mcp/`
+**Ubicación:** `/Users/ricardopenalvergarcia/proyectos-espublico/app-congreso/app-congreso/.playwright-mcp/`
 
 ---
 

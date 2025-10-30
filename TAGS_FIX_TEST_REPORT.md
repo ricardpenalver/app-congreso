@@ -89,7 +89,7 @@ CREATE POLICY "Users can update their own tags" ON tags
 
 ### 2. Corrección del Código JavaScript (index.html:2338-2341)
 
-**Ubicación:** `/Users/rilihouse/PROYECTOS/CLAUDE CODE/index.html` líneas 2338-2341
+**Ubicación:** `/Users/ricardopenalvergarcia/proyectos-espublico/app-congreso/app-congreso/index.html` líneas 2338-2341
 
 **Cambio aplicado:**
 ```diff
